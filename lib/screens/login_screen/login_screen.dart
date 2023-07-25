@@ -85,7 +85,7 @@ class LoginViewBody extends StatelessWidget {
               ),
               SizedBox(height: screenSize.height * .015),
               Text(
-                'Please Enter Your Credentials To Get Started ...',
+                'Please Enter Your Credentials To Get Started ....',
                 style: TextStyles.textStyle18
                     .copyWith(fontStyle: FontStyle.italic),
                 maxLines: 2,
