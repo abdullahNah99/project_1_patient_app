@@ -143,7 +143,7 @@ class LoginViewBody extends StatelessWidget {
                       'Create Account',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 17,
+                        fontSize: 14,
                       ),
                     ),
                   ),
