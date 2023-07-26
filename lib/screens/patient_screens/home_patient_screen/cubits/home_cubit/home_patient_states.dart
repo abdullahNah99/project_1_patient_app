@@ -7,8 +7,6 @@ abstract class HomePatientStates extends Equatable {
   List<Object> get props => [];
 }
 
-class HomePatientInitial extends HomePatientStates {}
-
 class HomePatientLoading extends HomePatientStates {}
 
 class HomePatientFailure extends HomePatientStates {
@@ -17,16 +15,29 @@ class HomePatientFailure extends HomePatientStates {
   HomePatientFailure({required this.failureMsg});
 }
 
-class GetDoctorsSuccess extends HomePatientStates {
+class GetDoctorsAndDepartmentsSuccess extends HomePatientStates {
   final List<DoctorModel> doctors;
-
-  GetDoctorsSuccess({required this.doctors});
-}
-
-class GetDepartmentsSuccess extends HomePatientStates {
   final List<DepartmentModel> departments;
 
-  GetDepartmentsSuccess({required this.departments});
+  GetDoctorsAndDepartmentsSuccess({
+    required this.doctors,
+    required this.departments,
+  });
+
+  List<DoctorModel> getDepartmentDoctors({int? departmentID}) {
+    List<DoctorModel> doctors = [];
+    if (departmentID != null) {
+      for (DoctorModel item in this.doctors) {
+        if (item.departmentID == departmentID) {
+          doctors.add(item);
+        }
+      }
+      return doctors;
+    }
+    return doctors;
+  }
 }
 
 class LogOutState extends HomePatientStates {}
+
+class ViewDoctorsForDebarmentState extends HomePatientStates {}
