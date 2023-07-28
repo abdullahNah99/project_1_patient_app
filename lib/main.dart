@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient_app/core/api/services/local/cache_helper.dart';
 import 'package:patient_app/core/styles/app_colors.dart';
 import 'package:patient_app/core/utils/app_router.dart';
+import 'package:patient_app/screens/doctor_screens/home_doctor_screen/home_doctor_screen.dart';
 import 'package:patient_app/screens/login_screen/login_screen.dart';
 import 'package:patient_app/screens/patient_screens/doctor_details_screen/doctor_details_screen.dart';
 import 'package:patient_app/screens/patient_screens/home_patient_screen/home_patient_screen.dart';
@@ -16,6 +17,8 @@ void main() async {
   if (await CacheHelper.getData(key: 'Token') == null) {
     initalRoute = LoginView.route;
   } else if (await CacheHelper.getData(key: 'Role') == 'secretary') {
+    initalRoute = AppointmentsRequestsView.route;
+  }else if (await CacheHelper.getData(key: 'Role') == 'doctor') {
     initalRoute = AppointmentsRequestsView.route;
   } else {
     initalRoute = DoctorDetailsView.route;
@@ -60,6 +63,9 @@ class PatientApp extends StatelessWidget {
                 : CacheHelper.getData(key: 'Role') == 'secretary'
                     ? AppointmentsRequestsView(
                         token: CacheHelper.getData(key: 'Token'))
+                : CacheHelper.getData(key: 'Role') == 'doctor'
+                ? DoctorHomeScreen(
+                token: CacheHelper.getData(key: 'Token'))
                     : const HomePatientView(),
             // initialRoute: initialRoute,
             routes: AppRouter.router);
