@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../screens/doctor_screens/home_doctor_screen/home_doctor_screen.dart';
 import '../../screens/login_screen/login_screen.dart';
 import '../../screens/patient_screens/add_appointment_view/add_appointment_view.dart';
 import '../../screens/patient_screens/doctor_details_screen/doctor_details_screen.dart';
@@ -18,5 +19,8 @@ abstract class AppRouter {
     AppointmentsRequestsView.route: (context) =>
         AppointmentsRequestsView(token: CacheHelper.getData(key: 'Token')),
     ShowAllConsultationView.route: (context) => const ShowAllConsultationView(),
+
+    DoctorHomeScreen.route: (context) =>  DoctorHomeScreen(token: CacheHelper.getData(key: 'Token')),
+
   };
 }
