@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient_app/core/api/services/local/cache_helper.dart';
 import 'package:patient_app/core/styles/app_colors.dart';
@@ -8,15 +9,21 @@ import 'package:patient_app/screens/patient_screens/doctor_details_screen/doctor
 import 'package:patient_app/screens/patient_screens/home_patient_screen/home_patient_screen.dart';
 import 'package:patient_app/screens/secretary_screens/appointments_requests_screen/appointments_requests_view.dart';
 
+import 'core/api/dio_helper.dart';
+import 'core/api/services/local/bloc_ob_server.dart';
+import 'screens/secretary_screens/secretary_layout/secretaria_latout.dart';
+
 void main() async {
   String initalRoute;
   WidgetsFlutterBinding.ensureInitialized();
   await CacheHelper.init();
+  Bloc.observer = MyBlocObserver();
+  DioHelperG.init();
 
   if (await CacheHelper.getData(key: 'Token') == null) {
     initalRoute = LoginView.route;
   } else if (await CacheHelper.getData(key: 'Role') == 'secretary') {
-    initalRoute = AppointmentsRequestsView.route;
+    initalRoute = SecretariaLayout.route;
   } else {
     initalRoute = DoctorDetailsView.route;
   }
@@ -54,12 +61,21 @@ class PatientApp extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
+              bottomNavigationBarTheme: BottomNavigationBarThemeData(
+                selectedItemColor: Colors.purple.shade300,
+                //unselectedItemColor: Colors.grey,
+                showUnselectedLabels: true,
+                unselectedLabelStyle: const TextStyle(
+                  color: Colors.black,
+                ),
+                type: BottomNavigationBarType.fixed,
+              ),
             ),
             home: CacheHelper.getData(key: 'Token') == null
                 ? const LoginView()
                 : CacheHelper.getData(key: 'Role') == 'secretary'
-                    ? AppointmentsRequestsView(
-                        token: CacheHelper.getData(key: 'Token'))
+                    ? SecretariaLayout()/*AppointmentsRequestsView(
+                        token: CacheHelper.getData(key: 'Token'))*/
                     : const HomePatientView(),
             // initialRoute: initialRoute,
             routes: AppRouter.router);

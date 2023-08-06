@@ -1,9 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:patient_app/screens/secretary_screens/api_cubit/api_cubit.dart';
+import '../../../../core/models/appointment_model.dart';
+import '../../../../core/models/secretaria/secretaria_appointment/index_appointment_by_date_model.dart';
 import '../../../../core/widgets/custome_image.dart';
+import '../../api_cubit/api_states.dart';
+import '../../handel_apppintment/handel_apppintment.dart';
+import '../../view_info_handle/view_info_handle.dart';
 
 class AppointmentRequestItem extends StatelessWidget {
-  const AppointmentRequestItem({super.key});
+
+  //final List<AppointmentModel> appointments;
+  final int? index;
+  final IndexAppointmentByDateModel model;
+
+  const AppointmentRequestItem({
+    super.key,
+    //required this.appointments
+    this.index,
+    required this.model,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +54,11 @@ class AppointmentRequestItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                const _TextItem(text: 'From: Abdullah Nahlawi xxxxxxxxx'),
+                //const _TextItem(text: 'From: Abdullah Nahlawi xxxxxxxxx'),
+                _TextItem(text: 'From: ${model.appointment[index!].patient.user.firstName} ${model.appointment[index!].patient.user.lastName}'),
                 SizedBox(height: 8.w),
-                const _TextItem(text: 'Time: Sunday 5/7  03:00 PM'),
+                //const _TextItem(text: 'Time: Sunday 5/7  03:00 PM'),
+                _TextItem(text: 'Time: ''${model.appointment[index!].time}'.replaceRange(11, 14, ''),),//'${model.appointment[index!].time}'),
                 SizedBox(height: 8.w),
                 Row(
                   children: [
@@ -51,7 +70,8 @@ class AppointmentRequestItem extends StatelessWidget {
                     ),
                     SizedBox(width: 5.w),
                     _TextItem(
-                      text: 'To: Dr. Abdullah Nahlawi',
+                      //text: 'To: Dr. Abdullah Nahlawi',
+                      text: 'To: Dr. ${model.appointment[index!].doctor.user.firstName} ${model.appointment[index!].doctor.user.lastName}',
                       width: 170.w,
                     ),
                   ],
@@ -59,12 +79,12 @@ class AppointmentRequestItem extends StatelessWidget {
                 SizedBox(height: 8.w),
                 SizedBox(
                   width: 210.w,
-                  child: const Row(
+                  child: Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Spacer(),
-                      _HandleButton(),
+                      _HandleButton(model: model, index: index! < 0 ? 0 : index!,),
                     ],
                   ),
                 ),
@@ -78,29 +98,53 @@ class AppointmentRequestItem extends StatelessWidget {
 }
 
 class _HandleButton extends StatelessWidget {
-  const _HandleButton();
+
+  final int? index;
+  final IndexAppointmentByDateModel model;
+
+  const _HandleButton({
+    this.index,
+    required this.model,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {},
-      highlightColor: Colors.black.withOpacity(.7),
-      borderRadius: BorderRadius.circular(30.h),
-      child: Container(
-        width: 70.h,
-        padding: const EdgeInsets.symmetric(vertical: 5),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30.h),
-          color: Colors.green.withOpacity(.6),
-        ),
-        child: const Text(
-          'Handle',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 15,
-          ),
-        ),
+    return BlocProvider(
+      create: (context) => SecretariaLyoutCubit(),
+      child: BlocConsumer<SecretariaLyoutCubit, SecretariaLyoutStates>(
+        listener: (context, state) {
+
+        },
+        builder: (context, state) {
+          return InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context1) => ViewInfoHandle(model: model,index: index! < 0 ? 0 : index!,)),
+              );
+            },
+            highlightColor: Colors.black.withOpacity(.7),
+            borderRadius: BorderRadius.circular(30.h),
+            child: Container(
+              width: 70.h,
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30.h),
+                color: Colors.green.withOpacity(.6),
+              ),
+              child: const Text(
+                'Handle',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                ),
+              ),
+            ),
+          );
+
+        },
       ),
     );
   }
