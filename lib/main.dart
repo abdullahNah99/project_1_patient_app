@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,13 +10,19 @@ import 'package:patient_app/screens/patient_screens/doctor_details_screen/doctor
 import 'package:patient_app/screens/patient_screens/home_patient_screen/home_patient_screen.dart';
 import 'package:patient_app/screens/secretary_screens/appointments_requests_screen/appointments_requests_view.dart';
 
+
 import 'core/api/dio_helper.dart';
 import 'core/api/services/local/bloc_ob_server.dart';
 import 'screens/secretary_screens/secretary_layout/secretaria_latout.dart';
 
+import 'firebase_options.dart';
+
+
 void main() async {
   String initalRoute;
   WidgetsFlutterBinding.ensureInitialized();
+  await _initializeFirebase();
+  // await FirebaseAPIs.getFirebaseMessagingToken();
   await CacheHelper.init();
   Bloc.observer = MyBlocObserver();
   DioHelperG.init();
@@ -82,4 +89,10 @@ class PatientApp extends StatelessWidget {
       },
     );
   }
+}
+
+_initializeFirebase() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 }
