@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,163 +14,64 @@ import 'package:patient_app/core/widgets/custome_progress_indicator.dart';
 import 'package:patient_app/main.dart';
 import 'package:patient_app/screens/patient_screens/doctor_details_screen/cubit/doctor_details_cubit.dart';
 import 'package:patient_app/screens/patient_screens/doctor_details_screen/cubit/doctor_details_states.dart';
-import 'package:patient_app/screens/patient_screens/show_all_consultation/show_all_consultation.dart';
-
+import 'package:patient_app/screens/patient_screens/doctor_details_screen/widgets/consultation_bottom_sheet.dart';
+import 'package:patient_app/screens/patient_screens/doctor_details_screen/widgets/doctor_details_button.dart';
+import 'package:patient_app/screens/patient_screens/favourite_screen/favourite_screen.dart';
 import '../add_appointment_view/add_appointment_view.dart';
 
 class DoctorDetailsView extends StatelessWidget {
   static const route = 'DoctorDetailsView';
-
   const DoctorDetailsView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final DoctorModel doctorModel =
-        ModalRoute.of(context)?.settings.arguments as DoctorModel;
+    final dynamic args = ModalRoute.of(context)?.settings.arguments;
+    final DoctorModel doctorModel = args[0];
+    final bool fromFavorite = args[1];
     return BlocProvider(
-      create: (context) => DoctorDetailsCubit(),
+      create: (context) => DoctorDetailsCubit()
+        ..checkIsFavourited(
+          token: CacheHelper.getData(key: 'Token'),
+          doctorID: doctorModel.id,
+        ),
       child: Scaffold(
-        body: DoctorDetailsViewBody(doctorModel: doctorModel),
+        body: DoctorDetailsViewBody(
+          doctorModel: doctorModel,
+          fromFavourite: fromFavorite,
+        ),
         floatingActionButton:
             BlocBuilder<DoctorDetailsCubit, DoctorDetailsStates>(
-          builder: (context, state) => FloatingActionButton(
-            tooltip: 'Add a consultation',
-            onPressed: () {
-              // BlocProvider.of<DoctorDetailsCubit>(context).visible =
-              //     BlocProvider.of<DoctorDetailsCubit>(context).visible;
-              _showBottomSheet(
-                context,
-                doctorModel: doctorModel,
-                cubit: BlocProvider.of<DoctorDetailsCubit>(context),
-              );
-            },
-            child: const Icon(
-              Icons.chat,
-              color: defaultColor,
+          builder: (context, state) => Visibility(
+            visible: state is DoctorDetailsLoading ? false : true,
+            child: FloatingActionButton(
+              tooltip: 'Add a consultation',
+              onPressed: () {
+                ConsultationBottomSheet.showConsultationBottomSheet(
+                  context,
+                  doctorModel: doctorModel,
+                  cubit: BlocProvider.of<DoctorDetailsCubit>(context),
+                );
+              },
+              child: const Icon(
+                Icons.chat,
+                color: defaultColor,
+              ),
             ),
           ),
         ),
       ),
-    );
-  }
-
-  void _showBottomSheet(BuildContext context,
-      {required DoctorModel doctorModel, required DoctorDetailsCubit cubit}) {
-    final formKey = GlobalKey<FormState>();
-    String? question;
-    showModalBottomSheet(
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
-        ),
-      ),
-      context: context,
-      builder: (context) {
-        return GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-            cubit.udpateImageState(visibility: true);
-          },
-          child: Padding(
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom,
-            ),
-            child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              children: [
-                Container(
-                  height: 4,
-                  margin: EdgeInsets.symmetric(
-                      vertical: screenSize.height * .015,
-                      horizontal: screenSize.width * .4),
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                SizedBox(height: 10.h),
-                const Text(
-                  'Note: You will Lose 1000 from your account',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontStyle: FontStyle.italic,
-                  ),
-                ),
-                SizedBox(height: 10.h),
-                InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      ShowAllConsultationView.route,
-                      arguments: doctorModel.id,
-                    );
-                  },
-                  highlightColor: defaultColor.withOpacity(.4),
-                  borderRadius: BorderRadius.circular(10),
-                  child: Text(
-                    '  View All>>',
-                    style: TextStyle(color: defaultColor.withOpacity(.9)),
-                  ),
-                ),
-                SizedBox(height: 10.h),
-                Form(
-                  key: formKey,
-                  child: TextFormField(
-                    validator: (value) {
-                      if (value?.isEmpty ?? true) {
-                        return 'required';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) => question = value,
-                    onTap: () => cubit.udpateImageState(visibility: false),
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        hintStyle: TextStyle(
-                          fontSize: 15,
-                          color: Colors.black.withOpacity(.3),
-                        ),
-                        hintText: 'Enter Your Question ...'),
-                    maxLines: 5,
-                    autofocus: false,
-                  ),
-                ),
-                SizedBox(height: 10.h),
-                CustomeButton(
-                  text: 'Send Consultation',
-                  onPressed: () async {
-                    log('${doctorModel.id}');
-                    if (formKey.currentState!.validate()) {
-                      cubit.addConsultation(
-                        context,
-                        doctorID: doctorModel.id,
-                        question: question!,
-                      );
-                    }
-                  },
-                ),
-                SizedBox(height: 10.h),
-              ],
-            ),
-          ),
-        );
-      },
-    ).whenComplete(
-      () => BlocProvider.of<DoctorDetailsCubit>(context)
-          .udpateImageState(visibility: true),
     );
   }
 }
 
 class DoctorDetailsViewBody extends StatelessWidget {
   final DoctorModel doctorModel;
-  const DoctorDetailsViewBody({super.key, required this.doctorModel});
+  final bool fromFavourite;
+  const DoctorDetailsViewBody({
+    super.key,
+    required this.doctorModel,
+    required this.fromFavourite,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -181,8 +81,16 @@ class DoctorDetailsViewBody extends StatelessWidget {
           return const CustomeProgressIndicator();
         } else if (state is DoctorDetaisFailure) {
           return CustomeErrorWidget(errorMsg: state.failureMsg);
+        } else if (state is FetchDoctorDetailsSuccess) {
+          return _Body(
+            doctorModel: state.doctorModel,
+            fromFavourite: fromFavourite,
+          );
         } else {
-          return _Body(doctorModel: doctorModel);
+          return _Body(
+            doctorModel: doctorModel,
+            fromFavourite: fromFavourite,
+          );
         }
       },
     );
@@ -191,7 +99,8 @@ class DoctorDetailsViewBody extends StatelessWidget {
 
 class _Body extends StatelessWidget {
   final DoctorModel doctorModel;
-  const _Body({required this.doctorModel});
+  final bool fromFavourite;
+  const _Body({required this.doctorModel, required this.fromFavourite});
 
   @override
   Widget build(BuildContext context) {
@@ -206,9 +115,15 @@ class _Body extends StatelessWidget {
               height: screenSize.height * .33,
             ),
             Positioned(
-              left: screenSize.width * .85,
-              top: 22.h,
-              child: const CustomArrowBackIconButton(),
+              right: screenSize.width * .85,
+              top: 25.h,
+              child: CustomArrowBackIconButton(
+                onTap: fromFavourite
+                    ? () {
+                        Navigator.popAndPushNamed(context, FavouriteView.route);
+                      }
+                    : null,
+              ),
             ),
             Align(
               alignment: Alignment.bottomCenter,
@@ -228,7 +143,7 @@ class _Body extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
-                          height: 60.h,
+                          height: 80.h,
                           width: screenSize.width,
                         ),
                         Align(
@@ -246,9 +161,10 @@ class _Body extends StatelessWidget {
                         Align(
                           alignment: Alignment.center,
                           child: Text(
-                            'Cardiac Surgery Doctor',
+                            // 'Cardiac Surgery Doctor',
+                            '${doctorModel.specialty} Doctor',
                             style: TextStyle(
-                              fontSize: 13.h,
+                              fontSize: 16.h,
                               fontWeight: FontWeight.w500,
                               color: Colors.black45,
                             ),
@@ -280,7 +196,7 @@ class _Body extends StatelessWidget {
                                   );
                                 } else {
                                   cubit.deleteFromFavourite(
-                                    favouriteID: 6,
+                                    doctorID: doctorModel.id,
                                     token: CacheHelper.getData(key: 'Token'),
                                   );
                                 }
@@ -305,10 +221,15 @@ class _Body extends StatelessWidget {
                                     cubit.ratingValue =
                                         CustomDialogs.helperGetRatingIndex();
                                     Navigator.pop(context);
-                                    cubit.addEvaluation(
+                                    cubit
+                                        .addEvaluation(
                                       doctorID: doctorModel.id,
                                       token: CacheHelper.getData(key: 'Token'),
-                                    );
+                                    )
+                                        .then((value) {
+                                      cubit.getDoctorDetails(
+                                          userID: doctorModel.userID);
+                                    });
                                   },
                                 );
                               },
@@ -327,6 +248,8 @@ class _Body extends StatelessWidget {
                               AddAppointmentView.route,
                               arguments: doctorModel,
                             );
+                            // log('\nDoctorIMG${doctorModel.imagePath}');
+                            // log('\nDoctorIMG${doctorModel.departmentImage}');
                           },
                         ),
                         SizedBox(height: 25.h),
@@ -358,12 +281,22 @@ class _Body extends StatelessWidget {
               child: Row(
                 children: [
                   const Expanded(child: SizedBox()),
-                  CustomeImage(
-                    borderRadius: BorderRadius.circular(50.h),
-                    margin: EdgeInsets.only(top: screenSize.height * .16),
-                    height: 100.h,
-                    width: 95.h,
-                  ),
+                  doctorModel.imagePath == 'default'
+                      ? CustomeImage(
+                          borderRadius: BorderRadius.circular(80.h),
+                          margin: EdgeInsets.only(top: screenSize.height * .16),
+                          height: 120.h,
+                          width: 115.h,
+                          iconSize: 50.sp,
+                        )
+                      : CustomeNetworkImage(
+                          imageUrl: doctorModel.imagePath,
+                          borderRadius: BorderRadius.circular(80.h),
+                          margin: EdgeInsets.only(top: screenSize.height * .16),
+                          height: 120.h,
+                          width: 115.h,
+                          fit: BoxFit.cover,
+                        ),
                   const Expanded(child: SizedBox()),
                 ],
               ),
@@ -371,52 +304,6 @@ class _Body extends StatelessWidget {
           ],
         );
       },
-    );
-  }
-}
-
-class DoctorDetailsButton extends StatelessWidget {
-  final String text;
-  final Icon icon;
-  final void Function() onPressed;
-  const DoctorDetailsButton({
-    super.key,
-    required this.text,
-    required this.icon,
-    required this.onPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10.h),
-        child: ElevatedButton(
-          onPressed: onPressed,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
-            elevation: 0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-          child: Column(
-            children: [
-              Text(
-                text,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 12.w,
-                  color: Colors.grey,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              icon,
-            ],
-          ),
-        ),
-      ),
     );
   }
 }
