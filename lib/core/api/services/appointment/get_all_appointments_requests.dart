@@ -5,7 +5,7 @@ import 'package:patient_app/core/models/appointment_model.dart';
 import '../../../errors/failures.dart';
 import '../../http_api_services.dart';
 
-abstract class GetAppointmentsRequestsService {
+abstract class GetAllAppointmentsRequestsService {
   static Future<Either<Failure, List<AppointmentModel>>>
       getAppointmentsRequestsService({required String token}) async {
     try {
