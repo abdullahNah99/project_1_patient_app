@@ -6,7 +6,10 @@ import '../../screens/patient_screens/doctor_details_screen/doctor_details_scree
 import '../../screens/patient_screens/home_patient_screen/home_patient_screen.dart';
 import '../../screens/patient_screens/show_all_consultation/show_all_consultation.dart';
 import '../../screens/register_screen/register_screen.dart';
+import '../../screens/secretary_screens/add_patient/add_patient.dart';
 import '../../screens/secretary_screens/appointments_requests_screen/appointments_requests_view.dart';
+import '../../screens/secretary_screens/handel_apppintment/handel_apppintment.dart';
+import '../../screens/secretary_screens/secretary_layout/secretaria_latout.dart';
 import '../api/services/local/cache_helper.dart';
 
 abstract class AppRouter {
@@ -20,5 +23,10 @@ abstract class AppRouter {
     AppointmentsRequestsView.route: (context) =>
         AppointmentsRequestsView(token: CacheHelper.getData(key: 'Token')),
     ShowAllConsultationView.route: (context) => const ShowAllConsultationView(),
+    SecretariaLayout.route: (context) => SecretariaLayout(),
+    //PatientProfile.route: (context) => const PatientProfile(),
+    RegisterSecretaria.route: (context) => RegisterSecretaria(),
+    //ViewInfoHandle.route: (context) => ViewInfoHandle(),
+    HandelApppintment.route: (context) => HandelApppintment(),
   };
 }

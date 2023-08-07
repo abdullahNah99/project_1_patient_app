@@ -13,6 +13,7 @@ import '../../../../../core/utils/constants.dart';
 import 'home_patient_states.dart';
 
 class HomePatientCubit extends Cubit<HomePatientStates> {
+
   int? bottomNavigationBarIndex;
   PatientModel? patientModel;
   List<DepartmentModel> departments = [];
