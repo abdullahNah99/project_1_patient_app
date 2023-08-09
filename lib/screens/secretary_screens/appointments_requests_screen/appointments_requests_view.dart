@@ -2,20 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:patient_app/core/widgets/custome_error_widget.dart';
 import 'package:patient_app/core/widgets/custome_progress_indicator.dart';
+import 'package:patient_app/screens/secretary_screens/api_cubit/api_cubit.dart';
 import 'package:patient_app/screens/secretary_screens/appointments_requests_screen/widgets/appointment_request_item.dart';
+import '../../../core/styles/app_colors.dart';
+import '../add_patient/add_patient.dart';
+import '../api_cubit/api_states.dart';
 import 'cubit/appointments_requests_cubit.dart';
 import 'cubit/appointments_requests_states.dart';
 
 class AppointmentsRequestsView extends StatelessWidget {
   static const route = 'AppointmentsRequestsView';
+
+  final String? date;
   final String token;
-  const AppointmentsRequestsView({super.key, required this.token});
+  const AppointmentsRequestsView({super.key, required this.token, this.date});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          AppointmentsRequestsCubit()..getAppointmentsRequests(token: token),
+          SecretariaLyoutCubit()..indexAppointmentByDate(date: date! ?? 'Tuesday Oct 08'),
       child: const Scaffold(
         body: AppointmentsRequestsViewBody(),
       ),
@@ -28,14 +34,39 @@ class AppointmentsRequestsViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppointmentsRequestsCubit, AppointmentsRequestsStates>(
+    return BlocBuilder<SecretariaLyoutCubit, SecretariaLyoutStates>(
       builder: (context, state) {
-        if (state is AppointmentsRequestsFailure) {
-          return CustomeErrorWidget(errorMsg: state.failureMsg);
-        } else if (state is AppointmentsRequestsSuccess) {
+        SecretariaLyoutCubit cubit = SecretariaLyoutCubit.get(context);
+        if(state is ApppintmentListByDateErrorState)
+        {
+          return const Padding(
+            padding: EdgeInsetsDirectional.only(
+              start: 15.0,
+              end: 15.0,
+              top: 10.0,
+              bottom: 10.0,
+            ),
+            child: Stack(
+              alignment: AlignmentDirectional.bottomEnd,
+              children: [
+                Center(
+                  child: Text(
+                    'There Are No Appointment',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }else if (state is ApppintmentListByDateSuccssesState) {
           return ListView.builder(
-            itemBuilder: (context, index) => const AppointmentRequestItem(),
-            itemCount: state.appointments.length,
+            /*physics: const NeverScrollableScrollPhysics(),
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,*/
+            itemBuilder: (context, index) => AppointmentRequestItem(model: cubit.indexAppointmentByDateModel, index: index < 0 ? 0 : index),
+            itemCount: cubit.indexAppointmentByDateModel.appointment.length/*state.appointments.length*/,
           );
         } else {
           return const CustomeProgressIndicator();

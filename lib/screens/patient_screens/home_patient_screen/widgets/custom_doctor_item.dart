@@ -7,7 +7,12 @@ import '../../doctor_details_screen/doctor_details_screen.dart';
 
 class CustomDoctorItem extends StatelessWidget {
   final DoctorModel doctorModel;
-  const CustomDoctorItem({super.key, required this.doctorModel});
+  final bool fromFavorite;
+  const CustomDoctorItem({
+    super.key,
+    required this.doctorModel,
+    required this.fromFavorite,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +22,14 @@ class CustomDoctorItem extends StatelessWidget {
         SizedBox(
           width: 200.w,
           child: InkWell(
-            onTap: () {
-              Navigator.pushNamed(context, DoctorDetailsView.route,
-                  arguments: doctorModel);
+            onTap: () async {
+              if (fromFavorite) {
+                Navigator.popAndPushNamed(context, DoctorDetailsView.route,
+                    arguments: [doctorModel, fromFavorite]);
+              } else {
+                Navigator.pushNamed(context, DoctorDetailsView.route,
+                    arguments: [doctorModel, fromFavorite]);
+              }
             },
             highlightColor: defaultColor.withOpacity(.5),
             borderRadius: BorderRadius.circular(15),
@@ -33,11 +43,21 @@ class CustomDoctorItem extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    CustomeImage(
-                      image: 'assets/images/register_doctor_image3.jpg',
-                      width: 190.w,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
+                    SizedBox(height: 6.h),
+                    doctorModel.imagePath == 'default'
+                        ? CustomeImage(
+                            image: 'assets/images/register_doctor_image3.jpg',
+                            width: 190.w,
+                            height: 160.h,
+                            borderRadius: BorderRadius.circular(15),
+                          )
+                        : CustomeNetworkImage(
+                            imageUrl: doctorModel.imagePath,
+                            width: 190.w,
+                            height: 160.h,
+                            borderRadius: BorderRadius.circular(15),
+                            fit: BoxFit.cover,
+                          ),
                     SizedBox(
                       width: 170.w,
                       child: const Divider(
@@ -45,28 +65,53 @@ class CustomDoctorItem extends StatelessWidget {
                         color: Colors.grey,
                       ),
                     ),
-                    SizedBox(height: 5.w),
+                    // SizedBox(height: 5.w),
                     Text(
                       'Dr. ${doctorModel.user.firstName} ${doctorModel.user.lastName}',
                       maxLines: 1,
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontSize: 17.w,
-                        fontWeight: FontWeight.w500,
+                        fontSize: 14.w,
+                        fontWeight: FontWeight.bold,
                       ),
+                    ),
+                    // SizedBox(height: 5.w),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          '${doctorModel.specialty} Doctor',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 12.w,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        Text(
+                          '(${doctorModel.review}.0 ⭐️)',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 10.w,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(height: 5.w),
-                    Text(
-                      'Cardiac Surgery Doctor',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 13.w,
-                        color: Colors.grey,
-                      ),
-                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: List.generate(
+                    //     doctorModel.review,
+                    //     (index) => const Text('⭐️'),
+                    //   ),
+
+                    // ),
                   ],
                 ),
               ),
@@ -74,7 +119,7 @@ class CustomDoctorItem extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: 160.w,
+          top: 150.w,
           left: 135.w,
           child: CustomeImage(
             image: 'assets/images/stethoscope_icon.png',
@@ -84,6 +129,16 @@ class CustomDoctorItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(40.w),
           ),
         ),
+        // Positioned(
+        //   left: 20.h,
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.center,
+        //     children: List.generate(
+        //       doctorModel.review,
+        //       (index) => const Text('⭐️'),
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }
