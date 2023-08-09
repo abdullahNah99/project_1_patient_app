@@ -1,17 +1,67 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:patient_app/core/api/services/dio_api_services.dart';
+import 'package:patient_app/core/models/doctor_info_model.dart';
+import 'package:patient_app/core/models/index_appointment_by_doctor_model.dart';
+import 'package:patient_app/screens/doctor_screens/appointment_screen/appointment_screen.dart';
+import 'package:patient_app/screens/doctor_screens/consulting_screen/consulting_screen.dart';
 import 'package:patient_app/screens/doctor_screens/doctor_cubit/states.dart';
+import 'package:patient_app/screens/doctor_screens/search_screen/search_screen.dart';
+import 'package:patient_app/screens/doctor_screens/session_screen/session_screen.dart';
 import 'package:patient_app/screens/login_screen/login_screen.dart';
+import '../../../core/api/services/get_doctor_info.dart';
 import '../../../core/api/services/local/cache_helper.dart';
+import '../../../core/api/services/local/end_point.dart';
 import '../../../core/api/services/log_out_service.dart';
 
 class DoctorCubit extends Cubit<DoctorStates>
 {
   DoctorCubit() : super(DoctorHomeInitialState());
   static DoctorCubit get(context) =>BlocProvider.of(context);
+  
 
-  final String _adminToken ='eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZWIzNTExMThmNzQxYjY4Y2E5YWUyN2MwYzgwMmU2NDhlZjNhM2IwNTI3MmM4YWJhYzJmNTY5MTQzOWNmYzIzYjQ4MTExY2Y3YWJkOTZlMDkiLCJpYXQiOjE2OTA1NDQ4MjkuOTYyMTEyLCJuYmYiOjE2OTA1NDQ4MjkuOTYyMTE3LCJleHAiOjE3MjIxNjcyMjkuOTUxMTQyLCJzdWIiOiIzIiwic2NvcGVzIjpbXX0.XHAYDgG7aQzzw4u_WBU1dSjVD454utu5QcvdyhfOv3w8r7v0vIZ0mdDCh6zCQNqP4nS78VyuBWruO35RmouybgLqpeI57ow6QnVZkYeU_gIvwMIJnQQinizG-U2jOa06ee5vKTL0qp2Ph54KkIoLdRS6ooNMprFgDRKOCeorIEZmCCssJc3K0F-q2iExpTMaRyVlS5fPrSoIUZnKGadpMC9BF1QWklr1P_j13ZYc5zYInKi92zsjhxidRDEfmkaeh3bfGKHvm_K8HlXqzOdfnmmFgTDw0Z01IlbvxJ_R5UULV1P9yYWrgO8vK5fhJUnQgSl1ffWCVZdCpVbQA3KVethYgyGjUqnLiTa4jeEGdoV5V0xHsfZR4GpaMtTrcyaFAnHgRKaraHosvvd2ZzaE-AcyKtrua1zlIRJ9-Ob3nLs7D2oXRPQwo0R1ZqL8W94zOM-M2OB9L2UhYgWR0xl7M5_OBXxhzl-WUM4C-rxnJB2kNKHPhLgeQKsSMIHrobKT6dVfFPEeEATuaQQjwICTlq4-PS5fWv5UOlpY_cODrrqv73kmx2BQWQW45ZcWbooQ0NnyFKPBlLXqykwlo6izyL19AQ9vwTjJVXbn4pMJUCzmp8uB8xyfUGgDEeSEjY7mD0x4NeC71D5orCn5_qekUk75ugqNfU7r8ykynZljjGc';
+  int currentIndex = 0;
+  List<Widget> bottomNavScreens =
+  [
+      ShowAppointmentScreen(),
+      ShowSessionScreen(),
+      ShowConsultingScreen(),
+      SearchScreen(),
+  ];
 
+  List <BottomNavigationBarItem> items =
+  [
+    BottomNavigationBarItem(
+      icon: Icon(
+        Icons.date_range_rounded,
+        size: 25.0,),
+      label: 'Appointment',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.medical_information_outlined,
+        size: 25.0,),
+      label: 'Session',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.question_answer_outlined,
+        size: 25.0,),
+      label: 'Consulting',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.search_outlined,
+        size: 25.0,),
+      label: 'Search',
+    ),
+  ];
+
+  void changeBottomNav(int index)
+  {
+    currentIndex = index;
+    emit(DoctorHomeChangeBottomNavState());
+
+  }
 
   Future<void> logout(BuildContext context) async {
     emit(DoctorHomeLoadingState());
@@ -30,11 +80,81 @@ class DoctorCubit extends Cubit<DoctorStates>
       },
     );
   }
-  //getSession
-  //getAppointment
-  //getConsul
-   //work time
 
+
+  DoctorInfoModel? doctorInfoModel;
+
+  Future<void> fetchMyInfo() async {
+    emit(DoctorInfoLoadingState());
+    String token = await CacheHelper.getData(key: 'Token');
+    int userID = int.parse(JwtDecoder.decode(token)['sub']);
+    (await GetDoctorInfoService.getMyInfo(userID: userID)).fold(
+          (failure) {
+        emit(DoctorGetInfoErrorState(error: failure.errorMessege));
+      },
+          (doctorInfoModel) async {
+        this.doctorInfoModel = doctorInfoModel;
+
+       // await getDoctors();
+      },
+    );
+    print(userID);
+  }
+
+///////////////
+  Map<String, dynamic>? perInfo;
+  Map<String, dynamic> decode(String token) {
+    final splitToken = token.split("."); // Split the token by '.'
+    if (splitToken.length != 3) {
+      throw FormatException('Invalid token');
+    }
+    try {
+      final payloadBase64 = splitToken[1]; // Payload is always the index 1
+      // Base64 should be multiple of 4. Normalize the payload before decode it
+      final normalizedPayload = base64.normalize(payloadBase64);
+      // Decode payload, the result is a String
+      final payloadString = utf8.decode(base64.decode(normalizedPayload));
+      // Parse the String to a Map<String, dynamic>
+      final decodedPayload = jsonDecode(payloadString);
+
+      perInfo = decodedPayload;
+      // Return the decoded payload
+      return decodedPayload;
+    } catch (error) {
+      throw const FormatException('Invalid payload');
+    }
+  }
+
+  int getMyId(){
+    String token =  CacheHelper.getData(key: 'Token');
+    perInfo = decode(token);
+    return int.parse(perInfo!['sub']);
+  }
+
+
+
+ late IndexAppointmentByDoctorModel indexAppointmentByDoctorModel;
+
+Future<void> viewAppointment({required int doctor_id})
+  async {
+  emit(DoctorViewAppointmentLoadingState());
+  DioHelper.postData(
+      url: 'indexAppointmentDoctor',
+      token: await CacheHelper.getData(key:'Token'),
+      data: {
+        'doctor_id': doctor_id,
+      }
+  ).then((value)
+  {
+    indexAppointmentByDoctorModel = IndexAppointmentByDoctorModel.fromJson(value.data);
+    emit(DoctorViewAppointmentSussesState());
+    print(indexAppointmentByDoctorModel.message);
+  }).catchError((error)
+  {
+    emit(DoctorViewAppointmentErrorState(error: error.toString()));
+  });
+
+}
 
 
 }
