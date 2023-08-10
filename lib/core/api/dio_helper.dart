@@ -1,4 +1,5 @@
 
+import 'package:dio/dio.dart';
 
 //gh api method**********************************************************************************
 class DioHelperG {
