@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:patient_app/screens/doctor_screens/home_doctor_screen/home_doctor_screen.dart';
 import 'package:patient_app/screens/patient_screens/favourite_screen/favourite_screen.dart';
 import '../../screens/login_screen/login_screen.dart';
 import '../../screens/patient_screens/add_appointment_view/add_appointment_view.dart';
@@ -28,5 +29,7 @@ abstract class AppRouter {
     RegisterSecretaria.route: (context) => RegisterSecretaria(),
     //ViewInfoHandle.route: (context) => ViewInfoHandle(),
     HandelApppintment.route: (context) => HandelApppintment(),
+
+    DoctorHomeScreen.route: (context) => DoctorHomeScreen(token: CacheHelper.getData(key: 'Token')),
   };
 }

@@ -2,36 +2,40 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:patient_app/core/api/services/dio_api_services.dart';
 import 'package:patient_app/core/models/doctor_info_model.dart';
 import 'package:patient_app/core/models/index_appointment_by_doctor_model.dart';
 import 'package:patient_app/screens/doctor_screens/appointment_screen/appointment_screen.dart';
 import 'package:patient_app/screens/doctor_screens/consulting_screen/consulting_screen.dart';
-import 'package:patient_app/screens/doctor_screens/doctor_cubit/states.dart';
+import 'package:patient_app/screens/doctor_screens/home_doctor_screen/home_doctor_cubit/states.dart';
 import 'package:patient_app/screens/doctor_screens/search_screen/search_screen.dart';
 import 'package:patient_app/screens/doctor_screens/session_screen/session_screen.dart';
 import 'package:patient_app/screens/login_screen/login_screen.dart';
-import '../../../core/api/services/get_doctor_info.dart';
-import '../../../core/api/services/local/cache_helper.dart';
-import '../../../core/api/services/local/end_point.dart';
-import '../../../core/api/services/log_out_service.dart';
+import '../../../../core/api/dio_helper.dart';
+import '../../../../core/api/services/get_doctor_info.dart';
+import '../../../../core/api/services/local/cache_helper.dart';
+import '../../../../core/api/services/local/end_point.dart';
+import '../../../../core/api/services/log_out_service.dart';
+import '../../../../core/models/index_consult_by_doctor_model.dart';
 
 class DoctorCubit extends Cubit<DoctorStates>
 {
   DoctorCubit() : super(DoctorHomeInitialState());
   static DoctorCubit get(context) =>BlocProvider.of(context);
-  
+  final String _adminToken =
+      'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiNjY5MzI3ZTEwNDI3NGRmMzE1YzE2NmVlMjAzNDIxNjRkZWIzNzcwNzdlZjM0MDY0MmYzNjFlZDQ0ZTE0Mzg2MDRiYmE5NzczZTkzYTFiZjYiLCJpYXQiOjE2OTE1ODUzMTYuNzc3NTc5LCJuYmYiOjE2OTE1ODUzMTYuNzc3NTgyLCJleHAiOjE3MjMyMDc3MTYuNzY3ODg5LCJzdWIiOiI1Iiwic2NvcGVzIjpbXX0.mqMrUix6vASVF8PF-ISzjGjFIY8ce-raRhCncnrslJkoClOF62tfUnPuMqLwqGdYv6_ex5vDFavPoDqcYL4Ks9JK72n3GQ2xLMkQF1vnhM7ut6j6kgDQ7kWHGldhT1cyFxe9rNiw6Ixl3-7l88r_BC-Ee2y3nsG1AUmCwC2v8MTvJNNsCq_PcD5rAHI7zgIJQWuCWY5Q_e6_a-qST2DtWwPE9_EIdFXJuxvsbg0aQnTVQKfrya3TYuTfH6R5Bwit4JXR7PUzJeVHHMK5K5F0uLdfOcxrM_Jeeygg5DBdJlvBSP6GtvFqx1zTJBOOXMXXEuNvyYadcw6yehwJ8QcG3hr_tsK48HxeCH8W-dpUusLsZ8guu6-cqzQzOsopMFD7Ves0NUYzAqRWBjAEm0kLH8DdMTdCiG3WlVHl3Z_omglKtkl9sXejERAnveII1ZHv0WTlSVLL_IgO-2hkkeiJKLHK4EjKV5Wh03SNJGBEKswOZ9FkkZUtYJWgO86LSf5V2D_Hp05MhlYgwAHy4HxEuz0y9x5nzfZgvK3YNKOFPKhLcdcjOVBjirFLz61HcB1yg3_7wmyXuW5qzo0B2MRIK5IKByPaJYSklrRPsuC1MgYNhwAqsovu5VGYWeXyWUJfJXEN-LsFnL-uGeuhEV0sO4IvPo7UyN5nmyi9oJCAkNI'
+ ;
+
 
   int currentIndex = 0;
   List<Widget> bottomNavScreens =
   [
       ShowAppointmentScreen(),
-      ShowSessionScreen(),
       ShowConsultingScreen(),
+      ShowSessionScreen(),
       SearchScreen(),
   ];
 
-  List <BottomNavigationBarItem> items =
+  List <BottomNavigationBarItem> items =const
   [
     BottomNavigationBarItem(
       icon: Icon(
@@ -40,14 +44,14 @@ class DoctorCubit extends Cubit<DoctorStates>
       label: 'Appointment',
     ),
     BottomNavigationBarItem(
-      icon: Icon(Icons.medical_information_outlined,
-        size: 25.0,),
-      label: 'Session',
-    ),
-    BottomNavigationBarItem(
       icon: Icon(Icons.question_answer_outlined,
         size: 25.0,),
       label: 'Consulting',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.medical_information_outlined,
+        size: 25.0,),
+      label: 'Session',
     ),
     BottomNavigationBarItem(
       icon: Icon(Icons.search_outlined,
@@ -88,6 +92,7 @@ class DoctorCubit extends Cubit<DoctorStates>
     emit(DoctorInfoLoadingState());
     String token = await CacheHelper.getData(key: 'Token');
     int userID = int.parse(JwtDecoder.decode(token)['sub']);
+
     (await GetDoctorInfoService.getMyInfo(userID: userID)).fold(
           (failure) {
         emit(DoctorGetInfoErrorState(error: failure.errorMessege));
@@ -99,9 +104,10 @@ class DoctorCubit extends Cubit<DoctorStates>
       },
     );
     print(userID);
+
   }
 
-///////////////
+
   Map<String, dynamic>? perInfo;
   Map<String, dynamic> decode(String token) {
     final splitToken = token.split("."); // Split the token by '.'
@@ -126,7 +132,7 @@ class DoctorCubit extends Cubit<DoctorStates>
   }
 
   int getMyId(){
-    String token =  CacheHelper.getData(key: 'Token');
+    String token = CacheHelper.getData(key: 'Token');
     perInfo = decode(token);
     return int.parse(perInfo!['sub']);
   }
@@ -155,6 +161,17 @@ Future<void> viewAppointment({required int doctor_id})
   });
 
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 }
