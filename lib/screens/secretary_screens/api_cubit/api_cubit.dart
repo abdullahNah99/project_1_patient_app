@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:patient_app/core/utils/constants.dart';
 import '../../../../core/api/services/local/cache_helper.dart';
-import '../../../core/api/dio_helper.dart';
+import '../../../core/api/dio_api_services.dart';
 import '../../../core/models/secretaria/secretaria_appointment/approve_the_appointment_model.dart';
 import '../../../core/models/secretaria/secretaria_appointment/cancel_appointment_model.dart';
 import '../../../core/models/secretaria/secretaria_appointment/handel_appointment_model.dart';
