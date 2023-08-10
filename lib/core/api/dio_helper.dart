@@ -1,28 +1,23 @@
-import 'package:dio/dio.dart';
+
 
 //gh api method**********************************************************************************
-class DioHelperG
-{
+class DioHelperG {
   static late Dio dio;
-  static init()
-  {
-    dio =Dio(
+  static init() {
+    dio = Dio(
       BaseOptions(
-        baseUrl: 'http://192.168.1.10:8000/api/',
+        baseUrl: 'http://192.168.43.37:8000/api/',
         receiveDataWhenStatusError: true,
-
       ),
     );
   }
 
   static Future<Response> getDataG({
     required String url,
-    required Map<String,dynamic>? query,
-    String? token ,
-  }) async
-  {
-    dio.options.headers=
-    {
+    required Map<String, dynamic>? query,
+    String? token,
+  }) async {
+    dio.options.headers = {
       'Authorization': 'Bearer $token',
     };
     return await dio.get(
@@ -33,13 +28,11 @@ class DioHelperG
 
   static Future<Response> postDataG({
     required String url,
-    required Map<String,dynamic>? data,
-    Map<String,dynamic>? query,
-    String? token ,
-  }) async
-  {
-    dio.options.headers=
-    {
+    required Map<String, dynamic>? data,
+    Map<String, dynamic>? query,
+    String? token,
+  }) async {
+    dio.options.headers = {
       'Authorization': 'Bearer $token',
     };
 
