@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 abstract class ApiServices {
   
-  static const _baseUrl = 'http://192.168.60.37:8000/api/';
+  static const _baseUrl = 'http://192.168.1.10:8000/api/';
 
 
   static Future<dynamic> get({

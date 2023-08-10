@@ -13,8 +13,8 @@ import 'package:patient_app/screens/secretary_screens/appointments_requests_scre
 
 
 
-import 'core/api/services/dio_api_services.dart';
 import 'core/api/dio_helper.dart';
+import 'core/api/services/dio_api_services.dart';
 import 'core/api/services/local/bloc_ob_server.dart';
 import 'package:patient_app/screens/doctor_screens/home_doctor_screen/home_doctor_screen.dart';
 import 'screens/secretary_screens/secretary_layout/secretaria_latout.dart';
@@ -37,6 +37,8 @@ void main() async {
     initalRoute = LoginView.route;
   } else if (await CacheHelper.getData(key: 'Role') == 'secretary') {
     initalRoute = SecretariaLayout.route;
+  }else if (await CacheHelper.getData(key: 'Role') == 'doctor') {
+    initalRoute = DoctorHomeScreen.route;
   } else {
     initalRoute = DoctorDetailsView.route;
   }
@@ -86,6 +88,8 @@ class PatientApp extends StatelessWidget {
             ),
             home: CacheHelper.getData(key: 'Token') == null
                 ? const LoginView()
+                : CacheHelper.getData(key: 'Role') == 'doctor'
+                    ? DoctorHomeScreen(token:  CacheHelper.getData(key: 'Token'))
                 : CacheHelper.getData(key: 'Role') == 'secretary'
                     ? SecretariaLayout()/*AppointmentsRequestsView(
                         token: CacheHelper.getData(key: 'Token'))*/

@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient_app/core/widgets/custome_image.dart';
-import 'package:patient_app/screens/doctor_screens/doctor_cubit/cubit.dart';
-import 'package:patient_app/screens/doctor_screens/doctor_cubit/states.dart';
+import 'package:patient_app/screens/doctor_screens/consulting_screen/consult_doctor_cubit/cubit.dart';
+import 'package:patient_app/screens/doctor_screens/home_doctor_screen/home_doctor_cubit/cubit.dart';
+import 'package:patient_app/screens/doctor_screens/home_doctor_screen/home_doctor_cubit/states.dart';
 import 'package:patient_app/screens/doctor_screens/widget/custom_divider.dart';
 import 'package:patient_app/screens/patient_screens/home_patient_screen/widgets/custom_drawer_button.dart';
 
@@ -19,8 +20,16 @@ class DoctorHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return BlocProvider(
-      create: (context) => DoctorCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => DoctorCubit()..fetchMyInfo(),
+        ),
+        BlocProvider(
+          create: (context) => DoctorConsultCubit()..getQuestion(),
+        ),
+      ],
+      //create: (context) => DoctorCubit(),
       child: BlocConsumer<DoctorCubit, DoctorStates>(
         listener: (context, state) {},
         builder: (context, state)
