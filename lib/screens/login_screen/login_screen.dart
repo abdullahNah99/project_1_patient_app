@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient_app/core/functions/custome_snack_bar.dart';
+import 'package:patient_app/screens/doctor_screens/home_doctor_screen/home_doctor_screen.dart';
 import 'package:patient_app/screens/patient_screens/home_patient_screen/home_patient_screen.dart';
 import 'package:patient_app/screens/register_screen/register_screen.dart';
 import '../../core/api/services/local/cache_helper.dart';
@@ -56,6 +57,8 @@ class LoginViewBody extends StatelessWidget {
           CacheHelper.saveData(key: 'Role', value: state.loginModel.role);
           if (state.loginModel.role == 'secretary') {
             return AppointmentsRequestsView(token: state.loginModel.token);
+          } if (state.loginModel.role == 'doctor') {
+            return DoctorHomeScreen(token: state.loginModel.token);
           }
           return const HomePatientView();
         } else {
