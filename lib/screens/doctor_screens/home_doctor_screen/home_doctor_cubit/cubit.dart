@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:patient_app/core/api/services/dio_api_services.dart';
 import 'package:patient_app/core/models/doctor_info_model.dart';
 import 'package:patient_app/core/models/index_appointment_by_doctor_model.dart';
 import 'package:patient_app/screens/doctor_screens/appointment_screen/appointment_screen.dart';
@@ -11,6 +10,7 @@ import 'package:patient_app/screens/doctor_screens/home_doctor_screen/home_docto
 import 'package:patient_app/screens/doctor_screens/search_screen/search_screen.dart';
 import 'package:patient_app/screens/doctor_screens/session_screen/session_screen.dart';
 import 'package:patient_app/screens/login_screen/login_screen.dart';
+import '../../../../core/api/dio_helper.dart';
 import '../../../../core/api/services/get_doctor_info.dart';
 import '../../../../core/api/services/local/cache_helper.dart';
 import '../../../../core/api/services/local/end_point.dart';

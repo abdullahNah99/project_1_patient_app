@@ -14,7 +14,6 @@ import 'package:patient_app/screens/secretary_screens/appointments_requests_scre
 
 
 import 'core/api/dio_helper.dart';
-import 'core/api/services/dio_api_services.dart';
 import 'core/api/services/local/bloc_ob_server.dart';
 import 'package:patient_app/screens/doctor_screens/home_doctor_screen/home_doctor_screen.dart';
 import 'screens/secretary_screens/secretary_layout/secretaria_latout.dart';
@@ -28,8 +27,6 @@ void main() async {
   await CacheHelper.init();
   Bloc.observer = MyBlocObserver();
 
-
-  DioHelperG.init();
   DioHelper.init();
   //tokenDoc = CacheHelper.getData(key: 'token');
 

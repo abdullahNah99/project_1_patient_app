@@ -2,7 +2,7 @@
 import 'package:dio/dio.dart';
 
 //gh api method**********************************************************************************
-class DioHelperG {
+class DioHelper {
   static late Dio dio;
   static init() {
     dio = Dio(
@@ -13,9 +13,9 @@ class DioHelperG {
     );
   }
 
-  static Future<Response> getDataG({
+  static Future<Response> getData({
     required String url,
-    required Map<String, dynamic>? query,
+     Map<String, dynamic>? query,
     String? token,
   }) async {
     dio.options.headers = {
@@ -27,7 +27,7 @@ class DioHelperG {
     );
   }
 
-  static Future<Response> postDataG({
+  static Future<Response> postData({
     required String url,
     required Map<String, dynamic>? data,
     Map<String, dynamic>? query,

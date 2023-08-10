@@ -5,7 +5,7 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:patient_app/core/api/services/get_doctor_info.dart';
 import 'package:patient_app/core/models/doctor_info_model.dart';
 import 'package:patient_app/screens/doctor_screens/consulting_screen/consult_doctor_cubit/states.dart';
-import '../../../../core/api/services/dio_api_services.dart';
+import '../../../../core/api/dio_helper.dart';
 import '../../../../core/api/services/local/cache_helper.dart';
 import '../../../../core/models/index_consult_by_doctor_model.dart';
 
