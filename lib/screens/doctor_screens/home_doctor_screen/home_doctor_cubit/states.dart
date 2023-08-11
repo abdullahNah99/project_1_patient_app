@@ -29,3 +29,7 @@ class DoctorViewAppointmentErrorState extends DoctorStates
  final String error;
  DoctorViewAppointmentErrorState({required this.error});
 }
+
+
+
+

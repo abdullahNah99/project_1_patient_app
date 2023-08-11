@@ -2,8 +2,8 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:patient_app/screens/doctor_screens/doctor_cubit/cubit.dart';
-import 'package:patient_app/screens/doctor_screens/doctor_cubit/states.dart';
+import 'package:patient_app/screens/doctor_screens/home_doctor_screen/home_doctor_cubit/cubit.dart';
+import 'package:patient_app/screens/doctor_screens/home_doctor_screen/home_doctor_cubit/states.dart';
 import 'package:patient_app/screens/doctor_screens/widget/custom_divider.dart';
 import '../widget/custom_button.dart';
 
