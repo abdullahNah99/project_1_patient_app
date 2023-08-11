@@ -23,9 +23,7 @@ void main() async {
   await CacheHelper.init();
   Bloc.observer = MyBlocObserver();
 
-
-  DioHelperG.init();
-
+  // DioHelperG.init();
 
   DioHelper.init();
   //tokenDoc = CacheHelper.getData(key: 'token');
@@ -34,7 +32,7 @@ void main() async {
     initalRoute = LoginView.route;
   } else if (await CacheHelper.getData(key: 'Role') == 'secretary') {
     initalRoute = SecretariaLayout.route;
-  }else if (await CacheHelper.getData(key: 'Role') == 'doctor') {
+  } else if (await CacheHelper.getData(key: 'Role') == 'doctor') {
     initalRoute = DoctorHomeScreen.route;
   } else {
     initalRoute = DoctorDetailsView.route;
@@ -86,15 +84,15 @@ class PatientApp extends StatelessWidget {
             home: CacheHelper.getData(key: 'Token') == null
                 ? const LoginView()
                 : CacheHelper.getData(key: 'Role') == 'doctor'
-                    ? DoctorHomeScreen(token:  CacheHelper.getData(key: 'Token'))
-                : CacheHelper.getData(key: 'Role') == 'secretary'
-                    ? SecretariaLayout() /*AppointmentsRequestsView(
+                    ? DoctorHomeScreen(token: CacheHelper.getData(key: 'Token'))
+                    : CacheHelper.getData(key: 'Role') == 'secretary'
+                        ? SecretariaLayout() /*AppointmentsRequestsView(
                         token: CacheHelper.getData(key: 'Token'))*/
-                    : CacheHelper.getData(key: 'Role') == 'doctor'
-                        ? DoctorHomeScreen(
-                            token: CacheHelper.getData(key: 'Token'),
-                          )
-                        : const HomePatientView(),
+                        : CacheHelper.getData(key: 'Role') == 'doctor'
+                            ? DoctorHomeScreen(
+                                token: CacheHelper.getData(key: 'Token'),
+                              )
+                            : const HomePatientView(),
             // initialRoute: initialRoute,
             routes: AppRouter.router);
       },
