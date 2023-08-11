@@ -52,6 +52,10 @@ class LoginViewBody extends StatelessWidget {
         if (state is LoginLoading) {
           return const CustomeProgressIndicator();
         } else if (state is LoginSuccess) {
+          // SchedulerBinding.instance.addPostFrameCallback((_) {
+          //   BlocProvider.of<LoginCubit>(context).close();
+          //   Navigator.popAndPushNamed(context, HomePatientView.route);
+          // });
           CacheHelper.saveData(key: 'Token', value: state.loginModel.token);
           CacheHelper.saveData(key: 'Role', value: state.loginModel.role);
           if (state.loginModel.role == 'secretary') {

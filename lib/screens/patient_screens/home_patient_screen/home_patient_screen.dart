@@ -48,6 +48,7 @@ class _HomePatientViewState extends State<HomePatientView> {
               context,
               homeCubit: homeCubit,
               scaffoldKey: _scaffoldKey,
+              patientModel: homeCubit.patientModel,
             ),
             appBar: AppBar(
               shape: RoundedRectangleBorder(
@@ -75,8 +76,10 @@ class _HomePatientViewState extends State<HomePatientView> {
                     if (value == 0) {
                       homeCubit.getDoctorsAndDepartments();
                     } else {
-                      appointmentsCubit.getMyAppointments(
-                          patientID: homeCubit.patientModel!.id!);
+                      if (homeCubit.patientModel != null) {
+                        appointmentsCubit.getMyAppointments(
+                            patientID: homeCubit.patientModel!.id!);
+                      }
                     }
                     _index = value;
                   });
@@ -119,34 +122,41 @@ class HomePatientViewBody extends StatelessWidget {
         } else if (state is HomePatientFailure) {
           return CustomeErrorWidget(errorMsg: state.failureMsg);
         } else if (state is GetDoctorsAndDepartmentsSuccess) {
-          return CustomScrollView(
-            physics: const BouncingScrollPhysics(),
-            slivers: [
-              SliverToBoxAdapter(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    DepartmentsListView(homeCubit: homeCubit, state: state),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                  ],
+          return RefreshIndicator(
+            onRefresh: () => homeCubit.fetchMyInfo(),
+            child: CustomScrollView(
+              physics: const BouncingScrollPhysics(),
+              slivers: [
+                SliverToBoxAdapter(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      DepartmentsListView(homeCubit: homeCubit, state: state),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              homeCubit.departmentID != null
-                  ? DoctorsSliverGrid(homeCubit: homeCubit, state: state)
-                  : const SliverFillRemaining(
-                      child: Center(
-                        child: Text(
-                          'Please Select Department',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 25,
+                homeCubit.departmentID != null
+                    ? DoctorsSliverGrid(
+                        homeCubit: homeCubit,
+                        state: state,
+                        patientModel: homeCubit.patientModel!,
+                      )
+                    : const SliverFillRemaining(
+                        child: Center(
+                          child: Text(
+                            'Please Select Department',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 25,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-            ],
+              ],
+            ),
           );
         } else {
           return const CustomeProgressIndicator();
@@ -188,8 +198,11 @@ class AppointmentsViewBody extends StatelessWidget {
             );
           }
         } else {
-          return const Center(
-            child: Text('Initial'),
+          return Center(
+            child: Text(
+              'Please Check Your Connectin',
+              style: TextStyle(fontSize: 22.w, color: Colors.black54),
+            ),
           );
         }
       },
