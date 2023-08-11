@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:patient_app/core/functions/custome_dialogs.dart';
 import 'package:patient_app/core/models/doctor_model.dart';
+import 'package:patient_app/core/models/patient_model.dart';
 import 'package:patient_app/core/styles/app_colors.dart';
 import 'package:patient_app/core/widgets/custome_button.dart';
 import 'package:patient_app/core/widgets/custome_progress_indicator.dart';
@@ -22,8 +26,9 @@ class AddAppointmentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DoctorModel doctorModel =
-        ModalRoute.of(context)!.settings.arguments as DoctorModel;
+    final dynamic args = ModalRoute.of(context)?.settings.arguments;
+    final DoctorModel doctorModel = args[0];
+    final PatientModel patientModel = args[1];
     return BlocProvider(
       create: (context) {
         return AddAppointmentCubit()
@@ -35,7 +40,10 @@ class AddAppointmentView extends StatelessWidget {
             FocusScope.of(context).unfocus();
           },
           child: Scaffold(
-            body: AddAppointmentViewBody(doctorModel: doctorModel),
+            body: AddAppointmentViewBody(
+              doctorModel: doctorModel,
+              patientModel: patientModel,
+            ),
           ),
         ),
       ),
@@ -45,7 +53,12 @@ class AddAppointmentView extends StatelessWidget {
 
 class AddAppointmentViewBody extends StatelessWidget {
   final DoctorModel doctorModel;
-  const AddAppointmentViewBody({super.key, required this.doctorModel});
+  final PatientModel patientModel;
+  const AddAppointmentViewBody({
+    super.key,
+    required this.doctorModel,
+    required this.patientModel,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -67,25 +80,13 @@ class AddAppointmentViewBody extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        // if (state is AddAppointmentFailureState) {
-        //   return CustomeErrorWidget(
-        //     errorMsg: state.failureMsg,
-        //   );
-        // }
-        //  else if (state is AddAppointmentSuccessState) {
-        //   SchedulerBinding.instance.addPostFrameCallback((_) {
-        //     // int count = 0;
-        //     BlocProvider.of<AddAppointmentCubit>(context).close();
-        //     Navigator.popUntil(context, (route) => route.isFirst);
-        //   });
-        //   return const HomePatientView();
-        // }
         if (state is AddAppointmentLodgingState) {
           return const CustomeProgressIndicator();
         } else {
           return _Body(
             key: key,
             doctorModel: doctorModel,
+            patientModel: patientModel,
           );
         }
       },
@@ -95,9 +96,11 @@ class AddAppointmentViewBody extends StatelessWidget {
 
 class _Body extends StatelessWidget {
   final DoctorModel doctorModel;
+  final PatientModel patientModel;
   const _Body({
     super.key,
     required this.doctorModel,
+    required this.patientModel,
   });
 
   @override
@@ -158,12 +161,6 @@ class _Body extends StatelessWidget {
                         SizedBox(
                           height: 10.h,
                         ),
-                        // SizedBox(
-                        //     height: cubit.times11.isNotEmpty ? 70.h : 10.h,
-                        //   )
-                        // : SizedBox(
-                        //     height: 10.h,
-                        //   ),
                         Form(
                           key: cubit.formKey,
                           child: TextFormField(
@@ -205,14 +202,29 @@ class _Body extends StatelessWidget {
                                   msg: 'Please Select a Time',
                                   color: Colors.red,
                                 );
+                              } else if (patientModel.wallet! < 100) {
+                                CustomeSnackBar.showSnackBar(
+                                  context,
+                                  msg:
+                                      "You Don't Have Enough Money, Please Charge Your Wallet",
+                                  color: Colors.red,
+                                );
                               } else {
-                                cubit.addAppointment(
-                                  token: CacheHelper.getData(key: 'Token'),
-                                  departmentID: doctorModel.departmentID,
-                                  doctorID: doctorModel.id,
+                                CustomDialogs.showCustomDialog(
+                                  context,
+                                  balance: patientModel.wallet!,
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    cubit.addAppointment(
+                                      token: CacheHelper.getData(key: 'Token'),
+                                      departmentID: doctorModel.departmentID,
+                                      doctorID: doctorModel.id,
+                                    );
+                                  },
                                 );
                               }
                             }
+                            log(patientModel.wallet.toString());
                           },
                           text: 'ADD',
                           width: double.infinity,

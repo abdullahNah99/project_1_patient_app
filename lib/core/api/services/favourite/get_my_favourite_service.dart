@@ -18,8 +18,6 @@ abstract class GetMyFavouritedService {
       );
       List<DoctorModel> doctors = [];
       for (var item in data['session']) {
-        int index = 0;
-
         var doctorData = await ApiServices.post(
           endPoint: 'viewDoctor',
           body: {
@@ -27,7 +25,6 @@ abstract class GetMyFavouritedService {
           },
         );
         doctors.add(DoctorModel.fromJson(doctorData['doctor']));
-        index += 1;
       }
       return right(doctors);
     } catch (ex) {

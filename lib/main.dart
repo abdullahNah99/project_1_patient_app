@@ -5,17 +5,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient_app/core/api/services/local/cache_helper.dart';
 import 'package:patient_app/core/styles/app_colors.dart';
 import 'package:patient_app/core/utils/app_router.dart';
-
+import 'package:patient_app/screens/doctor_screens/home_doctor_screen/home_doctor_screen.dart';
 import 'package:patient_app/screens/login_screen/login_screen.dart';
 import 'package:patient_app/screens/patient_screens/doctor_details_screen/doctor_details_screen.dart';
 import 'package:patient_app/screens/patient_screens/home_patient_screen/home_patient_screen.dart';
-import 'package:patient_app/screens/secretary_screens/appointments_requests_screen/appointments_requests_view.dart';
-
-
 
 import 'core/api/dio_helper.dart';
 import 'core/api/services/local/bloc_ob_server.dart';
-import 'package:patient_app/screens/doctor_screens/home_doctor_screen/home_doctor_screen.dart';
 import 'screens/secretary_screens/secretary_layout/secretaria_latout.dart';
 import 'firebase_options.dart';
 
@@ -26,6 +22,10 @@ void main() async {
   // await FirebaseAPIs.getFirebaseMessagingToken();
   await CacheHelper.init();
   Bloc.observer = MyBlocObserver();
+
+
+  DioHelperG.init();
+
 
   DioHelper.init();
   //tokenDoc = CacheHelper.getData(key: 'token');
@@ -88,9 +88,13 @@ class PatientApp extends StatelessWidget {
                 : CacheHelper.getData(key: 'Role') == 'doctor'
                     ? DoctorHomeScreen(token:  CacheHelper.getData(key: 'Token'))
                 : CacheHelper.getData(key: 'Role') == 'secretary'
-                    ? SecretariaLayout()/*AppointmentsRequestsView(
+                    ? SecretariaLayout() /*AppointmentsRequestsView(
                         token: CacheHelper.getData(key: 'Token'))*/
-                    : const HomePatientView(),
+                    : CacheHelper.getData(key: 'Role') == 'doctor'
+                        ? DoctorHomeScreen(
+                            token: CacheHelper.getData(key: 'Token'),
+                          )
+                        : const HomePatientView(),
             // initialRoute: initialRoute,
             routes: AppRouter.router);
       },
