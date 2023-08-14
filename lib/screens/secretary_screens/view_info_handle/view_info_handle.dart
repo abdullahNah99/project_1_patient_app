@@ -703,9 +703,10 @@ class ViewInfoHandle extends StatelessWidget {
                               ),
                             ),
                             Container(
-                              height: MediaQuery.of(context).size.height * .06,
+                              height: MediaQuery.of(context).size.height * .063,
                               padding: EdgeInsetsDirectional.only(
                                 top: 3.h,
+                                //bottom: 3.h,
                               ),
                               child: state is! ViewInfoHandleLoadingState ? ListView.separated(
                                 scrollDirection: Axis.horizontal,
@@ -728,14 +729,15 @@ class ViewInfoHandle extends StatelessWidget {
                                     child: Padding(
                                       padding: EdgeInsetsDirectional.only(
                                         top: 6.h,
+                                        bottom: 6.h,
                                         start: 12.w,
                                         end: 12.w,
                                       ),
                                       child: Align(
                                         alignment: AlignmentDirectional.topStart,
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             /*Text(
                                               cubit.viewInfoHandleModel.bookedAppointments[index].date,

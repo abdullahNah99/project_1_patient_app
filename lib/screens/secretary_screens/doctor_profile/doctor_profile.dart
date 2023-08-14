@@ -68,12 +68,10 @@ class DoctorProfile extends StatelessWidget {
           {
             return ConditionalBuilder(
               condition: state is! DoctorProfLoadingState && state is! ViewInfoHandleLoadingState,
-              builder: (context) => state is ViewInfoHandleSuccssesState ? DoctorProfileItem(
+              builder: (context) => DoctorProfileItem(
                   model: SecretariaLyoutCubit.get(context).viewDoctorModel,
-                  modelInfo: SecretariaLyoutCubit.get(context).viewInfoHandleModel)
-                  : Scaffold(
-                    backgroundColor: Colors.white,
-                    body: Center(child: Text('Please Wait...', style: Theme.of(context).textTheme.labelLarge),),),
+                indexApp: indexApp,
+              ),
               fallback: (context) => Container(
                 color: Colors.white,
                 child:  const Center(child: CircularProgressIndicator(),),
