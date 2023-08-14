@@ -30,13 +30,12 @@ import '../doctor_list/doctor_list.dart';
 import '../patient_list/patient_list.dart';
 import 'api_states.dart';
 
-class SecretariaLyoutCubit extends Cubit<SecretariaLyoutStates>
-{
+class SecretariaLyoutCubit extends Cubit<SecretariaLyoutStates> {
   SecretariaLyoutCubit() : super(SecretariaLyoutInitialStates());
 
   static SecretariaLyoutCubit get(context) => BlocProvider.of(context);
 
-  Map<String, dynamic>? perInfo;
+   Map<String, dynamic>? perInfo;
 
   int currentIndex = 0;
 
@@ -68,7 +67,7 @@ class SecretariaLyoutCubit extends Cubit<SecretariaLyoutStates>
     /*AppointmentsRequestsView(token: CacheHelper.getData(key: 'Token')),*/
   ];
 
-  void changBottomNavBar(int index)
+  void changBottomNavBar(int index) 
     {
     currentIndex = index;
     emit(SecretariaLyoutChangeNavBarStates());
@@ -84,8 +83,7 @@ class SecretariaLyoutCubit extends Cubit<SecretariaLyoutStates>
   IconData suffixIcon = Icons.visibility;
   bool isPassShow = false;
 
-  void changePassVisibility()
-  {
+  void changePassVisibility() {
     isPassShow = !isPassShow;
     suffixIcon = isPassShow ? Icons.visibility_off : Icons.visibility;
     emit(SecretariaLyoutChangePassVisibilityState());
@@ -93,8 +91,7 @@ class SecretariaLyoutCubit extends Cubit<SecretariaLyoutStates>
 
   bool isBottomSheetShown = false;
 
-  void changeBottomSheet({required bool isShow})
-  {
+  void changeBottomSheet({required bool isShow}) {
     isBottomSheetShown = isShow;
     emit(ChangeBottomSheetState());
   }
@@ -175,7 +172,7 @@ class SecretariaLyoutCubit extends Cubit<SecretariaLyoutStates>
       print(value.toString());
       print(indexPatientModel.patient[0].user.firstName);
       emit(PatientListSuccssesState());
-    }).catchError((error){
+    }).catchError((error) {
       print(error.toString());
       emit(PatientListErrorState());
     });
@@ -185,8 +182,7 @@ class SecretariaLyoutCubit extends Cubit<SecretariaLyoutStates>
 
   void viewPatient({
     required int user_id,
-  })
-  {
+  }) {
     emit(PatientProfLoadingState());
     DioHelper.postData(
         url: 'viewPatient',
@@ -218,8 +214,7 @@ class SecretariaLyoutCubit extends Cubit<SecretariaLyoutStates>
     required String email,
     required String password,
     required String FCMToken,
-  })
-  {
+  }) {
     emit(PatientRegisterLoadingState());
     DioHelper.postData(
         url: 'registerPatient',
@@ -253,8 +248,7 @@ class SecretariaLyoutCubit extends Cubit<SecretariaLyoutStates>
   void chargeWallet({
     required double value,
     required int id,
-  })
-  {
+  }) {
     emit(ChargeWalletLoadingState());
     DioHelper.postData(
         url: 'wallet/patient/$id',
@@ -281,11 +275,11 @@ class SecretariaLyoutCubit extends Cubit<SecretariaLyoutStates>
   })
   {
     emit(LogOutLoadingState());
-    DioHelperG.getDataG(
-        url: 'logout',
-        query: null,
-        token: CacheHelper.getData(key: 'Token')
-    ).then((value) {
+    DioHelper.getData(
+            url: 'logout',
+            query: null,
+            token: CacheHelper.getData(key: 'Token'))
+        .then((value) {
       //indexPatientModel = IndexPatientModel.fromJson(value.data);
       print(value.toString());
       //print(indexPatientModel.patient[0].user.firstName);
@@ -293,7 +287,7 @@ class SecretariaLyoutCubit extends Cubit<SecretariaLyoutStates>
       CacheHelper.deletData(key: 'Token');
       CacheHelper.deletData(key: 'Role');
       Navigator.pop(context, LoginView.route);
-    }).catchError((error){
+    }).catchError((error) {
       print(error.toString());
       emit(LogOutErrorState());
     });
@@ -302,19 +296,18 @@ class SecretariaLyoutCubit extends Cubit<SecretariaLyoutStates>
 
   /*late IndexAppointmentModel indexAppointmentModel;
 
-  void indexAppointment()
-  {
+  void indexAppointment() {
     emit(ApppintmentListLoadingState());
-    DioHelperG.getDataG(
-        url: 'indexAppointment',
-        query: null,
-        token: CacheHelper.getData(key: 'Token')
-    ).then((value) {
+    DioHelper.getData(
+            url: 'indexAppointment',
+            query: null,
+            token: CacheHelper.getData(key: 'Token'))
+        .then((value) {
       indexAppointmentModel = IndexAppointmentModel.fromJson(value.data);
       print(value.toString());
       print(indexAppointmentModel.appointment[0].date);
       emit(ApppintmentListSuccssesState());
-    }).catchError((error){
+    }).catchError((error) {
       print(error.toString());
       emit(ApppintmentListErrorState());
     });
@@ -325,8 +318,7 @@ class SecretariaLyoutCubit extends Cubit<SecretariaLyoutStates>
 
   void indexAppointmentByDate({
     required String date,
-  })
-  {
+  }) {
     emit(ApppintmentListByDateLoadingState());
     DioHelper.postData(
         url: 'indexAppointmentByDate',
@@ -336,7 +328,8 @@ class SecretariaLyoutCubit extends Cubit<SecretariaLyoutStates>
         token: CacheHelper.getData(key: 'Token')
     ).then((value) {
       print(value.data);
-      indexAppointmentByDateModel = IndexAppointmentByDateModel.fromJson(value.data);
+      indexAppointmentByDateModel =
+          IndexAppointmentByDateModel.fromJson(value.data);
       print(indexAppointmentByDateModel.appointment[0].status);
       print(indexAppointmentByDateModel.success);
       emit(ApppintmentListByDateSuccssesState());
@@ -479,7 +472,8 @@ class SecretariaLyoutCubit extends Cubit<SecretariaLyoutStates>
         token: CacheHelper.getData(key: 'Token')
     ).then((value) {
       print(value.data);
-      approveTheAppointmentModel = ApproveTheAppointmentModel.fromJson(value.data);
+      approveTheAppointmentModel =
+          ApproveTheAppointmentModel.fromJson(value.data);
       print(approveTheAppointmentModel.message);
       print(approveTheAppointmentModel.success);
       emit(ApproveTheAppointmentSuccssesState());
@@ -552,8 +546,7 @@ class SecretariaLyoutCubit extends Cubit<SecretariaLyoutStates>
     required String time,
     required String status,
     required int id,
-  })
-  {
+  }) {
     emit(HandelApppintmentLoadingState());
     DioHelper.postData(
         url: 'AppointmentHandle',
@@ -601,8 +594,7 @@ class SecretariaLyoutCubit extends Cubit<SecretariaLyoutStates>
 
   void viewDoctor({
     required int user_id,
-  })
-  {
+  }) {
     emit(DoctorProfLoadingState());
     DioHelper.postData(
         url: 'viewDoctor',

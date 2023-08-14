@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:patient_app/core/models/patient_model.dart';
 import '../../../../core/models/doctor_model.dart';
 import '../../../../core/styles/app_colors.dart';
 import '../../../../core/widgets/custome_image.dart';
@@ -8,10 +9,12 @@ import '../../doctor_details_screen/doctor_details_screen.dart';
 class CustomDoctorItem extends StatelessWidget {
   final DoctorModel doctorModel;
   final bool fromFavorite;
+  final PatientModel patientModel;
   const CustomDoctorItem({
     super.key,
     required this.doctorModel,
     required this.fromFavorite,
+    required this.patientModel,
   });
 
   @override
@@ -25,10 +28,10 @@ class CustomDoctorItem extends StatelessWidget {
             onTap: () async {
               if (fromFavorite) {
                 Navigator.popAndPushNamed(context, DoctorDetailsView.route,
-                    arguments: [doctorModel, fromFavorite]);
+                    arguments: [doctorModel, fromFavorite, patientModel]);
               } else {
                 Navigator.pushNamed(context, DoctorDetailsView.route,
-                    arguments: [doctorModel, fromFavorite]);
+                    arguments: [doctorModel, fromFavorite, patientModel]);
               }
             },
             highlightColor: defaultColor.withOpacity(.5),

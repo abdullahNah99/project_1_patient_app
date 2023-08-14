@@ -4,30 +4,45 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient_app/core/widgets/custome_image.dart';
-import 'package:patient_app/screens/doctor_screens/doctor_cubit/cubit.dart';
-import 'package:patient_app/screens/doctor_screens/doctor_cubit/states.dart';
+import 'package:patient_app/screens/doctor_screens/consulting_screen/consult_doctor_cubit/cubit.dart';
+import 'package:patient_app/screens/doctor_screens/home_doctor_screen/home_doctor_cubit/cubit.dart';
+import 'package:patient_app/screens/doctor_screens/home_doctor_screen/home_doctor_cubit/states.dart';
 import 'package:patient_app/screens/doctor_screens/widget/custom_divider.dart';
 import 'package:patient_app/screens/patient_screens/home_patient_screen/widgets/custom_drawer_button.dart';
+
 
 class DoctorHomeScreen extends StatelessWidget {
   static const route = 'DoctorHomeScreen';
   final String token;
+  
   DoctorHomeScreen({super.key, required this.token});
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => DoctorCubit(),
+
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => DoctorCubit()..fetchMyInfo(),
+        ),
+        BlocProvider(
+          create: (context) => DoctorConsultCubit()..getQuestion(),
+        ),
+      ],
+      //create: (context) => DoctorCubit(),
       child: BlocConsumer<DoctorCubit, DoctorStates>(
         listener: (context, state) {},
-        builder: (context, state) {
-
-
-          DoctorCubit homeCubit = BlocProvider.of<DoctorCubit>(context);
-          DoctorCubit cubit = DoctorCubit.get(context);
-
+        builder: (context, state)
+        {
+          DoctorCubit cubit = BlocProvider.of<DoctorCubit>(context);
+          //DoctorCubit cubit = DoctorCubit.get(context);
           return Scaffold(
             key: scaffoldKey,
+            /*onPressed: () {
+                      _scaffoldKey.currentState!.closeDrawer();
+                      Navigator.pushNamed(
+                          context, ShowAllConsultationView.route);
+                    },*/
             drawer: Drawer(
               width: 250.w,
               child: Padding(
@@ -52,6 +67,21 @@ class DoctorHomeScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 22.h,),
                     divider(),
+                    SizedBox(height: 25.h),
+                    Row(
+                      children: [
+                        const Icon(Icons.info_outline),
+                        SizedBox(width: 15.w,),
+                        Text(
+                          'My Account',
+                          style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.bold
+
+                          ),
+                        ),
+                      ],
+                    ),
                     SizedBox(height: 25.h),
                     Row(
                       children: [
@@ -112,6 +142,21 @@ class DoctorHomeScreen extends StatelessWidget {
                         ),
                       ],
                     ),
+                    SizedBox(height: 25.h),
+                    Row(
+                      children: [
+                        const Icon(Icons.dark_mode_outlined),
+                        SizedBox(width: 15.w,),
+                        Text(
+                          'Dark mode',
+                          style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.bold
+
+                          ),
+                        ),
+                      ],
+                    ),
                     const Expanded(child: SizedBox()),
                     Padding(
                      padding:const EdgeInsets.only(right: 20.0),
@@ -121,7 +166,7 @@ class DoctorHomeScreen extends StatelessWidget {
                      iconColor: Colors.red,
                      onPressed: () {
                        scaffoldKey.currentState!.closeDrawer();
-                       homeCubit.logout(context);
+                       cubit.logout(context);
                      },
                    ),),
                     SizedBox(height: 25.h),
@@ -135,17 +180,30 @@ class DoctorHomeScreen extends StatelessWidget {
                   bottom: Radius.circular(20.r),
                 ),
               ),
-              title: Text(
-                'Welcome', //${homeCubit.patientModel?.userModel?.firstName ?? ''}
-                style: TextStyle(fontSize: 20.w),
-              ),
-              actions: const [
-                Icon(Icons.notifications),
-                SizedBox(width: 5),
-              ],
+             /* title: Text(
+                 cubit.doctorInfoModel.doctor.user.firstName ?? 'h',
+                style: TextStyle(
+                    fontSize: 25.sp, fontWeight: FontWeight.bold),
+              ),*/
+            /*  actions:  [
+               IconButton(
+                 onPressed: ()
+                 {
+                   DoctorCubit.get(context).getDoctorInfo(user_id: DoctorCubit.get(context).doctorInfoModel.doctor.userId);
+                 }, icon: const Icon(Icons.notifications),),
+                const SizedBox(width: 5),
+              ],*/
             ),
-            body:const Center(
-              child:Text('hello dr food'),
+            body: cubit.bottomNavScreens[cubit.currentIndex],
+            bottomNavigationBar:BottomNavigationBar(
+              currentIndex:cubit.currentIndex,
+              onTap: (index)
+              {
+                cubit.currentIndex =index;
+                print(index);
+                cubit.changeBottomNav(index);
+              },
+              items: cubit.items,
             ),
           );
         },

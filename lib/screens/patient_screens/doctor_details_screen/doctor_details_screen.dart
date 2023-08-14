@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient_app/core/api/services/local/cache_helper.dart';
 import 'package:patient_app/core/functions/custome_dialogs.dart';
 import 'package:patient_app/core/models/doctor_model.dart';
+import 'package:patient_app/core/models/patient_model.dart';
 import 'package:patient_app/core/styles/app_colors.dart';
 import 'package:patient_app/core/utils/app_assets.dart';
 import 'package:patient_app/core/widgets/custome_arrow_back_button.dart';
@@ -17,6 +18,7 @@ import 'package:patient_app/screens/patient_screens/doctor_details_screen/cubit/
 import 'package:patient_app/screens/patient_screens/doctor_details_screen/widgets/consultation_bottom_sheet.dart';
 import 'package:patient_app/screens/patient_screens/doctor_details_screen/widgets/doctor_details_button.dart';
 import 'package:patient_app/screens/patient_screens/favourite_screen/favourite_screen.dart';
+
 import '../add_appointment_view/add_appointment_view.dart';
 
 class DoctorDetailsView extends StatelessWidget {
@@ -28,6 +30,7 @@ class DoctorDetailsView extends StatelessWidget {
     final dynamic args = ModalRoute.of(context)?.settings.arguments;
     final DoctorModel doctorModel = args[0];
     final bool fromFavorite = args[1];
+    final PatientModel patientModel = args[2];
     return BlocProvider(
       create: (context) => DoctorDetailsCubit()
         ..checkIsFavourited(
@@ -38,6 +41,7 @@ class DoctorDetailsView extends StatelessWidget {
         body: DoctorDetailsViewBody(
           doctorModel: doctorModel,
           fromFavourite: fromFavorite,
+          patientModel: patientModel,
         ),
         floatingActionButton:
             BlocBuilder<DoctorDetailsCubit, DoctorDetailsStates>(
@@ -67,10 +71,12 @@ class DoctorDetailsView extends StatelessWidget {
 class DoctorDetailsViewBody extends StatelessWidget {
   final DoctorModel doctorModel;
   final bool fromFavourite;
+  final PatientModel patientModel;
   const DoctorDetailsViewBody({
     super.key,
     required this.doctorModel,
     required this.fromFavourite,
+    required this.patientModel,
   });
 
   @override
@@ -85,11 +91,13 @@ class DoctorDetailsViewBody extends StatelessWidget {
           return _Body(
             doctorModel: state.doctorModel,
             fromFavourite: fromFavourite,
+            patientModel: patientModel,
           );
         } else {
           return _Body(
             doctorModel: doctorModel,
             fromFavourite: fromFavourite,
+            patientModel: patientModel,
           );
         }
       },
@@ -100,7 +108,12 @@ class DoctorDetailsViewBody extends StatelessWidget {
 class _Body extends StatelessWidget {
   final DoctorModel doctorModel;
   final bool fromFavourite;
-  const _Body({required this.doctorModel, required this.fromFavourite});
+  final PatientModel patientModel;
+  const _Body({
+    required this.doctorModel,
+    required this.fromFavourite,
+    required this.patientModel,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +133,11 @@ class _Body extends StatelessWidget {
               child: CustomArrowBackIconButton(
                 onTap: fromFavourite
                     ? () {
-                        Navigator.popAndPushNamed(context, FavouriteView.route);
+                        Navigator.popAndPushNamed(
+                          context,
+                          FavouriteView.route,
+                          arguments: patientModel,
+                        );
                       }
                     : null,
               ),
@@ -246,10 +263,8 @@ class _Body extends StatelessWidget {
                             Navigator.pushNamed(
                               context,
                               AddAppointmentView.route,
-                              arguments: doctorModel,
+                              arguments: [doctorModel, patientModel],
                             );
-                            // log('\nDoctorIMG${doctorModel.imagePath}');
-                            // log('\nDoctorIMG${doctorModel.departmentImage}');
                           },
                         ),
                         SizedBox(height: 25.h),
