@@ -80,7 +80,79 @@ class PatientApp extends StatelessWidget {
                 ),
                 type: BottomNavigationBarType.fixed,
               ),
+              textTheme: TextTheme(
+                bodySmall: TextStyle(//bodyText2
+                  color: Colors.white,
+                  fontSize: 15.w,
+                  fontWeight: FontWeight.w500,
+                ),
+                labelLarge: TextStyle(//caption
+                  fontSize: 12.5.w,
+                  fontWeight: FontWeight.w400,
+                ),
+                titleSmall: TextStyle(//subtitle2
+                    color: Colors.black,
+                    fontSize: 12.5.w,
+                    fontWeight: FontWeight.w400
+                ),
+                labelSmall: TextStyle(//overline
+                    color: Colors.grey.shade500,
+                    fontSize: 9.w,
+                    fontWeight: FontWeight.w300
+                ),
+              ),
             ),
+            darkTheme: ThemeData(
+              //scaffoldBackgroundColor: Colors.grey.shade300,
+              useMaterial3: true,
+              appBarTheme: AppBarTheme(
+                iconTheme: IconThemeData(color: Colors.grey.shade800, size: 30.w),
+                color: defaultColor,
+                centerTitle: true,
+                actionsIconTheme: IconThemeData(
+                  color: Colors.black,
+                  size: 30.w,
+                ),
+                titleTextStyle: TextStyle(
+                  color: Colors.grey.shade800,
+                  fontSize: 23.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              bottomNavigationBarTheme: BottomNavigationBarThemeData(
+                backgroundColor: Colors.grey.shade600,
+                selectedItemColor: Colors.purple.shade300,
+                unselectedItemColor: Colors.grey.shade50,
+                showUnselectedLabels: true,
+                unselectedLabelStyle: const TextStyle(
+                  color: Colors.white,
+                ),
+                type: BottomNavigationBarType.fixed,
+              ),
+              textTheme: TextTheme(
+                bodyText2: TextStyle(
+                  color: Colors.black,
+                  fontSize: 15.w,
+                  fontWeight: FontWeight.w500,
+                ),
+                caption: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12.5.w,
+                  fontWeight: FontWeight.w400,
+                ),
+                subtitle2: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12.5.w,
+                    fontWeight: FontWeight.w400
+                ),
+                overline: TextStyle(
+                    color: Colors.grey.shade500,
+                    fontSize: 9.w,
+                    fontWeight: FontWeight.w300
+                ),
+              ),
+            ),
+            themeMode: ThemeMode.light,
             home: CacheHelper.getData(key: 'Token') == null
                 ? const LoginView()
                 : CacheHelper.getData(key: 'Role') == 'doctor'

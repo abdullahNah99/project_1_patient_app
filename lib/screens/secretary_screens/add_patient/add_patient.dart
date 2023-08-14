@@ -40,8 +40,8 @@ class RegisterSecretaria extends StatelessWidget {
               msg: 'Add Succsses',
               color: Colors.green,
             );
-            SecretariaLyoutCubit.get(context).indexPatientsList();
             Navigator.pop(context);
+            //SecretariaLyoutCubit.get(context).indexPatient();
             firstName.clear();
             lastName.clear();
             phoneNum.clear();
@@ -62,19 +62,27 @@ class RegisterSecretaria extends StatelessWidget {
         },
         builder: (context, state) {
           return Scaffold(
-            backgroundColor: Colors.white,
+            //backgroundColor: Colors.white,
             appBar: AppBar(
               backgroundColor: defaultColor,
               shape: RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.all(Radius.circular(20.r))),
               automaticallyImplyLeading: false,
-              actions: [
+              leading: Padding(
+                padding: EdgeInsetsDirectional.only(
+                  start: 16.w,
+                  top: 8.5.w,
+                  bottom: 8.5.w,
+                ),
+                child: const CustomArrowBackIconButton(),
+              ),
+              /*actions: [
                 Padding(
                   padding: EdgeInsetsDirectional.only(
                     end: 20.w,
                   ),
                   child: const CustomArrowBackIconButton(),
                 ),
-              ],
+              ],*/
             ),
             body: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
@@ -100,7 +108,7 @@ class RegisterSecretaria extends StatelessWidget {
                         height: MediaQuery.of(context).size.height * .05,
                       ),
                       RegisterTextField(
-                        lableText: 'First Name',
+                        hintText: 'First Name ...',
                         icon: Icons.person,
                         controller: firstName,
                         keyboardType: TextInputType.text,
@@ -109,7 +117,7 @@ class RegisterSecretaria extends StatelessWidget {
                         height: MediaQuery.of(context).size.height * .05,
                       ),
                       RegisterTextField(
-                        lableText: 'Last Name',
+                        hintText: 'Last Name ...',
                         icon: Icons.person,
                         controller: lastName,
                         keyboardType: TextInputType.name,
@@ -118,7 +126,7 @@ class RegisterSecretaria extends StatelessWidget {
                         height: MediaQuery.of(context).size.height * .05,
                       ),
                       RegisterTextField(
-                        lableText: 'Phone Number',
+                        hintText: 'Phone Number ...',
                         icon: Icons.phone,
                         controller: phoneNum,
                         keyboardType: TextInputType.number,
@@ -127,7 +135,7 @@ class RegisterSecretaria extends StatelessWidget {
                         height: MediaQuery.of(context).size.height * .05,
                       ),
                       RegisterTextField(
-                        lableText: 'Address',
+                        hintText: 'Address ...',
                         icon: Icons.location_on,
                         controller: address,
                         keyboardType: TextInputType.streetAddress,
@@ -136,7 +144,7 @@ class RegisterSecretaria extends StatelessWidget {
                         height: MediaQuery.of(context).size.height * .05,
                       ),
                       RegisterTextField(
-                        lableText: 'Email',
+                        hintText: 'Email ...',
                         icon: Icons.mail,
                         controller: email,
                         keyboardType: TextInputType.emailAddress,
@@ -145,7 +153,7 @@ class RegisterSecretaria extends StatelessWidget {
                         height: MediaQuery.of(context).size.height * .05,
                       ),
                       RegisterTextField(
-                        lableText: 'Password',
+                        hintText: 'Password ...',
                         icon: Icons.lock,
                         controller: pass,
                         keyboardType: TextInputType.visiblePassword,
@@ -165,7 +173,7 @@ class RegisterSecretaria extends StatelessWidget {
                         height: MediaQuery.of(context).size.height * .05,
                       ),
                       RegisterTextField(
-                        lableText: 'Birth Date',
+                        hintText: 'Birth Date ...',
                         icon: Icons.cake,
                         controller: birthDate,
                         keyboardType: TextInputType.text,
@@ -174,7 +182,7 @@ class RegisterSecretaria extends StatelessWidget {
                         height: MediaQuery.of(context).size.height * .05,
                       ),
                       RegisterTextField(
-                        lableText: 'Gender',
+                        hintText: 'Gender ...',
                         icon: CupertinoIcons.person_2_fill,
                         controller: gender,
                         keyboardType: TextInputType.text,

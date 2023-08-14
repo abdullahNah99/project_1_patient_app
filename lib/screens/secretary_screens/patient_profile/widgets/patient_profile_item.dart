@@ -38,13 +38,15 @@ class PatientProfileItem extends StatelessWidget {
             msg: 'Charge Succsses',
             color: Colors.green,
           );
+          //Navigator.pop(context);
         }else if(state is ChargeWalletErrorState){
+          Navigator.pop(context);
           CustomeSnackBar.showSnackBar(
             context,
             msg: 'Charge Failed',
             color: Colors.red,
           );
-          Navigator.pop(context);
+          //Navigator.pop(context);
         }
       },
       builder: (context, state) {
@@ -57,7 +59,7 @@ class PatientProfileItem extends StatelessWidget {
                 color: defaultColor,
               ),
               Positioned(
-                left: screenSize.width * .85,
+                right: screenSize.width * .85,
                 top: 22.h,
                 child: const CustomArrowBackIconButton(),
               ),
@@ -180,7 +182,7 @@ class PatientProfileItem extends StatelessWidget {
                                         end: 0.w,
                                       ),
                                       child: RegisterTextField(
-                                        lableText: 'Amount',
+                                        hintText: 'Amount ...',
                                         icon: Icons.monetization_on,
                                         controller: amount,
                                         keyboardType: TextInputType.number,
@@ -222,8 +224,8 @@ class PatientProfileItem extends StatelessWidget {
                         '   Personal Information',
                         style: TextStyle(
                           color: defaultColor,
-                          fontSize: 13.h,
-                          fontWeight: FontWeight.w500,
+                          fontSize: 13.w,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ),

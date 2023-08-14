@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:patient_app/core/widgets/custome_error_widget.dart';
 import 'package:patient_app/core/widgets/custome_progress_indicator.dart';
 import 'package:patient_app/screens/secretary_screens/api_cubit/api_cubit.dart';
 import 'package:patient_app/screens/secretary_screens/appointments_requests_screen/widgets/appointment_request_item.dart';
-import '../../../core/styles/app_colors.dart';
-import '../add_patient/add_patient.dart';
 import '../api_cubit/api_states.dart';
-import 'cubit/appointments_requests_cubit.dart';
-import 'cubit/appointments_requests_states.dart';
 
 class AppointmentsRequestsView extends StatelessWidget {
   static const route = 'AppointmentsRequestsView';
@@ -21,7 +16,7 @@ class AppointmentsRequestsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          SecretariaLyoutCubit()..indexAppointmentByDate(date: date! ?? 'Tuesday Oct 08'),
+          SecretariaLyoutCubit()..indexAppointmentByDate(date: date!),
       child: const Scaffold(
         body: AppointmentsRequestsViewBody(),
       ),
@@ -39,7 +34,7 @@ class AppointmentsRequestsViewBody extends StatelessWidget {
         SecretariaLyoutCubit cubit = SecretariaLyoutCubit.get(context);
         if(state is ApppintmentListByDateErrorState)
         {
-          return const Padding(
+          return Padding(
             padding: EdgeInsetsDirectional.only(
               start: 15.0,
               end: 15.0,
@@ -52,9 +47,7 @@ class AppointmentsRequestsViewBody extends StatelessWidget {
                 Center(
                   child: Text(
                     'There Are No Appointment',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                    ),
+                    style: Theme.of(context).textTheme.labelLarge,
                   ),
                 ),
               ],
