@@ -47,12 +47,6 @@ class PatientsListViewItem extends StatelessWidget {
                   ),
                   child: GestureDetector(
                     onTap: (){
-                      /*SecretariaLyoutCubit.get(context).viewPatient(
-                          user_id: model.patient[index].userId,
-                        );*/
-                      /*Navigator.pushNamed(
-                            context, PatientProfile.route
-                        );*/
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => PatientProfile(userId: model.patient[index].userId,index: index < 0 ? 0 : index,)),

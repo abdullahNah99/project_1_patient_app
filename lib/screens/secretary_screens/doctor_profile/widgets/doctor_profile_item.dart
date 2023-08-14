@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,8 +5,8 @@ import 'package:patient_app/core/models/secretaria/secretaria_appointment/view_i
 import 'package:patient_app/core/styles/app_colors.dart';
 import 'package:patient_app/screens/secretary_screens/api_cubit/api_states.dart';
 import '../../../../core/models/secretaria/secretaria_doctor/view_doctor_model.dart';
+import '../../../../core/utils/constants.dart';
 import '../../../../core/widgets/custome_arrow_back_button.dart';
-import '../../../../core/widgets/custome_image.dart';
 import '../../../../main.dart';
 import '../../api_cubit/api_cubit.dart';
 import '../../patient_profile/widgets/default_text_info.dart';
@@ -39,7 +38,7 @@ class DoctorProfileItem extends StatelessWidget {
                 color: defaultColor,
               ),
               Positioned(
-                left: screenSize.width * .85,
+                right: screenSize.width * .85,
                 top: 22.h,
                 child: const CustomArrowBackIconButton(),
               ),
@@ -87,22 +86,23 @@ class DoctorProfileItem extends StatelessWidget {
                             ' Work Times',
                             style: TextStyle(
                               color: defaultColor,
-                              fontSize: 13.h,
-                              fontWeight: FontWeight.w500
+                              fontSize: 13.w,
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
                           Padding(
                             padding: EdgeInsetsDirectional.only(
                               top: 3.h,
                             ),
-                            child: Container(
+                            child: SizedBox(
                               height: MediaQuery.of(context).size.height * .13,
-                              child: ListView.separated(
+                              child: modelInfo!.appointment.doctor.workTimes.isNotEmpty ? ListView.separated(
                                 scrollDirection: Axis.horizontal,
                                 physics: const BouncingScrollPhysics(),
                                 itemBuilder: (context, index) => Material(
                                   shadowColor: Colors.grey.shade50,
                                   elevation: 2.0,
+                                  borderRadius: BorderRadiusDirectional.all(Radius.circular(10.r)),
                                   child: Container(
                                     width: MediaQuery.of(context).size.width * .4,
                                     height: MediaQuery.of(context).size.height * .1,
@@ -172,6 +172,20 @@ class DoctorProfileItem extends StatelessWidget {
                                   width: MediaQuery.of(context).size.width * .03,
                                 ),
                                 itemCount: modelInfo!.appointment.doctor.workTimes.length,
+                              )
+                              : Padding(
+                                padding: const EdgeInsetsDirectional.only(
+                                  start: 15.0,
+                                  end: 15.0,
+                                  top: 10.0,
+                                  bottom: 10.0,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'There are no work times',
+                                    style: Theme.of(context).textTheme.labelLarge,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -188,7 +202,7 @@ class DoctorProfileItem extends StatelessWidget {
                     Row(
                       children: [
                         const Expanded(child: SizedBox()),
-                        /*Container(
+                        Container(
                           height: MediaQuery.of(context).size.height * .14,
                           width: MediaQuery.of(context).size.width * .27,
                           margin: EdgeInsets.only(top: screenSize.height * .16),
@@ -197,27 +211,18 @@ class DoctorProfileItem extends StatelessWidget {
                             borderRadius: BorderRadius.circular(50.h),
                             image: DecorationImage(
                               image: NetworkImage(
-                                'http://192.168.238.136:8000/storage/${model!.doctor.imagePath}',
+                                '${Constants.paseUrl}upload/${model!.doctor.imagePath}',
                               ),
                             )
                           ),
-                          *//*child: CircleAvatar(
-                            child: Image(
-                              image: NetworkImage(
-
-                              ),
-                              width: 95.h,
-                              height: 100.h,
-                            ),
-                          ),*//*
-                        ),*/
-                        CustomeImage(
+                        ),
+                        /*CustomeImage(
                           //image: Image(image: NetworkImage('')),
                           borderRadius: BorderRadius.circular(50.h),
                           margin: EdgeInsets.only(top: screenSize.height * .16),
                           height: 100.h,
                           width: 95.h,
-                        ),
+                        ),*/
                         const Expanded(child: SizedBox()),
                       ],
                     ),
@@ -242,7 +247,7 @@ class DoctorProfileItem extends StatelessWidget {
                         style: TextStyle(
                           color: defaultColor,
                           fontSize: 13.h,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ),

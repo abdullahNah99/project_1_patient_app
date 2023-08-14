@@ -8,7 +8,6 @@ import '../../screens/patient_screens/show_all_consultation/show_all_consultatio
 import '../../screens/register_screen/register_screen.dart';
 import '../../screens/secretary_screens/add_patient/add_patient.dart';
 import '../../screens/secretary_screens/appointments_requests_screen/appointments_requests_view.dart';
-import '../../screens/secretary_screens/handel_apppintment/handel_apppintment.dart';
 import '../../screens/secretary_screens/secretary_layout/secretaria_latout.dart';
 import '../api/services/local/cache_helper.dart';
 
@@ -26,7 +25,5 @@ abstract class AppRouter {
     SecretariaLayout.route: (context) => SecretariaLayout(),
     //PatientProfile.route: (context) => const PatientProfile(),
     RegisterSecretaria.route: (context) => RegisterSecretaria(),
-    //ViewInfoHandle.route: (context) => ViewInfoHandle(),
-    HandelApppintment.route: (context) => HandelApppintment(),
   };
 }

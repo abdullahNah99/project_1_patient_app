@@ -9,10 +9,8 @@ import 'package:patient_app/screens/secretary_screens/api_cubit/api_states.dart'
 
 import '../../../core/functions/custome_snack_bar.dart';
 import '../../../core/styles/app_colors.dart';
-import '../../../core/utils/app_assets.dart';
 import '../../../core/widgets/custome_arrow_back_button.dart';
 import '../../../core/widgets/custome_button.dart';
-import '../../../core/widgets/custome_image.dart';
 import '../../../core/widgets/custome_progress_indicator.dart';
 import '../../../core/widgets/register_text_field.dart';
 import '../doctor_profile/doctor_profile.dart';
@@ -38,25 +36,69 @@ class ViewInfoHandle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SecretariaLyoutCubit cubit = SecretariaLyoutCubit();
     return BlocProvider(
         create: (BuildContext context) => SecretariaLyoutCubit()..viewInfoHandle(id: model.appointment[index!].id),
         child: BlocConsumer<SecretariaLyoutCubit, SecretariaLyoutStates>(
           listener: (context, state) {
-            if(state is cancelAppointmentSuccssesState)
+            if(state is ApproveTheAppointmentSuccssesState)
+            {
+              CustomeSnackBar.showSnackBar(
+                context,
+                msg: 'Approve Succsses',
+                color: Colors.green,
+              );
+              Navigator.pop(context);
+            }else if(state is ApproveTheAppointmentErrorState)
+            {
+              CustomeSnackBar.showSnackBar(
+                context,
+                msg: 'Approve Failed',
+                color: Colors.red,
+              );
+              //Navigator.pop(context);
+            }
+            if(state is HandelApppintmentSuccssesState)
             {
               Navigator.pop(context);
               CustomeSnackBar.showSnackBar(
                 context,
-                msg: 'Approved Succsses',
+                msg: 'Edit Succsses',
                 color: Colors.green,
               );
+              Navigator.pop(context);
+            }else if(state is HandelApppintmentErrorState)
+            {
+              Navigator.pop(context);
+              CustomeSnackBar.showSnackBar(
+                context,
+                msg: 'Edit Failed',
+                color: Colors.red,
+              );
+              //Navigator.pop(context);
+            }
+            if(state is DeleteAppointmentSuccssesState)
+            {
+              CustomeSnackBar.showSnackBar(
+                context,
+                msg: 'Delete Succsses',
+                color: Colors.green,
+              );
+              Navigator.pop(context);
+            }else if(state is DeleteAppointmentErrorState)
+            {
+              CustomeSnackBar.showSnackBar(
+                context,
+                msg: 'Delete Failed',
+                color: Colors.red,
+              );
+              //Navigator.pop(context);
             }
           },
           builder: (context, state) {
+            SecretariaLyoutCubit cubit = SecretariaLyoutCubit.get(context);
             if(state is ApppintmentListByDateErrorState)
             {
-              return const Padding(
+              return Padding(
                 padding: EdgeInsetsDirectional.only(
                   start: 15.0,
                   end: 15.0,
@@ -69,9 +111,7 @@ class ViewInfoHandle extends StatelessWidget {
                     Center(
                       child: Text(
                         'There is some thing error',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                        ),
+                        style: Theme.of(context).textTheme.labelLarge,
                       ),
                     ),
                   ],
@@ -85,27 +125,33 @@ class ViewInfoHandle extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.all(Radius.circular(20.r))),
                   automaticallyImplyLeading: false,
                   centerTitle: true,
-                  title: Text(
-                    'Details',
-                    style: TextStyle(
-                      fontSize: 19.w,
+                  leading: Padding(
+                    padding: EdgeInsetsDirectional.only(
+                      start: 16.w,
+                      top: 8.5.w,
+                      bottom: 8.5.w,
                     ),
+                    child: const CustomArrowBackIconButton(),
                   ),
-                  actions: [
+                  title: const Text(
+                    'Details',
+                  ),
+                  /*actions: [
                     Padding(
                       padding: EdgeInsetsDirectional.only(
                         end: 20.w,
                       ),
                       child: const CustomArrowBackIconButton(),
                     ),
-                  ],
+                  ],*/
                 ),
                 body: Container(
                   width: screenSize.width,
-                  color: Colors.white,
+                  height: screenSize.height,
+                  //color: Colors.white,
                   padding: EdgeInsetsDirectional.all(10.h),
                   child: SingleChildScrollView(
-                    physics: BouncingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     child: Column(
                       children: [
                         Row(
@@ -118,6 +164,8 @@ class ViewInfoHandle extends StatelessWidget {
                                   ' Patient',
                                   style: TextStyle(
                                     color: defaultColor,
+                                    fontSize: 13.w,
+                                    fontWeight: FontWeight.w400,
                                   ),
                                 ),
                                 Padding(
@@ -163,16 +211,13 @@ class ViewInfoHandle extends StatelessWidget {
                                                 children: [
                                                   Text(
                                                     '${model.appointment[index!].patient.user.firstName} ${model.appointment[index!].patient.user.lastName}',
+                                                    style: Theme.of(context).textTheme.titleSmall,
                                                     maxLines: 1,
                                                     overflow: TextOverflow.ellipsis,
                                                   ),
                                                   Text(
                                                     'Tap to see details',
-                                                    style: TextStyle(
-                                                      color: Colors.grey.shade500,
-                                                      fontSize: 9.w,
-                                                      fontWeight: FontWeight.w300
-                                                    ),
+                                                    style: Theme.of(context).textTheme.labelSmall,
                                                   ),
                                                 ],
                                               ),
@@ -191,7 +236,9 @@ class ViewInfoHandle extends StatelessWidget {
                                 Text(
                                   ' Doctor',
                                   style: TextStyle(
-                                      color: defaultColor
+                                    color: defaultColor,
+                                    fontSize: 13.w,
+                                    fontWeight: FontWeight.w400,
                                   ),
                                 ),
                                 Padding(
@@ -237,16 +284,13 @@ class ViewInfoHandle extends StatelessWidget {
                                                 children: [
                                                   Text(
                                                     '${model.appointment[index!].doctor.user.firstName} ${model.appointment[index!].doctor .user.lastName}',
+                                                    style: Theme.of(context).textTheme.titleSmall,
                                                     maxLines: 1,
                                                     overflow: TextOverflow.ellipsis,
                                                   ),
                                                   Text(
                                                     'Tap to see details',
-                                                    style: TextStyle(
-                                                        color: Colors.grey.shade500,
-                                                        fontSize: 9.w,
-                                                        fontWeight: FontWeight.w300
-                                                    ),
+                                                    style: Theme.of(context).textTheme.labelSmall,
                                                   ),
                                                 ],
                                               ),
@@ -271,6 +315,8 @@ class ViewInfoHandle extends StatelessWidget {
                               ' Description',
                               style: TextStyle(
                                 color: defaultColor,
+                                fontSize: 13.w,
+                                fontWeight: FontWeight.w400,
                               ),
                             ),
                             Padding(
@@ -306,6 +352,7 @@ class ViewInfoHandle extends StatelessWidget {
                                     child: SingleChildScrollView(
                                       child: Text(
                                         model.appointment[index!].description,
+                                        style: Theme.of(context).textTheme.titleSmall,
                                       ),
                                     ),
                                   ),
@@ -324,8 +371,8 @@ class ViewInfoHandle extends StatelessWidget {
                               ' Appointment Info',
                               style: TextStyle(
                                 color: defaultColor,
-                                //fontSize: 13.h,
-                                //fontWeight: FontWeight.w500
+                                fontSize: 13.w,
+                                fontWeight: FontWeight.w400,
                               ),
                             ),
                             Padding(
@@ -395,7 +442,7 @@ class ViewInfoHandle extends StatelessWidget {
                                                           ),
                                                         ),
                                                         Text(
-                                                          '${model.appointment[index!].date}',
+                                                          model.appointment[index!].date,
                                                           style: TextStyle(
                                                             color: Colors.black,
                                                             fontSize: 13.w,
@@ -408,7 +455,7 @@ class ViewInfoHandle extends StatelessWidget {
                                                   ],
                                                 ),
                                                 SizedBox(
-                                                  width: 110.w,
+                                                  width: 65.w,
                                                 ),
                                                 Row(
                                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -440,7 +487,7 @@ class ViewInfoHandle extends StatelessWidget {
                                                           overflow: TextOverflow.ellipsis,
                                                         ),
                                                         Text(
-                                                          '${model.appointment[index!].time}'.replaceRange(5, 8, ''),
+                                                          model.appointment[index!].time.replaceRange(5, 8, ''),
                                                           style: TextStyle(
                                                             color: Colors.black,
                                                             fontSize: 13.w,
@@ -469,7 +516,7 @@ class ViewInfoHandle extends StatelessWidget {
                                         child: Container(
                                           height: 35.h,
                                           width: screenSize.width,
-                                          decoration: BoxDecoration(
+                                          decoration: const BoxDecoration(
                                             border: Border.fromBorderSide(BorderSide.none),
                                           ),
                                           child: Row(
@@ -485,7 +532,7 @@ class ViewInfoHandle extends StatelessWidget {
                                                       height: 35.h,
                                                       width: 100.w,
                                                       alignment: AlignmentDirectional.center,
-                                                      child: Text(
+                                                      child: const Text(
                                                         'Approve'
                                                       ),
                                                     ),
@@ -527,7 +574,7 @@ class ViewInfoHandle extends StatelessWidget {
 
                                                                     children: [
                                                                       RegisterTextField(
-                                                                        lableText: 'Time',
+                                                                        hintText: 'Time ...',
                                                                         icon: Icons.watch_later,
                                                                         controller: timeController,
                                                                         keyboardType: TextInputType.text,
@@ -544,7 +591,7 @@ class ViewInfoHandle extends StatelessWidget {
                                                                         height: MediaQuery.of(context).size.height * 0.02,
                                                                       ),
                                                                       RegisterTextField(
-                                                                        lableText: 'Date',
+                                                                        hintText: 'Date ...',
                                                                         icon: Icons.date_range,
                                                                         controller: dateController,
                                                                         keyboardType: TextInputType.text,
@@ -556,8 +603,7 @@ class ViewInfoHandle extends StatelessWidget {
                                                                             lastDate: DateTime.parse('2024-02-08'),
                                                                           ).then((value) {
                                                                             //Tuesday Oct 03
-                                                                            dateController.text = '${DateFormat.EEEE().format(value!)} ${DateFormat.MMMd().format(value!)}';
-                                                                            print(dateController.text);
+                                                                            dateController.text = '${DateFormat.EEEE().format(value!)} ${DateFormat.MMMd().format(value)}';
                                                                           });
                                                                         },
                                                                       ),
@@ -574,13 +620,14 @@ class ViewInfoHandle extends StatelessWidget {
                                                                 borderRadius: BorderRadiusDirectional.all(Radius.circular(10.r)),
                                                                 onPressed: (){
                                                                   if(formKey.currentState!.validate()){
-                                                                    SecretariaLyoutCubit.get(context).handelApppintment(
+                                                                    cubit.handelApppintment(
                                                                       date: dateController.text,
                                                                       time: timeController.text,
                                                                       status: 'approve',
                                                                       id: model.appointment[index!].id,
                                                                     );
-                                                                    SecretariaLyoutCubit.get(context).changeBottomSheet(isShow: true);
+                                                                    cubit.changeBottomSheet(isShow: true);
+                                                                    //SecretariaLyoutCubit.get(context).viewInfoHandle(id: model.appointment[index!].id);
                                                                   }
                                                                 },
                                                               ),
@@ -591,7 +638,7 @@ class ViewInfoHandle extends StatelessWidget {
                                                           ),
                                                         ),
                                                       ).closed.then((value) => {
-                                                        SecretariaLyoutCubit.get(context).changeBottomSheet(isShow: false),
+                                                        cubit.changeBottomSheet(isShow: false),
                                                       }
                                                       );
                                                     },
@@ -599,7 +646,7 @@ class ViewInfoHandle extends StatelessWidget {
                                                       height: 35.h,
                                                       width: 100.w,
                                                       alignment: AlignmentDirectional.center,
-                                                      child: Text(
+                                                      child: const Text(
                                                         'Edit'
                                                       ),
                                                     ),
@@ -617,65 +664,14 @@ class ViewInfoHandle extends StatelessWidget {
                                                   alignment: AlignmentDirectional.center,
                                                   child: TextButton(
                                                     onPressed: () {
-                                                      scaffoldKey.currentState!.showBottomSheet(
-                                                        elevation: 00.0,
-                                                            (context) => Container(
-                                                          height: 175.h,
-                                                          width: screenSize.width,
-                                                          color: Colors.grey.shade100,
-                                                          child: Column(
-                                                            mainAxisAlignment: MainAxisAlignment.center,
-                                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                                            children: [
-                                                              SizedBox(
-                                                                height: MediaQuery.of(context).size.height * 0.020,
-                                                              ),
-                                                              Form(
-                                                                key: formKey,
-                                                                child: Padding(
-                                                                  padding:  EdgeInsetsDirectional.only(
-                                                                    start: 10.w,
-                                                                    end: 0.w,
-                                                                  ),
-                                                                  child: RegisterTextField(
-                                                                    lableText: 'Reason',
-                                                                    icon: Icons.question_mark,
-                                                                    controller: cancelReason,
-                                                                    keyboardType: TextInputType.text,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              SizedBox(
-                                                                height: MediaQuery.of(context).size.height * 0.05,
-                                                              ),
-                                                              CustomeButton(
-                                                                text: 'Cancel',
-                                                                width: 250.w,
-                                                                borderRadius: BorderRadiusDirectional.all(Radius.circular(10.r)),
-                                                                onPressed: (){
-                                                                  if(formKey.currentState!.validate()){
-                                                                    cubit.cancelAppointment(cancel_reason: cancelReason.text, id: model.appointment[index!].id);
-                                                                    SecretariaLyoutCubit.get(context).changeBottomSheet(isShow: true);
-                                                                  }
-                                                                },
-                                                              ),
-                                                              SizedBox(
-                                                                height: MediaQuery.of(context).size.height * 0.033,
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ).closed.then((value) => {
-                                                        SecretariaLyoutCubit.get(context).changeBottomSheet(isShow: false),
-                                                      }
-                                                      );
+                                                      cubit.deleteAppointment(id: model.appointment[index!].id);
                                                     },
                                                     child: Container(
                                                       height: 35.h,
                                                       width: 100.w,
                                                       alignment: AlignmentDirectional.center,
-                                                      child: Text(
-                                                        'Cancel',
+                                                      child: const Text(
+                                                        'Delete',
                                                       ),
                                                     ),
                                                   ),
@@ -691,7 +687,108 @@ class ViewInfoHandle extends StatelessWidget {
                               ),
                             ),
                           ],
-                        )
+                        ),
+                        SizedBox(
+                          height: 20.h,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              ' Booked Appointment',
+                              style: TextStyle(
+                                color: defaultColor,
+                                fontSize: 13.w,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            Container(
+                              height: MediaQuery.of(context).size.height * .06,
+                              padding: EdgeInsetsDirectional.only(
+                                top: 3.h,
+                              ),
+                              child: state is! ViewInfoHandleLoadingState ? ListView.separated(
+                                scrollDirection: Axis.horizontal,
+                                physics: const BouncingScrollPhysics(),
+                                itemBuilder: (context, index) => Material(
+                                  shadowColor: Colors.grey.shade50,
+                                  elevation: 2.0,
+                                  borderRadius: BorderRadiusDirectional.all(Radius.circular(10.r)),
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width * .28,
+                                    height: MediaQuery.of(context).size.height * .1,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadiusDirectional.all(Radius.circular(10.r)),
+                                      border: Border.all(
+                                          width: 1,
+                                          color: Colors.grey.shade500
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.only(
+                                        top: 6.h,
+                                        start: 12.w,
+                                        end: 12.w,
+                                      ),
+                                      child: Align(
+                                        alignment: AlignmentDirectional.topStart,
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            /*Text(
+                                              cubit.viewInfoHandleModel.bookedAppointments[index].date,
+                                              style: TextStyle(
+                                                color: defaultColor,
+                                                fontSize: 15.w,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            SizedBox(
+                                              height: 5.h,
+                                            ),*/
+                                            Text(
+                                              cubit.viewInfoHandleModel.bookedAppointments[index].time,
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 14.5.w,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                separatorBuilder: (context, index) => SizedBox(
+                                  width: MediaQuery.of(context).size.width * .03,
+                                ),
+                                itemCount: cubit.viewInfoHandleModel.bookedAppointments.length,
+                              )
+                                  : state is ViewInfoHandleErrorState ? Padding(
+                                    padding: const EdgeInsetsDirectional.only(
+                                      start: 15.0,
+                                      end: 15.0,
+                                      top: 10.0,
+                                      bottom: 10.0,
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        'There are no booked appointment',
+                                        style: Theme.of(context).textTheme.labelLarge,
+                                      ),
+                                    ),
+                                  )
+                                      : const Center(child: CircularProgressIndicator()),
+                            )
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -705,3 +802,74 @@ class ViewInfoHandle extends StatelessWidget {
     );
   }
 }
+
+/*
+GridView.builder(
+  scrollDirection: Axis.horizontal,
+  physics: const BouncingScrollPhysics(),
+  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: 2,
+      crossAxisSpacing: 5.w,
+      mainAxisSpacing: 5.h,
+      childAspectRatio: 3/2,
+      mainAxisExtent: 99.h
+  ),
+  itemBuilder: (context, index) => Material(
+    shadowColor: Colors.grey.shade50,
+    elevation: 2.0,
+    borderRadius: BorderRadiusDirectional.all(Radius.circular(10.r)),
+    child: Container(
+      width: MediaQuery.of(context).size.width * .28,
+      height: MediaQuery.of(context).size.height * .1,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadiusDirectional.all(Radius.circular(10.r)),
+        border: Border.all(
+            width: 1,
+            color: Colors.grey.shade500
+        ),
+      ),
+      child: Padding(
+        padding: EdgeInsetsDirectional.only(
+          top: 6.h,
+          start: 12.w,
+          end: 12.w,
+        ),
+        child: Align(
+          alignment: AlignmentDirectional.topStart,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              /*Text(
+              cubit.viewInfoHandleModel.bookedAppointments[index].date,
+              style: TextStyle(
+                color: defaultColor,
+                fontSize: 15.w,
+                fontWeight: FontWeight.w500,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            SizedBox(
+              height: 5.h,
+            ),*/
+              Text(
+                cubit.viewInfoHandleModel.bookedAppointments[index].time,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 14.5.w,
+                  fontWeight: FontWeight.w400,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  ),
+  itemCount: cubit.viewInfoHandleModel.bookedAppointments.length,
+)
+ */
