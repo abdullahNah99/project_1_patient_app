@@ -10,6 +10,10 @@ class ChangeBottomSheetState extends SecretariaLyoutStates{}
 
 class ShowAppointmentState extends SecretariaLyoutStates{}
 
+class ShowWaitingDayState extends SecretariaLyoutStates{}
+
+class ShowApproveDayState extends SecretariaLyoutStates{}
+
 class PatientProfLoadingState extends SecretariaLyoutStates{}
 class PatientProfSuccssesState extends SecretariaLyoutStates{}
 class PatientProfErrorState extends SecretariaLyoutStates{}
@@ -38,22 +42,58 @@ class ApppintmentListByDateLoadingState extends SecretariaLyoutStates{}
 class ApppintmentListByDateSuccssesState extends SecretariaLyoutStates{}
 class ApppintmentListByDateErrorState extends SecretariaLyoutStates{}
 
-class viewInfoHandleModelLoadingState extends SecretariaLyoutStates{}
-class viewInfoHandleModelSuccssesState extends SecretariaLyoutStates{}
-class viewInfoHandleModelErrorState extends SecretariaLyoutStates{}
+class ApproveApppintmentListByDateLoadingState extends SecretariaLyoutStates{}
+class ApproveApppintmentListByDateSuccssesState extends SecretariaLyoutStates{}
+class ApproveApppintmentListByDateErrorState extends SecretariaLyoutStates{}
 
-class approveTheAppointmentLoadingState extends SecretariaLyoutStates{}
-class approveTheAppointmentSuccssesState extends SecretariaLyoutStates{}
-class approveTheAppointmentErrorState extends SecretariaLyoutStates{}
+class AppointmentListDoctorLoadingState extends SecretariaLyoutStates{}
+class AppointmentListDoctorSuccssesState extends SecretariaLyoutStates{}
+class AppointmentListDoctorErrorState extends SecretariaLyoutStates{}
 
-class cancelAppointmentLoadingState extends SecretariaLyoutStates{}
-class cancelAppointmentSuccssesState extends SecretariaLyoutStates{}
-class cancelAppointmentErrorState extends SecretariaLyoutStates{}
+class DateWaitingAppointmentLoadingState extends SecretariaLyoutStates{}
+class DateWaitingAppointmentSuccssesState extends SecretariaLyoutStates{}
+class DateWaitingAppointmentErrorState extends SecretariaLyoutStates{}
+
+class DateApproveAppointmentLoadingState extends SecretariaLyoutStates{}
+class DateApproveAppointmentSuccssesState extends SecretariaLyoutStates{}
+class DateApproveAppointmentErrorState extends SecretariaLyoutStates{}
+
+class ViewInfoHandleLoadingState extends SecretariaLyoutStates{}
+class ViewInfoHandleSuccssesState extends SecretariaLyoutStates{}
+class ViewInfoHandleErrorState extends SecretariaLyoutStates{}
+
+class ApproveTheAppointmentLoadingState extends SecretariaLyoutStates{}
+class ApproveTheAppointmentSuccssesState extends SecretariaLyoutStates{}
+class ApproveTheAppointmentErrorState extends SecretariaLyoutStates{}
+
+class CancelAppointmentLoadingState extends SecretariaLyoutStates{}
+class CancelAppointmentSuccssesState extends SecretariaLyoutStates{}
+class CancelAppointmentErrorState extends SecretariaLyoutStates{}
+
+class DeleteAppointmentLoadingState extends SecretariaLyoutStates{}
+class DeleteAppointmentSuccssesState extends SecretariaLyoutStates{}
+class DeleteAppointmentErrorState extends SecretariaLyoutStates{}
 
 class HandelApppintmentLoadingState extends SecretariaLyoutStates{}
 class HandelApppintmentSuccssesState extends SecretariaLyoutStates{}
 class HandelApppintmentErrorState extends SecretariaLyoutStates{}
 
+class DoctorListLoadingState extends SecretariaLyoutStates{}
+class DoctorListSuccssesState extends SecretariaLyoutStates{}
+class DoctorListErrorState extends SecretariaLyoutStates{}
+
 class DoctorProfLoadingState extends SecretariaLyoutStates{}
 class DoctorProfSuccssesState extends SecretariaLyoutStates{}
 class DoctorProfErrorState extends SecretariaLyoutStates{}
+
+class DoctorListByDepartmentLoadingState extends SecretariaLyoutStates{}
+class DoctorListByDepartmentSuccssesState extends SecretariaLyoutStates{}
+class DoctorListByDepartmentErrorState extends SecretariaLyoutStates{}
+
+class WorkTimeListLoadingState extends SecretariaLyoutStates{}
+class WorkTimeListSuccssesState extends SecretariaLyoutStates{}
+class WorkTimeListErrorState extends SecretariaLyoutStates{}
+
+class SecretariaProfLoadingState extends SecretariaLyoutStates{}
+class SecretariaProfSuccssesState extends SecretariaLyoutStates{}
+class SecretariaProfErrorState extends SecretariaLyoutStates{}

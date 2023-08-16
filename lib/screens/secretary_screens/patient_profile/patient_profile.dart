@@ -38,21 +38,27 @@ class PatientProfile extends StatelessWidget {
                 backgroundColor: defaultColor,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.all(Radius.circular(20.r))),
                 automaticallyImplyLeading: false,
-                actions: [
+                leading: Padding(
+                  padding: EdgeInsetsDirectional.only(
+                    start: 16.w,
+                    top: 8.5.w,
+                    bottom: 8.5.w,
+                  ),
+                  child: const CustomArrowBackIconButton(),
+                ),
+                /*actions: [
                   Padding(
                     padding: EdgeInsetsDirectional.only(
                       end: 20.w,
                     ),
                     child: const CustomArrowBackIconButton(),
                   ),
-                ],
+                ],*/
               ),
-              body: const Center(
+              body: Center(
                 child: Text(
                   'There is some thing error',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                  ),
+                  style: Theme.of(context).textTheme.labelLarge,
                 ),
               ),
             );
