@@ -152,19 +152,23 @@ class PatientApp extends StatelessWidget {
                 ),
               ),
             ),
+
+            home: getHome(),
+            // home: CacheHelper.getData(key: 'Token') == null
+            //     ? const LoginView()
+            //     : CacheHelper.getData(key: 'Role') == 'doctor'
+            //         ? DoctorHomeScreen(token: CacheHelper.getData(key: 'Token'))
+            //         : CacheHelper.getData(key: 'Role') == 'secretary'
+            //             ? SecretariaLayout() /*AppointmentsRequestsView(
+            //             token: CacheHelper.getData(key: 'Token'))*/
+            //             : CacheHelper.getData(key: 'Role') == 'doctor'
+            //                 ? DoctorHomeScreen(
+            //                     token: CacheHelper.getData(key: 'Token'),
+            //                   )
+            //                 : const HomePatientView(),
+
             themeMode: ThemeMode.light,
-            home: CacheHelper.getData(key: 'Token') == null
-                ? const LoginView()
-                : CacheHelper.getData(key: 'Role') == 'doctor'
-                    ? DoctorHomeScreen(token: CacheHelper.getData(key: 'Token'))
-                    : CacheHelper.getData(key: 'Role') == 'secretary'
-                        ? SecretariaLayout() /*AppointmentsRequestsView(
-                        token: CacheHelper.getData(key: 'Token'))*/
-                        : CacheHelper.getData(key: 'Role') == 'doctor'
-                            ? DoctorHomeScreen(
-                                token: CacheHelper.getData(key: 'Token'),
-                              )
-                            : const HomePatientView(),
+            
             // initialRoute: initialRoute,
             routes: AppRouter.router);
       },
@@ -176,4 +180,18 @@ _initializeFirebase() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+}
+
+Widget getHome() {
+  if (CacheHelper.getData(key: 'Token') == null) {
+    return const LoginView();
+  } else {
+    if (CacheHelper.getData(key: 'Role') == 'doctor') {
+      return DoctorHomeScreen(token: CacheHelper.getData(key: 'Token'));
+    } else if (CacheHelper.getData(key: 'Role') == 'secretary') {
+      return SecretariaLayout();
+    } else {
+      return const HomePatientView();
+    }
+  }
 }
