@@ -73,8 +73,9 @@ class DepartmentsListView extends StatelessWidget {
                         ),
                         Text(
                           state.departments[index].name.toString(),
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontWeight: FontWeight.bold,
+                            fontSize: 10.sp,
                           ),
                         ),
                       ],

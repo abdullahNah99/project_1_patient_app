@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient_app/core/functions/custome_snack_bar.dart';
-import 'package:patient_app/screens/doctor_screens/home_doctor_screen/home_doctor_screen.dart';
-import 'package:patient_app/screens/patient_screens/home_patient_screen/home_patient_screen.dart';
 import 'package:patient_app/screens/register_screen/register_screen.dart';
 import '../../core/api/services/local/cache_helper.dart';
 import '../../core/styles/app_colors.dart';
@@ -14,7 +12,6 @@ import '../../core/widgets/custome_image.dart';
 import '../../core/widgets/custome_progress_indicator.dart';
 import '../../core/widgets/custome_text_field.dart';
 import '../../main.dart';
-import '../secretary_screens/appointments_requests_screen/appointments_requests_view.dart';
 import 'cubit/login_cubit.dart';
 import 'cubit/login_states.dart';
 
@@ -53,14 +50,21 @@ class LoginViewBody extends StatelessWidget {
         if (state is LoginLoading) {
           return const CustomeProgressIndicator();
         } else if (state is LoginSuccess) {
+          // SchedulerBinding.instance.addPostFrameCallback((_) {
+          //   BlocProvider.of<LoginCubit>(context).close();
+          //   Navigator.popAndPushNamed(context, HomePatientView.route);
+          // });
           CacheHelper.saveData(key: 'Token', value: state.loginModel.token);
           CacheHelper.saveData(key: 'Role', value: state.loginModel.role);
-          if (state.loginModel.role == 'secretary') {
-            return AppointmentsRequestsView(token: state.loginModel.token);
-          } if (state.loginModel.role == 'doctor') {
-            return DoctorHomeScreen(token: state.loginModel.token);
-          }
-          return const HomePatientView();
+          // if (state.loginModel.role == 'secretary') {
+          //   return AppointmentsRequestsView(token: state.loginModel.token);
+          // }
+          // if (state.loginModel.role == 'doctor') {
+          //   return DoctorHomeScreen(token: state.loginModel.token);
+
+          // }
+          // return const HomePatientView();
+          return getHome();
         } else {
           return _body(context);
         }
@@ -126,8 +130,8 @@ class LoginViewBody extends StatelessWidget {
                     if (loginCubit.formKey.currentState!.validate()) {
                       loginCubit.login();
                     }
-                    // CacheHelper.deletData(key: 'Token');
-                    // CacheHelper.deletData(key: 'Role');
+                    //CacheHelper.deletData(key: 'Token');
+                    //CacheHelper.deletData(key: 'Role');
                   },
                 ),
               ),
@@ -135,11 +139,11 @@ class LoginViewBody extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
+                  Text(
                     "Don't Hava an Account?",
                     style: TextStyle(
                       color: Colors.grey,
-                      fontSize: 16,
+                      fontSize: 11.w,
                     ),
                   ),
                   SizedBox(width: 6.w),
@@ -147,11 +151,11 @@ class LoginViewBody extends StatelessWidget {
                     onPressed: () {
                       Navigator.pushNamed(context, RegisterView.route);
                     },
-                    child: const Text(
+                    child: Text(
                       'Create Account',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 17,
+                        fontSize: 12.w,
                       ),
                     ),
                   ),

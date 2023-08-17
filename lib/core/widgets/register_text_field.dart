@@ -7,7 +7,8 @@ class RegisterTextField extends StatelessWidget {
 
   final IconData icon;
   final TextEditingController? controller;
-  final String lableText;
+  //final String lableText;
+  final String hintText;
   final TextInputType keyboardType;
   final String? Function(String?)? validator;
   final IconData? suffixIcon;
@@ -19,7 +20,8 @@ class RegisterTextField extends StatelessWidget {
     super.key,
     required this.icon,
     this.controller,
-    required this.lableText,
+    //required this.lableText,
+    required this.hintText,
     required this.keyboardType,
     this.validator,
     this.suffixIcon,
@@ -38,7 +40,8 @@ class RegisterTextField extends StatelessWidget {
         ),
         Expanded(
           child: EditTextField(
-            lableText: lableText,
+            //lableText: lableText,
+            hintText: hintText,
             controller: controller,
             keyboardType: keyboardType,
             validator: validator,

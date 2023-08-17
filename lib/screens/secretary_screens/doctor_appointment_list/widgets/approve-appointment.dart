@@ -1,57 +1,56 @@
-
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:patient_app/core/api/services/local/cache_helper.dart';
-import 'package:patient_app/main.dart';
-import 'package:patient_app/screens/secretary_screens/api_cubit/api_cubit.dart';
 
-import '../../../core/widgets/custome_progress_indicator.dart';
-import '../api_cubit/api_states.dart';
-import '../appointments_requests_screen/appointments_requests_view.dart';
+import '../../../../core/api/services/local/cache_helper.dart';
+import '../../../../main.dart';
+import '../../api_cubit/api_cubit.dart';
+import '../../api_cubit/api_states.dart';
+import 'appointments_list_doctor_item.dart';
 
-class AppointmentsListDate extends StatelessWidget {
+class ApproveAppointment extends StatelessWidget {
 
-  const AppointmentsListDate({Key? key}) : super(key: key);
+  final int doctorId;
+
+  const ApproveAppointment({super.key, required this.doctorId});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => SecretariaLyoutCubit()..dateHaveWaitingAppointment(),
+      create: (context) => SecretariaLyoutCubit()..dateHaveApproveAppointment(doctor_id: doctorId),
       child: BlocConsumer<SecretariaLyoutCubit, SecretariaLyoutStates>(
         listener: (context, state) {
 
         },
         builder: (context, state) {
           SecretariaLyoutCubit cubit = SecretariaLyoutCubit.get(context);
-          if(state is DateWaitingAppointmentErrorState)
+          if(state is DateApproveAppointmentErrorState)
           {
             return Padding(
-              padding: EdgeInsetsDirectional.only(
+              padding: const EdgeInsetsDirectional.only(
                 start: 15.0,
                 end: 15.0,
                 top: 10.0,
                 bottom: 10.0,
               ),
-              child: Stack(
-                alignment: AlignmentDirectional.bottomEnd,
-                children: [
-                  Center(
-                    child: Text(
-                      'There Are No Appointment',
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                  ),
-                ],
+              child: Center(
+                child: Text(
+                  'There is some thing error',
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
               ),
             );
-          }else if (state is! DateWaitingAppointmentLoadingState) {
+          }else if(state is DateApproveAppointmentLoadingState)
+          {
+            return const Center(child: CircularProgressIndicator());
+          }else
+          {
             return Column(
               children: [
                 Padding(
                   padding: EdgeInsetsDirectional.all(10.h),
-                  child: Container(
+                  child: SizedBox(
                     height: MediaQuery.of(context).size.height * .07,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
@@ -74,13 +73,15 @@ class AppointmentsListDate extends StatelessWidget {
                               children: [
                                 Text(
                                   //'${cubit.days[index]}',
-                                  cubit.dateWaitingAppointmentModel.appointment[index].date.replaceRange(cubit.dateWaitingAppointmentModel.appointment[index].date.length - 6, cubit.dateWaitingAppointmentModel.appointment[index].date.length, ''),
-                                  style: Theme.of(context).textTheme.bodySmall,
+                                  cubit.dateApproveAppointmentModel.appointment[index].date,
+                                  style: Theme.of(context).textTheme.bodyText2,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                Text(
-                                  cubit.dateWaitingAppointmentModel.appointment[index].date.replaceRange(0, cubit.dateWaitingAppointmentModel.appointment[index].date.length - 6, ''),
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                ),
+                                /*Text(
+                                  '${cubit.month[index]} ${cubit.dayNum[index]}',
+                                  style: Theme.of(context).textTheme.bodyText2,
+                                ),*/
                               ],
                             ),
                           ),
@@ -89,7 +90,7 @@ class AppointmentsListDate extends StatelessWidget {
                       separatorBuilder: (context, index) => SizedBox(
                         width: MediaQuery.of(context).size.width * .03,
                       ),
-                      itemCount: cubit.dateWaitingAppointmentModel.appointment.length,
+                      itemCount: cubit.dateApproveAppointmentModel.appointment.length,
                     ),
                   ),
                 ),
@@ -101,17 +102,17 @@ class AppointmentsListDate extends StatelessWidget {
                     children: [
                       ConditionalBuilder(
                         condition: state is! ApppintmentListLoadingState,
-                        builder: (context) => Container(
+                        builder: (context) => SizedBox(
                           width: screenSize.width,
                           height: MediaQuery.of(context).size.height * .72,
-                          child: AppointmentsRequestsView(token: CacheHelper.getData(key: 'Token'), date: '${cubit.days[cubit.indexList]} ${cubit.month[cubit.indexList]} ${cubit.dayNum[cubit.indexList]}'),
+                          child: ApproveAppointmentsListDoctorItem(token: CacheHelper.getData(key: 'Token'), doctorId: doctorId, date: cubit.dateApproveAppointmentModel.appointment[cubit.indexList].date),
                         ),
                         fallback: (context) => const CircularProgressIndicator(),
                       ),
                     ],
                   ),
                 )
-                    : Container(
+                    : SizedBox(
                   height: 498.h,
                   child: Center(
                     child: Text(
@@ -122,8 +123,6 @@ class AppointmentsListDate extends StatelessWidget {
                 ),
               ],
             );
-          } else {
-            return const CustomeProgressIndicator();
           }
         },
       ),

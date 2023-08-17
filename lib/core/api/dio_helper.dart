@@ -1,13 +1,15 @@
-
 import 'package:dio/dio.dart';
 
-//gh api method**********************************************************************************
-class DioHelper {
+import '../utils/constants.dart';
+
+class DioHelper
+{
   static late Dio dio;
   static init() {
     dio = Dio(
       BaseOptions(
-        baseUrl: 'http://192.168.1.10:8000/api/',
+
+        baseUrl: '${Constants.paseUrl}api/',
         receiveDataWhenStatusError: true,
       ),
     );

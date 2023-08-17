@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient_app/screens/secretary_screens/api_cubit/api_cubit.dart';
-import '../../../../core/models/appointment_model.dart';
 import '../../../../core/models/secretaria/secretaria_appointment/index_appointment_by_date_model.dart';
+import '../../../../core/utils/constants.dart';
 import '../../../../core/widgets/custome_image.dart';
 import '../../api_cubit/api_states.dart';
-import '../../handel_apppintment/handel_apppintment.dart';
 import '../../view_info_handle/view_info_handle.dart';
 
 class AppointmentRequestItem extends StatelessWidget {
@@ -62,12 +61,26 @@ class AppointmentRequestItem extends StatelessWidget {
                 SizedBox(height: 8.w),
                 Row(
                   children: [
-                    CustomeImage(
+                    Container(
+                      height: 20.h,
+                      width: 20.h,
+                      //margin: EdgeInsets.only(top: screenSize.height * .16),
+                      decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular(30.h),
+                          image: DecorationImage(
+                            image: NetworkImage(
+                              '${Constants.paseUrl}upload/${model.appointment[index!].doctor.imagePath}',
+                            ),
+                          )
+                      ),
+                    ),
+                    /*CustomeImage(
                       width: 20.h,
                       height: 20.h,
                       iconSize: 15.h,
                       borderRadius: BorderRadius.circular(30),
-                    ),
+                    ),*/
                     SizedBox(width: 5.w),
                     _TextItem(
                       //text: 'To: Dr. Abdullah Nahlawi',

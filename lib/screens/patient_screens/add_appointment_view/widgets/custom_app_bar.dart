@@ -24,6 +24,7 @@ class CustomAppBar extends StatelessWidget {
           style: TextStyles.textStyle20.copyWith(
             color: Colors.white,
             fontWeight: FontWeight.bold,
+            fontSize: 16.sp,
             letterSpacing: 1,
           ),
         ),

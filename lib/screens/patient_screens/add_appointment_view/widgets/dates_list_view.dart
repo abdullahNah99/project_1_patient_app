@@ -31,8 +31,8 @@ class DatesListView extends StatelessWidget {
               },
               child: Container(
                 padding: const EdgeInsets.all(5),
-                height: 75.h,
-                width: 85.w,
+                height: 80.h,
+                width: 90.w,
                 decoration: BoxDecoration(
                   color: addAppointmentCubit.selectIndexDay != index
                       ? Colors.white24
@@ -57,8 +57,8 @@ class DatesListView extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                             fontSize:
                                 addAppointmentCubit.days[index] == 'Wednesday'
-                                    ? 13.sp
-                                    : 14.sp),
+                                    ? 10.sp
+                                    : 12.sp),
                       ),
                       Text(
                         addAppointmentCubit.dates[index],

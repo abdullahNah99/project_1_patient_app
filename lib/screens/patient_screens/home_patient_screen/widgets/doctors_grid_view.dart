@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:patient_app/core/models/patient_model.dart';
 import '../cubits/home_cubit/home_patient_cuibt.dart';
 import '../cubits/home_cubit/home_patient_states.dart';
 import 'custom_doctor_item.dart';
@@ -7,10 +8,12 @@ import 'custom_doctor_item.dart';
 class DoctorsSliverGrid extends StatelessWidget {
   final GetDoctorsAndDepartmentsSuccess state;
   final HomePatientCubit homeCubit;
+  final PatientModel patientModel;
   const DoctorsSliverGrid({
     super.key,
     required this.state,
     required this.homeCubit,
+    required this.patientModel,
   });
 
   @override
@@ -26,6 +29,7 @@ class DoctorsSliverGrid extends StatelessWidget {
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
           return CustomDoctorItem(
+            patientModel: patientModel,
             fromFavorite: false,
             doctorModel: state.getDepartmentDoctors(
                 departmentImg: (homeCubit.departments.isNotEmpty &&

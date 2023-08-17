@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:patient_app/core/models/patient_model.dart';
 import '../../../../core/widgets/custome_image.dart';
 import '../../favourite_screen/favourite_screen.dart';
 import '../../show_all_consultation/show_all_consultation.dart';
@@ -11,6 +12,7 @@ abstract class CustomDrawer {
     BuildContext context, {
     required HomePatientCubit homeCubit,
     required GlobalKey<ScaffoldState> scaffoldKey,
+    required PatientModel? patientModel,
   }) {
     return Drawer(
       width: 250.w,
@@ -70,7 +72,11 @@ abstract class CustomDrawer {
             icon: Icons.favorite_outlined,
             onPressed: () {
               scaffoldKey.currentState!.closeDrawer();
-              Navigator.pushNamed(context, FavouriteView.route);
+              Navigator.pushNamed(
+                context,
+                FavouriteView.route,
+                arguments: patientModel,
+              );
             },
           ),
           const Expanded(child: SizedBox()),

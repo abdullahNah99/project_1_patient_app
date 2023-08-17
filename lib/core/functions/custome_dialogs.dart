@@ -1,32 +1,86 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient_app/core/styles/app_colors.dart';
+import '../utils/app_assets.dart';
 import '../widgets/custome_button.dart';
+import '../widgets/custome_image.dart';
 
 abstract class CustomDialogs {
-  // static showCalenderDialog(BuildContext context) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) {
-  //       return AlertDialog(
-  //         shape:
-  //             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-  //         content: SizedBox(
-  //           height: 350,
-  //           width: 250,
-  //           child: CupertinoDatePicker(
-  //             mode: CupertinoDatePickerMode.date,
-  //             initialDateTime: DateTime(2000, 1, 1),
-  //             onDateTimeChanged: (value) {
-  //               log('xxxxxx');
-  //               log(value.toString());
-  //             },
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
+  static void showCustomDialog(
+    BuildContext context, {
+    required int balance,
+    required void Function() onPressed,
+  }) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          content: SizedBox(
+            height: 150.h,
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Column(
+                  children: [
+                    const SizedBox(height: 10),
+                    const Text(
+                      'Note: You will lose 100 from your wallet when you submit appointment',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.red,
+                      ),
+                    ),
+                    const Expanded(child: SizedBox()),
+                    CustomeButton(
+                      text: 'Submit',
+                      onPressed: onPressed,
+                    ),
+                    const SizedBox(height: 10),
+                  ],
+                ),
+                Positioned(
+                  bottom: 135.h,
+                  left: 220.w,
+                  child: CustomeImage(
+                    image: AppAssets.stethoscopeIcon,
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(25.r),
+                    height: 75,
+                    width: 75,
+                  ),
+                ),
+                Positioned(
+                  bottom: 145.h,
+                  left: 90.w,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 15),
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 252, 246, 252),
+                      borderRadius: BorderRadius.circular(15.r),
+                      border: Border.all(color: defaultColor),
+                    ),
+                    child: Text(
+                      "$balance ",
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontStyle: FontStyle.italic,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   static Future<DateTime?> pickDateDialog(BuildContext context) {
     return showDatePicker(
