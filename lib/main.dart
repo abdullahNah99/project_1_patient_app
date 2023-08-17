@@ -164,7 +164,7 @@ class PatientApp extends StatelessWidget {
               ),
             ),
 
-            home: getHome(),
+           // home: getHome(),
             // home: CacheHelper.getData(key: 'Token') == null
             //     ? const LoginView()
             //     : CacheHelper.getData(key: 'Role') == 'doctor'
@@ -207,16 +207,4 @@ _initializeFirebase() async {
   );
 }
 
-Widget getHome() {
-  if (CacheHelper.getData(key: 'Token') == null) {
-    return const LoginView();
-  } else {
-    if (CacheHelper.getData(key: 'Role') == 'doctor') {
-      return DoctorHomeScreen(token: CacheHelper.getData(key: 'Token'));
-    } else if (CacheHelper.getData(key: 'Role') == 'secretary') {
-      return SecretariaLayout();
-    } else {
-      return const HomePatientView();
-    }
-  }
-}
+
