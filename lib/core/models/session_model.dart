@@ -1,17 +1,17 @@
-class AddSessionModel {
-  AddSessionModel({
+class SessionModel {
+  SessionModel({
     required this.success,
     required this.message,
     required this.session,
   });
   late final bool success;
   late final String message;
-  late final SessionModel session;
+  late final SessionDataModel session;
 
-  AddSessionModel.fromJson(Map<String, dynamic> json){
+  SessionModel.fromJson(Map<String, dynamic> json){
     success = json['success'];
     message = json['message'];
-    session = SessionModel.fromJson(json['session']);
+    session = SessionDataModel.fromJson(json['session']);
   }
 
   Map<String, dynamic> toJson() {
@@ -23,8 +23,8 @@ class AddSessionModel {
   }
 }
 
-class SessionModel {
-  SessionModel({
+class SessionDataModel {
+  SessionDataModel({
     required this.medicine,
     required this.report,
     required this.appointmentId,
@@ -39,7 +39,7 @@ class SessionModel {
   late final String createdAt;
   late final int id;
 
-  SessionModel.fromJson(Map<String, dynamic> json){
+  SessionDataModel.fromJson(Map<String, dynamic> json){
     medicine = json['medicine'];
     report = json['report'];
     appointmentId = json['appointment_id'];

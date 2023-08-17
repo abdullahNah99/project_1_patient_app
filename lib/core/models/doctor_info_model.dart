@@ -1,4 +1,3 @@
-import 'package:patient_app/core/models/doctor_info_model.dart';
 
 class DoctorInfoModel {
   DoctorInfoModel({
@@ -38,7 +37,7 @@ class DoctorModel {
     required this.userId,
     required this.createdAt,
     required this.updatedAt,
-    //required this.user,
+    required this.user,
   });
   late final int id;
   late final String specialty;
@@ -51,7 +50,7 @@ class DoctorModel {
   late final int userId;
   late final String createdAt;
   late final String updatedAt;
-  //late final User user;
+  late final User user;
 
   DoctorModel.fromJson(Map<String, dynamic> json){
     id = json['id'];
@@ -65,7 +64,7 @@ class DoctorModel {
     userId = json['user_id'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
-    //user = User.fromJson(json['user']);
+    user = User.fromJson(json['user']);
   }
 
   Map<String, dynamic> toJson() {
@@ -81,12 +80,11 @@ class DoctorModel {
     _data['user_id'] = userId;
     _data['created_at'] = createdAt;
     _data['updated_at'] = updatedAt;
-    //_data['user'] = user.toJson();
+    _data['user'] = user.toJson();
     return _data;
   }
 }
 
-/*
 class User {
   User({
     required this.id,
@@ -134,4 +132,4 @@ class User {
     _data['updated_at'] = updatedAt;
     return _data;
   }
-}*/
+}

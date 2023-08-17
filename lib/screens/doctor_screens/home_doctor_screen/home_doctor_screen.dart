@@ -1,14 +1,16 @@
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient_app/core/widgets/custome_image.dart';
 import 'package:patient_app/screens/doctor_screens/consulting_screen/consult_doctor_cubit/cubit.dart';
-import 'package:patient_app/screens/doctor_screens/home_doctor_screen/home_doctor_cubit/cubit.dart';
-import 'package:patient_app/screens/doctor_screens/home_doctor_screen/home_doctor_cubit/states.dart';
+import 'package:patient_app/screens/doctor_screens/home_doctor_screen/home_doctor_cubit/home_cubit.dart';
 import 'package:patient_app/screens/doctor_screens/widget/custom_divider.dart';
-import 'package:patient_app/screens/patient_screens/home_patient_screen/widgets/custom_drawer_button.dart';
+import '../my_account_screen/my_account_screen.dart';
+import '../widget/custom_button.dart';
+import '../widget/custom_navigate.dart';
+import '../work_day_screen/work_day_screen.dart';
+
 
 
 class DoctorHomeScreen extends StatelessWidget {
@@ -20,145 +22,111 @@ class DoctorHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => DoctorCubit()..fetchMyInfo(),
+          create: (context) => DoctorCubit()..fetchMyInfo()..getPatients(token: token)
+
         ),
         BlocProvider(
           create: (context) => DoctorConsultCubit()..getQuestion(),
         ),
+       /* BlocProvider(
+          create: (context) => SessionCubit()..getPatients(token: CacheHelper.getData(
+              key: 'Token')),
+        ),
+*/
       ],
-      //create: (context) => DoctorCubit(),
+
       child: BlocConsumer<DoctorCubit, DoctorStates>(
         listener: (context, state) {},
         builder: (context, state)
         {
           DoctorCubit cubit = BlocProvider.of<DoctorCubit>(context);
           //DoctorCubit cubit = DoctorCubit.get(context);
+
           return Scaffold(
             key: scaffoldKey,
-            /*onPressed: () {
-                      _scaffoldKey.currentState!.closeDrawer();
-                      Navigator.pushNamed(
-                          context, ShowAllConsultationView.route);
-                    },*/
+
             drawer: Drawer(
               width: 250.w,
               child: Padding(
-                padding: const EdgeInsets.only(left: 20.0),
+                padding: const EdgeInsets.only(left: 2.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
                       height: 30.h,
                     ),
-                    CustomeImage(
-                        height: 55.h,
-                        width: 55.w,
+                    Padding(padding:const EdgeInsets.only(left: 19.0),
+                      child: CustomeNetworkImage(
+                        imageUrl: cubit.doctorModel?.imagePath,
+                        fit: BoxFit.contain,
+                        height: 75.h,
+                        width: 75.h,
                         borderRadius: BorderRadius.circular(50.r),
-                        iconSize: 35.sp,
-                      ),
-                    SizedBox(height: 14.h,),
-                    Text(
-                      'dr food',
-                      style: TextStyle(
-                          fontSize: 18.sp, fontWeight: FontWeight.bold),
+                        iconSize: 55.sp,
+                     )
                     ),
+                    SizedBox(height: 14.h,),
+                    Padding(padding:const EdgeInsets.only(left: 21.0),
+                     child: Text(
+                     cubit.doctorModel?.user.firstName ?? '',
+
+                     style: TextStyle(
+                         fontSize: 18.sp, fontWeight: FontWeight.bold),
+                   ),),
                     SizedBox(height: 22.h,),
                     divider(),
-                    SizedBox(height: 25.h),
-                    Row(
-                      children: [
-                        const Icon(Icons.info_outline),
-                        SizedBox(width: 15.w,),
-                        Text(
-                          'My Account',
-                          style: TextStyle(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.bold
-
-                          ),
-                        ),
-                      ],
+                    SizedBox(height: 8.h),
+                    defMaterialButton(
+                      text:'My Account',
+                      function: ()
+                      {
+                        navigateTo(context, MyAccountScreen());
+                      },
+                      icon: Icons.info_outline,
                     ),
-                    SizedBox(height: 25.h),
-                    Row(
-                      children: [
-                        const Icon(Icons.date_range_rounded),
-                        SizedBox(width: 15.w,),
-                        Text(
-                          'Appointment',
-                          style: TextStyle(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.bold
+                   /* defMaterialButton(
+                        text: 'Appointment',
+                        function: ()
+                        {
 
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 25.h),
-                    Row(
-                      children: [
-                        const Icon(Icons.question_answer_outlined),
-                        SizedBox(width: 15.w,),
-                        Text(
-                          'Consulting',
-                          style: TextStyle(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.bold
+                        },
+                        icon: Icons.date_range_rounded,
+                    ),*/
+                    defMaterialButton(text: 'Consulting',
+                        function: ()
+                        {
 
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 25.h),
-                    Row(
-                      children: [
-                        const Icon(Icons.medical_information_outlined),
-                        SizedBox(width: 15.w,),
-                        Text(
-                          'My Sessions',
-                          style: TextStyle(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.bold
+                        },
+                        icon: Icons.question_answer_outlined),
+                   /* defMaterialButton(text: 'My Sessions',
+                        function: ()
+                        {
 
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 25.h),
-                    Row(
-                      children: [
-                        const Icon(Icons.work_history_outlined),
-                        SizedBox(width: 15.w,),
-                        Text(
-                          'Time off',
-                          style: TextStyle(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.bold
+                        },
+                        icon: Icons.medical_information_outlined),*/
+                    defMaterialButton(text: 'Time off',
+                      function: ()
+                      {
+                        //scaffoldKey.currentState!.closeDrawer();
+                        navigateTo(context, WorkTimesScreen());
 
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 25.h),
-                    Row(
-                      children: [
-                        const Icon(Icons.dark_mode_outlined),
-                        SizedBox(width: 15.w,),
-                        Text(
-                          'Dark mode',
-                          style: TextStyle(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.bold
+                      },
+                     icon: Icons.work_history_outlined),
+                    defMaterialButton(
+                        text:'Dark mode',
+                        function: ()
+                        {
 
-                          ),
-                        ),
-                      ],
+                        },
+                        icon: Icons.dark_mode_outlined),
+                    const Expanded(
+                        child: SizedBox()
                     ),
-                    const Expanded(child: SizedBox()),
-                    Padding(
+                      /* Padding(
                      padding:const EdgeInsets.only(right: 20.0),
                      child:CustomDrawerButton(
                      text: 'Logout',
@@ -168,7 +136,16 @@ class DoctorHomeScreen extends StatelessWidget {
                        scaffoldKey.currentState!.closeDrawer();
                        cubit.logout(context);
                      },
-                   ),),
+                   ),),*/
+                    defMaterialButton(
+                        text:'Logout',
+                        function: ()
+                        {
+                          scaffoldKey.currentState!.closeDrawer();
+                          cubit.logout(context);
+                        },
+                        icon: Icons.logout_outlined),
+
                     SizedBox(height: 25.h),
                   ],
                 ),
@@ -180,19 +157,7 @@ class DoctorHomeScreen extends StatelessWidget {
                   bottom: Radius.circular(20.r),
                 ),
               ),
-             /* title: Text(
-                 cubit.doctorInfoModel.doctor.user.firstName ?? 'h',
-                style: TextStyle(
-                    fontSize: 25.sp, fontWeight: FontWeight.bold),
-              ),*/
-            /*  actions:  [
-               IconButton(
-                 onPressed: ()
-                 {
-                   DoctorCubit.get(context).getDoctorInfo(user_id: DoctorCubit.get(context).doctorInfoModel.doctor.userId);
-                 }, icon: const Icon(Icons.notifications),),
-                const SizedBox(width: 5),
-              ],*/
+
             ),
             body: cubit.bottomNavScreens[cubit.currentIndex],
             bottomNavigationBar:BottomNavigationBar(

@@ -83,18 +83,32 @@ class PatientApp extends StatelessWidget {
                 type: BottomNavigationBarType.fixed,
               ),
             ),
-            home: CacheHelper.getData(key: 'Token') == null
+           home: getHome(),
+           /* home: CacheHelper.getData(key: 'Token') == null
                 ? const LoginView()
                 : CacheHelper.getData(key: 'Role') == 'doctor'
                     ? DoctorHomeScreen(token:  CacheHelper.getData(key: 'Token'))
                 : CacheHelper.getData(key: 'Role') == 'secretary'
-                    ? SecretariaLayout()/*AppointmentsRequestsView(
-                        token: CacheHelper.getData(key: 'Token'))*/
-                    : const HomePatientView(),
+                    ? SecretariaLayout()*//*AppointmentsRequestsView(
+                        token: CacheHelper.getData(key: 'Token'))*//*
+                    : const HomePatientView(),*/
             // initialRoute: initialRoute,
             routes: AppRouter.router);
       },
     );
+  }
+}
+Widget getHome() {
+  if (CacheHelper.getData(key: 'Token') == null) {
+    return const LoginView();
+  } else {
+    if (CacheHelper.getData(key: 'Role') == 'doctor') {
+      return DoctorHomeScreen(token: CacheHelper.getData(key: 'Token'));
+    } else if (CacheHelper.getData(key: 'Role') == 'secretary') {
+      return SecretariaLayout();
+    } else {
+      return const HomePatientView();
+    }
   }
 }
 

@@ -20,12 +20,3 @@ Widget myDivider()=> Padding(
     color:Colors.grey[100] ,
   ),);
 
-////////////////////////////////////////
-
-void navigateTo(context,Widget)
-{
-  Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => Widget),
-  );
-}
