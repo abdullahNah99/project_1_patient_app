@@ -18,9 +18,7 @@ class DoctorConsultCubit extends Cubit<DoctorConsultStates>
 
   ConsultationModel? consultationModel;
 
-class DoctorConsultCubit extends Cubit<DoctorConsultStates> {
-  DoctorConsultCubit() : super(DoctorConsultInitialState());
-  static DoctorConsultCubit get(context) => BlocProvider.of(context);
+
 
   Map<String, dynamic>? perInfo;
   Map<String, dynamic> decode(String token) {
@@ -51,7 +49,7 @@ class DoctorConsultCubit extends Cubit<DoctorConsultStates> {
     return int.parse(perInfo!['sub']);
   }
 
-  DoctorInfoModel? doctorInfoModel;
+  //DoctorInfoModel? doctorInfoModel;
 
 /*
   Future<void> fetchMyId() async {
@@ -82,15 +80,8 @@ class DoctorConsultCubit extends Cubit<DoctorConsultStates> {
       url: 'consultation/index',
       token: CacheHelper.getData(key: 'Token'),
       query: null,
-    ).then((value)
-    {
-      indexConsultByDoctorModel =IndexConsultByDoctorModel.fromJson(value.data);
-      print(indexConsultByDoctorModel.consultaion[0].id);
-
-      query: {},
     ).then((value) {
-      indexConsultByDoctorModel =
-          IndexConsultByDoctorModel.fromJson(value.data);
+      indexConsultByDoctorModel =IndexConsultByDoctorModel.fromJson(value.data);
       print(indexConsultByDoctorModel.message);
       print(indexConsultByDoctorModel.consultaion[0].question);
 
@@ -109,12 +100,17 @@ class DoctorConsultCubit extends Cubit<DoctorConsultStates> {
         required String answer,
       }) async {
     emit(DoctorConsultPostAnswerLoadingState());
-    (await SendAnswerService.sendAnswer(consultationID: consultationID , answer: answer, token: CacheHelper.getData(key: 'Token'),))
+    (await SendAnswerService.sendAnswer(
+      consultationID: consultationID ,
+      answer: answer,
+      token: CacheHelper.getData(key: 'Token'),
+    )
+    )
         .fold(
           (failure) {
-            Navigator.pop(context);
-            emit(DoctorConsultPostAnswerFinishState());
-       // emit(DoctorConsultPostAnswerErrorState(error: failure.errorMessege));
+        //Navigator.pop(context);
+       // emit(DoctorConsultPostAnswerFinishState());
+         emit(DoctorConsultPostAnswerErrorState(error: failure.errorMessege));
         CustomeSnackBar.showSnackBar(
           context,
           msg: 'Error occurred, Please Try Later',
@@ -122,21 +118,25 @@ class DoctorConsultCubit extends Cubit<DoctorConsultStates> {
         );
       },
           (consultationModel)
-      {
-        this.consultationModel =consultationModel;
-        Navigator.pop(context);
-        emit(DoctorConsultPostAnswerFinishState());
-        //emit(DoctorConsultPostAnswerSuccessState());
-        CustomeSnackBar.showSnackBar(
-          context,
-          msg: 'Answer Send Successfully',
-          color: Colors.black38,
-        );
+           {
+               this.consultationModel =consultationModel;
+                //Navigator.pop(context);
+                  //emit(DoctorConsultPostAnswerFinishState());
 
-  },
+                 CustomeSnackBar.showSnackBar(
+                  context,
+                    msg: 'Answer Send Successfully',
+                    color: Colors.black38,
+                    );
+               emit(DoctorConsultPostAnswerSuccessState());
+             //Navigator.pop(context);
+      },
     );
 
-  void postAnswer({
+  }
+
+
+ /* void postAnswer({
     required String answer,
     //required int id,
   }) async {
@@ -147,13 +147,16 @@ class DoctorConsultCubit extends Cubit<DoctorConsultStates> {
         data: {
           'answer': answer,
         }).then((value) {
-      indexConsultByDoctorModel =
-          IndexConsultByDoctorModel.fromJson(value.data);
-      print(getMyId().toString());
+      indexConsultByDoctorModel = IndexConsultByDoctorModel.fromJson(value.data);
+      //print(getMyId().toString());
       emit(DoctorConsultPostAnswerSuccessState());
     }).catchError((error) {
       emit(DoctorConsultPostAnswerErrorState(error: error.toString()));
     });
 
   }
+
+
+*/
+
 }

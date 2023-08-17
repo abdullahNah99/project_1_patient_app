@@ -91,8 +91,9 @@ class PostAnswerScreen extends StatelessWidget {
                                  consultationID: consultId,
                                  answer: answer!,
                               );
-                               DoctorConsultCubit.get(context).getQuestion();
+
                                Navigator.pop(context);
+                               DoctorConsultCubit.get(context).getQuestion();
                               // navigateAndReplacement(context,ShowConsultingScreen());
                             }
 
