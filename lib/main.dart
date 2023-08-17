@@ -102,6 +102,17 @@ class PatientApp extends StatelessWidget {
                 ),
               ),
             ),
+
+           home: getHome(),
+           /* home: CacheHelper.getData(key: 'Token') == null
+                ? const LoginView()
+                : CacheHelper.getData(key: 'Role') == 'doctor'
+                    ? DoctorHomeScreen(token:  CacheHelper.getData(key: 'Token'))
+                : CacheHelper.getData(key: 'Role') == 'secretary'
+                    ? SecretariaLayout()*//*AppointmentsRequestsView(
+                        token: CacheHelper.getData(key: 'Token'))*//*
+                    : const HomePatientView(),*/
+
             darkTheme: ThemeData(
               //scaffoldBackgroundColor: Colors.grey.shade300,
               useMaterial3: true,
@@ -169,10 +180,24 @@ class PatientApp extends StatelessWidget {
 
             themeMode: ThemeMode.light,
             
+
             // initialRoute: initialRoute,
             routes: AppRouter.router);
       },
     );
+  }
+}
+Widget getHome() {
+  if (CacheHelper.getData(key: 'Token') == null) {
+    return const LoginView();
+  } else {
+    if (CacheHelper.getData(key: 'Role') == 'doctor') {
+      return DoctorHomeScreen(token: CacheHelper.getData(key: 'Token'));
+    } else if (CacheHelper.getData(key: 'Role') == 'secretary') {
+      return SecretariaLayout();
+    } else {
+      return const HomePatientView();
+    }
   }
 }
 

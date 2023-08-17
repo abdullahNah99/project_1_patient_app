@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient_app/core/styles/app_colors.dart';
 
 Widget defTextButton({required Function function,required String text,required Color color }) => TextButton(
@@ -67,3 +68,25 @@ Widget defButton({
         color: background,
       ),
     );
+
+
+
+Widget defMaterialButton({required String text, required IconData icon, required Function function}) =>   MaterialButton(
+  onPressed: ()
+  {
+    function();
+  },
+  child:  Row(
+  children: [
+     Icon(icon),
+    SizedBox(width: 15.w,),
+    Text(
+    text,
+      style: TextStyle(
+          fontSize: 16.sp,
+          fontWeight: FontWeight.bold
+
+      ),
+    ),
+  ],
+),);

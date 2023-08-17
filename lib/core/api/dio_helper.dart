@@ -8,6 +8,7 @@ class DioHelper
   static init() {
     dio = Dio(
       BaseOptions(
+
         baseUrl: '${Constants.paseUrl}api/',
         receiveDataWhenStatusError: true,
       ),
