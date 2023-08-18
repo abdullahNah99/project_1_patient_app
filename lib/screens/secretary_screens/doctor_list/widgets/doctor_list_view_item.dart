@@ -103,7 +103,7 @@ class DoctorListViewItem extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(10.h),
                                   image: DecorationImage(
                                     image: NetworkImage(
-                                      '${Constants.paseUrl}upload/${cubit.indexDoctorByDepartmentModel.doctor[index].imagePath}',
+                                      '${Constants.baseURL}upload/${cubit.indexDoctorByDepartmentModel.doctor[index].imagePath}',
                                     ),
                                   )
                               ),

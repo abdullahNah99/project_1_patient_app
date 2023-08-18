@@ -10,6 +10,7 @@ import 'package:patient_app/core/models/appointment_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:patient_app/core/models/patient_model.dart';
 import 'package:patient_app/core/models/session_model.dart';
+import 'package:patient_app/core/utils/constants.dart';
 import '../../../../core/api/services/appointment/get_appointment_details.dart';
 import '../../../../core/api/services/get_patient_service.dart';
 import '../../../../core/api/services/local/cache_helper.dart';
@@ -22,7 +23,7 @@ class SessionCubit extends Cubit<SessionStates> {
   SessionCubit() : super(SessionInitialState());
 
   static SessionCubit get(context) => BlocProvider.of(context);
-  static String baseUrl = 'http://192.168.1.10:8000/api/';
+ // static String baseUrl = 'http://192.168.1.10:8000/api/';
 
   List<PatientModel> patients = [];
 
@@ -71,7 +72,7 @@ class SessionCubit extends Cubit<SessionStates> {
   }) async {
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('$baseUrl$endPoint'),
+      Uri.parse('${Constants.baseURL}$endPoint'),
     );
     request.fields.addAll(body);
     if (imagePath != null) {
@@ -133,6 +134,10 @@ class SessionCubit extends Cubit<SessionStates> {
       print(patients[0].address);
     });
   }
+
+
+ /// http://192.168.1.10:8000/api/sessions/patient/4
+
 
 
 //session/delete/3
