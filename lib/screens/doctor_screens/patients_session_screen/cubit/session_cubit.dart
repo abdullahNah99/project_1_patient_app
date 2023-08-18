@@ -31,9 +31,6 @@ class SessionCubit extends Cubit<SessionStates> {
 
   late AppointmentModel appointmentModel;
   late SessionModel sessionModel;
-  //late PatientModel patientModel;
-
-
 
  /* Future<void> viewAppointment(
       {required int appointmentId, required String token}) async {
@@ -139,7 +136,7 @@ class SessionCubit extends Cubit<SessionStates> {
   }
 */
 
- /// http://192.168.1.10:8000/api/sessions/patient/4
+
   Future<void> getSession({required String token,required int patientId})
   async {
     emit(GetSessionLoadingState());
@@ -163,8 +160,6 @@ class SessionCubit extends Cubit<SessionStates> {
     );
   }
 
-
-
   Future<void> getPatientAndSession({required String token,required int patientId}) async {
     emit(GetPatientsLoadingState());
     (await GetSessionService.getSession(token:token,patientId:patientId)).fold(
@@ -186,52 +181,34 @@ class SessionCubit extends Cubit<SessionStates> {
                 patient: patient));
           },
         );
-        //emit(GetDoctorsSuccess(doctors: doctors));
+
       },
     );
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //session/delete/3
  void deleteSession({required String token,required int sessionId}) async
  {
    emit(SessionLoadingState());
-   DioHelper.postData(url: 'session/delete/${sessionId}', data: null,token: await CacheHelper.getData(key: 'Token'),).then(
+   DioHelper.postData(
+     url: 'session/delete/${sessionId}',
+     data: null,
+     token: await CacheHelper.getData(key: 'Token'),
+   ).then(
            (value)
        {
          sessionModel =SessionModel.fromJson(value.data);
          emit(SessionDeletedSuccessState());
-         //getSession();
        }).catchError((error){
          emit(SessionDeletedErrorState(error: error));
    });
  }
  //session/update/2
- void updateSession({
+ void updateSession(BuildContext context ,{
    required String token,
    required String medicine,
    required String report,
-   required String img,
+  // required String img,
    required int appointmentId,
    required int sessionId,}) async
  {
@@ -241,8 +218,8 @@ class SessionCubit extends Cubit<SessionStates> {
         data: {
           'medicine': medicine,
           'report': report,
-          'img': img,
-          'appointment_id': appointmentId,
+         // 'img': img,
+         // 'appointment_id': appointmentId,
         },
         token:await CacheHelper.getData(key: 'Token'),
         query:null  ).then(
@@ -250,11 +227,58 @@ class SessionCubit extends Cubit<SessionStates> {
        {
          sessionModel =SessionModel.fromJson(value.data);
          emit(SessionUpdatedSuccessState());
+
+         Navigator.pop(context);
+
        }).catchError((error)
    {
      emit(SessionUpdatedErrorState(error: error));
    });
  }
+
+
+  Future<dynamic> updateWithImage({
+   /* required String medicine,
+    required String report,
+    required String img,
+    required int appointmentId,*/
+    required int sessionId,
+    required String endPoint,
+    required Map<String, String> body,
+    @required String? imagePath,
+    @required String? token,
+  }) async {
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse('${Constants.baseURL}api/$endPoint$sessionId'),
+    );
+    request.fields.addAll(body);
+    if (imagePath != null) {
+      request.files.add(await http.MultipartFile.fromPath('img', imagePath));
+    }
+    request.headers.addAll(
+      {
+        'Accept': 'application/json',
+        if (token != null) 'Authorization': 'Bearer $token',
+      },
+    );
+    http.StreamedResponse response = await request.send();
+
+    http.Response r = await http.Response.fromStream(response);
+
+    if (r.statusCode == 200) {
+      Map<String, dynamic> data = jsonDecode(r.body);
+      log('HTTP POSTIMAGE Data: $data');
+      //getHomeDepData();
+      return data;
+    } else {
+      throw Exception(
+        'there is an error with status code ${r.statusCode} and with body : ${r.body}',
+      );
+    }
+  }
+
+
 
 
 }

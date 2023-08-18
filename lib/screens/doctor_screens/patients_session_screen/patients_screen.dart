@@ -45,8 +45,7 @@ class ShowPatientsAndSessionScreen extends StatelessWidget {
 }
 
 Widget listOfPatient(GetPatientsSuccessState state) => ListView.separated(
-      itemBuilder: (context, index) =>
-          patientItemBuilder(context, state, index),
+      itemBuilder: (context, index) => patientItemBuilder(context, state, index),
       separatorBuilder: (context, index) => myDivider(),
       itemCount: state.patient.length,
     );
