@@ -51,6 +51,37 @@ class GetPatientsSuccessState extends SessionStates
 }
 
 
+class GetPatientAndSessionSuccess extends SessionStates
+{
+  final List<SessionModel> session;
+  final List<PatientModel> patient;
+
+  const GetPatientAndSessionSuccess({
+    required this.session,
+    required this.patient,
+  });
+}
+
+
+
+
+
+
+class GetSessionLoadingState extends SessionStates{}
+class GetSessionErrorState extends SessionStates
+{
+  final String error;
+  const GetSessionErrorState({required this.error});
+
+}
+class GetSessionSuccessState extends SessionStates
+{
+  final List<SessionModel> session;
+  const GetSessionSuccessState({required this.session});
+
+}
+
+
 
 class SessionDeletedSuccessState extends SessionStates{}
 class SessionDeletedErrorState extends SessionStates

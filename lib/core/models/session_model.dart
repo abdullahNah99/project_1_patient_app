@@ -1,3 +1,4 @@
+/*
 class SessionModel {
   SessionModel({
     required this.success,
@@ -58,4 +59,37 @@ class SessionDataModel {
     _data['id'] = id;
     return _data;
   }
+}
+
+
+*/
+
+class SessionModel{
+   final String? medicine;
+   final String? report;
+   final String? appointmentId;
+   final String? updatedAt;
+   final String? createdAt;
+   final int? id;
+
+   SessionModel({
+     required this.medicine,
+     required this.report,
+     required this.appointmentId,
+     required this.updatedAt,
+     required this.createdAt,
+     required this.id,
+});
+
+   factory SessionModel.fromJson(Map<String, dynamic> jsonData) {
+     return SessionModel(
+       id: jsonData['id'],
+       createdAt: jsonData['createdAt'],
+       updatedAt: jsonData['updatedAt'],
+       appointmentId: jsonData['appointmentId'],
+       report: jsonData['report'],
+       medicine: jsonData['medicine'],
+     );
+   }
+
 }
