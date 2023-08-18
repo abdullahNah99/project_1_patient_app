@@ -30,12 +30,11 @@ class DoctorCubit extends Cubit<DoctorStates> {
   //PatientModel? patientModel;
   PatientModel patientModel = PatientModel();
 
-
   int currentIndex = 0;
   List<Widget> bottomNavScreens = [
     ShowAppointmentScreen(),
     ShowConsultingScreen(),
-     ShowPatientsAndSessionScreen(),
+    const ShowPatientsAndSessionScreen(),
     SearchScreen(),
   ];
 
@@ -78,7 +77,7 @@ class DoctorCubit extends Cubit<DoctorStates> {
     }
     if (index == 2) {
       getPatients(token: CacheHelper.getData(key: 'Token'));
-     // getSession(token:CacheHelper.getData(key: 'Token'), patientId: patientModel.id!);
+      // getSession(token:CacheHelper.getData(key: 'Token'), patientId: patientModel.id!);
     }
   }
 
@@ -118,7 +117,7 @@ class DoctorCubit extends Cubit<DoctorStates> {
   Map<String, dynamic> decode(String token) {
     final splitToken = token.split("."); // Split the token by '.'
     if (splitToken.length != 3) {
-      throw FormatException('Invalid token');
+      throw const FormatException('Invalid token');
     }
     try {
       final payloadBase64 = splitToken[1]; // Payload is always the index 1
@@ -153,7 +152,7 @@ class DoctorCubit extends Cubit<DoctorStates> {
       },
       (appointment) {
         emit(DoctorViewAppointmentSuccessState(appointments: appointment));
-        print(appointment[0].date);
+        // print(appointment[0].date);
       },
     );
   }
@@ -170,23 +169,18 @@ class DoctorCubit extends Cubit<DoctorStates> {
     });
   }
 
-  Future<void> getSession({required String token,required int patientId})
-  async {
+  Future<void> getSession(
+      {required String token, required int patientId}) async {
     emit(GetSessionLoadingState());
-    (await GetSessionService.getSession(token: await CacheHelper.getData(key: 'Token'), patientId: patientId)).fold(
-            (error) {
-              emit(GetSessionErrorState(error: error.errorMessege));
-            },
-            (session) {
-          emit(GetSessionSuccessState(session: session));
-        }
-    );
+    (await GetSessionService.getSession(
+            token: await CacheHelper.getData(key: 'Token'),
+            patientId: patientId))
+        .fold((error) {
+      emit(GetSessionErrorState(error: error.errorMessege));
+    }, (session) {
+      emit(GetSessionSuccessState(session: session));
+    });
   }
-
-
-
-
-
 
 /*
 
@@ -213,7 +207,7 @@ class DoctorCubit extends Cubit<DoctorStates> {
 
 */
 
- /*late PatientModel patientModel;
+  /*late PatientModel patientModel;
   void search({required String token ,required String name})
   {
     emit(SearchLoadingState());

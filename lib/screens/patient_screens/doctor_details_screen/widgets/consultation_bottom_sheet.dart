@@ -103,6 +103,7 @@ abstract class ConsultationBottomSheet {
                 CustomeButton(
                   text: 'Send Consultation',
                   onPressed: () async {
+                    FocusScope.of(context).unfocus();
                     log('${doctorModel.id}');
                     if (formKey.currentState!.validate()) {
                       cubit.addConsultation(
