@@ -70,7 +70,7 @@ class AppointmentRequestItem extends StatelessWidget {
                           borderRadius: BorderRadius.circular(30.h),
                           image: DecorationImage(
                             image: NetworkImage(
-                              '${Constants.paseUrl}upload/${model.appointment[index!].doctor.imagePath}',
+                              '${Constants.baseURL}upload/${model.appointment[index!].doctor.imagePath}',
                             ),
                           )
                       ),

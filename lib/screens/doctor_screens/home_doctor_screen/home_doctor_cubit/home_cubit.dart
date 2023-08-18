@@ -29,7 +29,7 @@ class DoctorCubit extends Cubit<DoctorStates> {
   List<Widget> bottomNavScreens = [
     ShowAppointmentScreen(),
     ShowConsultingScreen(),
-    ShowPatientsAndSessionScreen(),
+    const ShowPatientsAndSessionScreen(),
     SearchScreen(),
   ];
 
@@ -163,6 +163,8 @@ class DoctorCubit extends Cubit<DoctorStates> {
       emit(GetPatientsSuccessState(patient: patient));
     });
   }
+
+
 
 /*
 

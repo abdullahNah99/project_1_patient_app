@@ -109,8 +109,8 @@ class DoctorConsultCubit extends Cubit<DoctorConsultStates>
         .fold(
           (failure) {
         //Navigator.pop(context);
-       // emit(DoctorConsultPostAnswerFinishState());
-         emit(DoctorConsultPostAnswerErrorState(error: failure.errorMessege));
+        emit(DoctorConsultPostAnswerFinishState());
+         //emit(DoctorConsultPostAnswerErrorState(error: failure.errorMessege));
         CustomeSnackBar.showSnackBar(
           context,
           msg: 'Error occurred, Please Try Later',
@@ -121,7 +121,7 @@ class DoctorConsultCubit extends Cubit<DoctorConsultStates>
            {
                this.consultationModel =consultationModel;
                 //Navigator.pop(context);
-                  //emit(DoctorConsultPostAnswerFinishState());
+                  emit(DoctorConsultPostAnswerFinishState());
 
                  CustomeSnackBar.showSnackBar(
                   context,

@@ -9,7 +9,7 @@ class DioHelper
     dio = Dio(
       BaseOptions(
 
-        baseUrl: '${Constants.paseUrl}api/',
+        baseUrl: '${Constants.baseURL}api/',
         receiveDataWhenStatusError: true,
       ),
     );
