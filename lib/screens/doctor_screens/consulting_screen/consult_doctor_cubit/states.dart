@@ -1,3 +1,4 @@
+import '../../../../core/models/consultation_model.dart';
 import '../../../../core/models/doctor_model.dart';
 
 abstract class  DoctorConsultStates{}
@@ -23,15 +24,16 @@ class DoctorConsultPostAnswerFinishState extends DoctorConsultStates {}
 
 
 
-class DoctorConsultGetInfoInitialState extends DoctorConsultStates {}
-class DoctorConsultGetInfoLoadingState extends DoctorConsultStates {}
-class DoctorConsultGetInfoSuccessState extends DoctorConsultStates {
-  final DoctorModel doctorModel;
-  DoctorConsultGetInfoSuccessState({required this.doctorModel});
+class DoctorConsultGetInitialState extends DoctorConsultStates {}
+class DoctorConsultGetLoadingState extends DoctorConsultStates {}
+class DoctorConsultGetSuccessState extends DoctorConsultStates {
+  final ConsultationModel consultationModel;
+  DoctorConsultGetSuccessState({required this.consultationModel});
 }
-class DoctorConsultGetInfoErrorState extends DoctorConsultStates
+class DoctorConsultGetErrorState extends DoctorConsultStates
 {
   final String error;
-  DoctorConsultGetInfoErrorState({required this.error});
+  DoctorConsultGetErrorState({required this.error});
 }
+
 

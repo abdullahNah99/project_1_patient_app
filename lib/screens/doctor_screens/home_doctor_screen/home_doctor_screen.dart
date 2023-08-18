@@ -44,7 +44,6 @@ class DoctorHomeScreen extends StatelessWidget {
         builder: (context, state)
         {
           DoctorCubit cubit = BlocProvider.of<DoctorCubit>(context);
-          //DoctorCubit cubit = DoctorCubit.get(context);
 
           return Scaffold(
             key: scaffoldKey,
@@ -99,7 +98,7 @@ class DoctorHomeScreen extends StatelessWidget {
                     defMaterialButton(text: 'Consulting',
                         function: ()
                         {
-
+                               navigateTo(context, Widget);
                         },
                         icon: Icons.question_answer_outlined),
                    /* defMaterialButton(text: 'My Sessions',

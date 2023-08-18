@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:patient_app/core/api/services/consultation/send_answer_service.dart';
 import 'package:patient_app/screens/doctor_screens/consulting_screen/consult_doctor_cubit/states.dart';
 import '../../../../core/api/dio_helper.dart';
+import '../../../../core/api/services/consultation/get_patient_consultations_service.dart';
 import '../../../../core/api/services/get_doctor_details_service.dart';
 import '../../../../core/api/services/local/cache_helper.dart';
 import '../../../../core/functions/custome_snack_bar.dart';
@@ -126,7 +127,7 @@ class DoctorConsultCubit extends Cubit<DoctorConsultStates>
                  CustomeSnackBar.showSnackBar(
                   context,
                     msg: 'Answer Send Successfully',
-                    color: Colors.black38,
+                    color: Colors.green,
                     );
                emit(DoctorConsultPostAnswerSuccessState());
              //Navigator.pop(context);
@@ -135,6 +136,25 @@ class DoctorConsultCubit extends Cubit<DoctorConsultStates>
 
   }
 
+
+  /*  Future<void> getConsoult(BuildContext context,{required String token}) async
+    {
+      emit(DoctorConsultGetLoadingState());
+      (await GetPatientConsultationsService.getPatientConsultations(token:  CacheHelper.getData(key: 'Token'))
+      ).fold((error)
+      {
+        emit(DoctorConsultGetErrorState(error:error.errorMessege));
+        CustomeSnackBar.showSnackBar(
+            context,
+            msg: 'Error Occurred',
+            color: Colors.red);
+      }
+      , (consultModel)
+          {
+              emit(DoctorConsultGetSuccessState(consultationModel: consultModel));
+          });
+
+    }*/
 
  /* void postAnswer({
     required String answer,

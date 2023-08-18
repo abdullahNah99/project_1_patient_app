@@ -154,8 +154,6 @@ class GetSessionSuccessState extends DoctorStates {
 }
 
 
-
-
 class SearchLoadingState extends DoctorStates{}
 class SearchErrorState extends DoctorStates
 {
@@ -164,8 +162,8 @@ class SearchErrorState extends DoctorStates
 }
 class SearchSuccessState extends DoctorStates
 {
- final List<SearchOnPatientModel> patient;
- const SearchSuccessState({required this.patient});
+ final List<UsersModel> users;
+ const SearchSuccessState({required this.users});
 
 }
 
