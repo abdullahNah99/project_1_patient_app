@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient_app/core/widgets/custome_progress_indicator.dart';
 import 'package:patient_app/screens/doctor_screens/patients_session_screen/cubit/session_cubit.dart';
+import 'package:patient_app/screens/doctor_screens/patients_session_screen/view_and_update_session.dart';
+import 'package:patient_app/screens/doctor_screens/widget/custom_navigate.dart';
 import '../../../core/api/services/local/cache_helper.dart';
 import '../../../core/functions/custome_snack_bar.dart';
 import '../../../core/styles/app_colors.dart';
@@ -20,7 +22,7 @@ class ViewPatientWithHisSessions extends StatelessWidget
   Widget build(BuildContext context) {
     return BlocProvider(create: (context)=> SessionCubit()..getPatientAndSession(
         token:  CacheHelper.getData(key: 'Token'),
-        patientId: patientId),
+         patientId: patientId),
       child: Scaffold(
         appBar: AppBar(
           shape: RoundedRectangleBorder(
@@ -181,13 +183,15 @@ class ViewPatientWithHisSessionsBody extends StatelessWidget
               ],
             ),
           );
-        }else if(state.session.isEmpty && state.patient.isEmpty)
+        }
+        else if(state.session.isEmpty && state.patient.isEmpty)
         {
           return  Center(
             child: Text('Error in get patient and his sessions',
               style: TextStyle(color: Colors.grey, fontSize: 30.w),),
           );
-        }else
+        }
+        else
         {
           return Padding(
             padding: const EdgeInsets.all(20.0),
@@ -327,7 +331,8 @@ class ViewPatientWithHisSessionsBody extends StatelessWidget
             ),
           );
         }
-      }else
+      }
+      else
       {
         return const CustomeProgressIndicator();
       }
@@ -348,52 +353,61 @@ class ViewPatientWithHisSessionsBody extends StatelessWidget
 
 }
 Widget listOfSession(GetPatientAndSessionSuccess state) => ListView.builder(
-    itemBuilder: (context, index)=> MaterialButton(
-      onPressed: ()
-      {
-        //navigaTo();
-      },
-      child:Padding(
-        padding: const EdgeInsets.only(top: 4.0,bottom: 4.0),
-        child:  Container(
-          padding: const EdgeInsets.only(left: 15.0, bottom: 10.0, top: 10.0),
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-          ),
-          child:  Row(
-            children: [
-              CircleAvatar(
-                radius:14.0 ,
-                backgroundColor: defaultColor,
-                child: Text(
-                  //'1',
-                  '${state.session[index].id}',
+    itemBuilder: (context, index)=> sessionItemBuilder(context ,state,index),
+    itemCount: state.session.length,
+);
 
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12.0,
-                  ),),
-              ),
-              SizedBox(
-                width: 10.0,
-              ),
-              Text(
-                'session',
-                style: const TextStyle(
-                  color: defaultColor,
-                  fontSize: 18.0,
-                ),
-              ),
-              Spacer(),
-              IconButton(onPressed: (){}, icon: Icon(
-                Icons.delete,
-                size: 20.0,
-              ))
-            ],
-          ),
-        ),
+
+Widget sessionItemBuilder(BuildContext context,GetPatientAndSessionSuccess  state, int index) => Padding(
+  padding: const EdgeInsets.only(top: 4.0,bottom: 4.0),
+  child:MaterialButton(
+    onPressed: ()
+    {
+      navigateTo(context, UpdateSessionScreen(state,index));
+
+    },
+    child: Container(
+      padding: const EdgeInsets.only(left: 15.0, bottom: 10.0, top: 10.0),
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
       ),
+      child:  Row(
+        children: [
+          CircleAvatar(
+            radius:14.0 ,
+            backgroundColor: defaultColor,
+            child: Text(
+              //'1',
+              '${state.session[index].id}',
 
+              style:const TextStyle(
+                color: Colors.white,
+                fontSize: 12.0,
+              ),),
+          ),
+          const SizedBox(
+            width: 10.0,
+          ),
+          const Text(
+            'session',
+            style: const TextStyle(
+              color: defaultColor,
+              fontSize: 18.0,
+            ),
+          ),
+          const Spacer(),
+          IconButton(onPressed: ()
+          {
+           SessionCubit.get(context).deleteSession(
+                token: CacheHelper.getData(key: 'Token'),
+                sessionId: state.session[index].id!,
+           );
+          }, icon: Icon(
+            Icons.delete,
+            size: 20.0,
+          ))
+        ],
+      ),
     ),
-
-    itemCount: state.session.length);
+  ),
+);

@@ -66,14 +66,16 @@ class SessionDataModel {
 
 class SessionModel{
    final String? medicine;
+   final String? image_path;
    final String? report;
-   final String? appointmentId;
+   final int? appointmentId;
    final String? updatedAt;
    final String? createdAt;
    final int? id;
 
    SessionModel({
      required this.medicine,
+     required this.image_path,
      required this.report,
      required this.appointmentId,
      required this.updatedAt,
@@ -84,11 +86,12 @@ class SessionModel{
    factory SessionModel.fromJson(Map<String, dynamic> jsonData) {
      return SessionModel(
        id: jsonData['id'],
-       createdAt: jsonData['createdAt'],
-       updatedAt: jsonData['updatedAt'],
-       appointmentId: jsonData['appointmentId'],
+       createdAt: jsonData['created_at'],
+       updatedAt: jsonData['updated_at'],
+       appointmentId: jsonData['appointment_id'],
        report: jsonData['report'],
        medicine: jsonData['medicine'],
+       image_path: jsonData['image_path'],
      );
    }
 
