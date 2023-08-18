@@ -64,7 +64,7 @@ class RegisterViewBody extends StatelessWidget {
                     ),
                     SizedBox(height: screenSize.height * .02),
                     Text(
-                      'Create Doctor Account',
+                      'Create Account',
                       style: TextStyles.textStyle30.copyWith(
                         letterSpacing: 1,
                         fontWeight: FontWeight.w500,
