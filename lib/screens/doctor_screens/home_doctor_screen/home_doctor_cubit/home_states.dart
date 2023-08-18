@@ -87,25 +87,19 @@ class DoctorGetInfoErrorState extends DoctorStates
 
 
 class DoctorViewAppointmentLoadingState extends DoctorStates {}
-
 class DoctorViewAppointmentErrorState extends DoctorStates {
  final String error;
 
  const DoctorViewAppointmentErrorState({required this.error});
 }
-
 class DoctorViewAppointmentSuccessState extends DoctorStates {
  final List<AppModel> appointments;
-
  const DoctorViewAppointmentSuccessState({required this.appointments});
-
-
 }
 
 
 class GetPatientsLoadingState extends DoctorStates{}
-class GetPatientsErrorState extends DoctorStates
-{
+class GetPatientsErrorState extends DoctorStates {
  final String error;
  const GetPatientsErrorState({required this.error});
 
@@ -116,6 +110,50 @@ class GetPatientsSuccessState extends DoctorStates
  const GetPatientsSuccessState({required this.patient});
 
 }
+
+/*
+class GetPatientAndSessionSuccess extends DoctorStates {
+ final List<PatientModel> patients;
+ final List<SessionModel> session;
+
+ GetPatientAndSessionSuccess({
+  required this.patients,
+  required this.session,
+ });
+
+ List<SessionModel> getSessionDoctors(
+     {int? patientID}) {
+  List<SessionModel> session = [];
+  if (patientID != null) {
+   for (SessionModel item in this.session) {
+    if (item.session.id == patientID) {
+
+     session.add(item);
+    }
+   }
+   return session;
+  }
+  return session;
+ }
+}
+
+*/
+
+
+
+class GetSessionLoadingState extends DoctorStates{}
+class GetSessionErrorState extends DoctorStates {
+ final String error;
+ GetSessionErrorState({required this.error});
+
+}
+class GetSessionSuccessState extends DoctorStates {
+ final List<SessionModel> session;
+ const GetSessionSuccessState({required this.session});
+
+}
+
+
 
 
 class SearchLoadingState extends DoctorStates{}

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:patient_app/core/api/dio_helper.dart';
+import 'package:patient_app/core/api/services/get_session_service.dart';
 import 'package:patient_app/core/models/appointment_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:patient_app/core/models/patient_model.dart';
@@ -26,11 +27,15 @@ class SessionCubit extends Cubit<SessionStates> {
  // static String baseUrl = 'http://192.168.1.10:8000/api/';
 
   List<PatientModel> patients = [];
+  List<SessionModel> session = [];
 
   late AppointmentModel appointmentModel;
   late SessionModel sessionModel;
+  //late PatientModel patientModel;
 
-  Future<void> viewAppointment(
+
+
+ /* Future<void> viewAppointment(
       {required int appointmentId, required String token}) async {
     emit(state);
 
@@ -41,7 +46,7 @@ class SessionCubit extends Cubit<SessionStates> {
     }, (success) {
       emit(state);
     });
-  }
+  }*/
 
   ///////add session
   // File? departmentImage;
@@ -104,7 +109,7 @@ class SessionCubit extends Cubit<SessionStates> {
 
 
 
-  Future<void> getPatients(BuildContext context,{required String token}) async {
+ /* Future<void> getPatients(BuildContext context,{required String token}) async {
     emit(GetPatientsLoadingState());
     (await GetPatientService.getPatient(
       token: await CacheHelper.getData(key: 'Token'),
@@ -112,7 +117,6 @@ class SessionCubit extends Cubit<SessionStates> {
      .fold(
             (error)
         {
-     // Navigator.pop(context);
          emit(GetPatientsErrorState(error: error.errorMessege));
          CustomeSnackBar.showSnackBar(
         context,
@@ -122,21 +126,89 @@ class SessionCubit extends Cubit<SessionStates> {
        },
             (patients)
         {
-        // Navigator.pop(context);
          emit(GetPatientsSuccessState(patients: patients));
-         //GetPatientsSuccessState(patients: patients);
-          CustomeSnackBar.showSnackBar(
+
+         *//* CustomeSnackBar.showSnackBar(
           context,
           msg: 'Session Created Successfully..',
           color: Colors.black38,
-      );
+      );*//*
 
       print(patients[0].address);
     });
   }
-
+*/
 
  /// http://192.168.1.10:8000/api/sessions/patient/4
+  Future<void> getSession({required String token,required int patientId})
+  async {
+    emit(GetSessionLoadingState());
+    (await GetSessionService.getSession(
+        token: await CacheHelper.getData(key: 'Token'),
+        patientId: patientId)).fold(
+        (error){
+          emit(GetSessionErrorState(error: error.errorMessege));
+         /* CustomeSnackBar.showSnackBar(
+            context,
+            msg: 'Error occurred, Please Try Later',
+            color: Colors.red,
+          );*/
+        },
+        (session)
+        {
+          emit(GetSessionSuccessState(session: session),);
+          print(session[0].medicine);
+
+        }
+    );
+  }
+
+
+
+  Future<void> getPatientAndSession({required String token,required int patientId}) async {
+    emit(GetPatientsLoadingState());
+    (await GetSessionService.getSession(token:token,patientId:patientId)).fold(
+          (failure) {
+        emit(GetPatientsErrorState(error: failure.errorMessege));
+      },
+          (session) async {
+        (await GetPatientService.getPatient(
+            token: token))
+            .fold(
+              (failure) {
+                emit(GetPatientsErrorState(error: failure.errorMessege));
+
+              },
+              (patient) {
+            this.patients = patient;
+            emit(GetPatientAndSessionSuccess(
+                session: session,
+                patient: patient));
+          },
+        );
+        //emit(GetDoctorsSuccess(doctors: doctors));
+      },
+    );
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

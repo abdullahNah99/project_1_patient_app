@@ -11,12 +11,15 @@ import 'package:patient_app/screens/login_screen/login_screen.dart';
 import '../../../../core/api/services/appointment/get_doctor_appointments_service.dart';
 import '../../../../core/api/services/get_doctor_information.dart';
 import '../../../../core/api/services/get_patient_service.dart';
+import '../../../../core/api/services/get_session_service.dart';
 import '../../../../core/api/services/local/cache_helper.dart';
 import '../../../../core/api/services/log_out_service.dart';
+import '../../../../core/functions/custome_snack_bar.dart';
 import '../../../../core/models/app_model.dart';
 import '../../../../core/models/doctor_model.dart';
 import '../../../../core/models/patient_model.dart';
 import '../../../../core/models/search_model.dart';
+import '../../../../core/models/session_model.dart';
 import '../../patients_session_screen/patients_screen.dart';
 part 'home_states.dart';
 
@@ -24,12 +27,15 @@ class DoctorCubit extends Cubit<DoctorStates> {
   DoctorCubit() : super(DoctorHomeInitialState());
   static DoctorCubit get(context) => BlocProvider.of(context);
   DoctorModel? doctorModel;
+  //PatientModel? patientModel;
+  PatientModel patientModel = PatientModel();
+
 
   int currentIndex = 0;
   List<Widget> bottomNavScreens = [
     ShowAppointmentScreen(),
     ShowConsultingScreen(),
-    const ShowPatientsAndSessionScreen(),
+     ShowPatientsAndSessionScreen(),
     SearchScreen(),
   ];
 
@@ -72,6 +78,7 @@ class DoctorCubit extends Cubit<DoctorStates> {
     }
     if (index == 2) {
       getPatients(token: CacheHelper.getData(key: 'Token'));
+     // getSession(token:CacheHelper.getData(key: 'Token'), patientId: patientModel.id!);
     }
   }
 
@@ -159,10 +166,25 @@ class DoctorCubit extends Cubit<DoctorStates> {
         .fold((error) {
       emit(GetPatientsErrorState(error: error.errorMessege));
     }, (patient) {
-          log('xxxxxxxxxxxx');
       emit(GetPatientsSuccessState(patient: patient));
     });
   }
+
+  Future<void> getSession({required String token,required int patientId})
+  async {
+    emit(GetSessionLoadingState());
+    (await GetSessionService.getSession(token: await CacheHelper.getData(key: 'Token'), patientId: patientId)).fold(
+            (error) {
+              emit(GetSessionErrorState(error: error.errorMessege));
+            },
+            (session) {
+          emit(GetSessionSuccessState(session: session));
+        }
+    );
+  }
+
+
+
 
 
 

@@ -14,7 +14,6 @@ abstract class GetSessionService {
           endPoint: 'sessions/patient/$patientId',
           token: token,
       );
-
       List<SessionModel> session = [];
 
       for (var item in data['session'])
@@ -24,6 +23,7 @@ abstract class GetSessionService {
       return right(session);
     } catch (ex) {
       log('Exception: there is an error in getSession method');
+      log(ex.toString());
       if (ex is DioException) {
         return left(ServerFailure.fromDioError(ex));
       }
