@@ -14,6 +14,7 @@ import '../../../../core/api/services/get_patient_service.dart';
 import '../../../../core/api/services/get_session_service.dart';
 import '../../../../core/api/services/local/cache_helper.dart';
 import '../../../../core/api/services/log_out_service.dart';
+import '../../../../core/api/services/search_on_patient_services.dart';
 import '../../../../core/functions/custome_snack_bar.dart';
 import '../../../../core/models/app_model.dart';
 import '../../../../core/models/doctor_model.dart';
@@ -182,6 +183,33 @@ class DoctorCubit extends Cubit<DoctorStates> {
     });
   }
 
+  
+  
+  
+  
+  Future<void> search({required String name,required String token}) async
+  {
+    emit(SearchLoadingState());
+    (await SearchOnPatientService.search(
+        token: CacheHelper.getData(key: 'Token'),
+        name:name,
+    ))
+        .fold(
+          (error) {
+        emit(SearchErrorState(error: error.errorMessege));
+      },
+          (users) {
+       emit(SearchSuccessState(users:users));
+        getPatients(token:CacheHelper.getData(key: 'Token'));
+      },
+    );
+  }
+
+
+  
+  
+  
+  
 /*
 
 

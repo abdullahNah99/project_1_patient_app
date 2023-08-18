@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:patient_app/core/functions/custome_snack_bar.dart';
+import 'package:patient_app/core/widgets/custome_progress_indicator.dart';
 import '../../../core/api/services/local/cache_helper.dart';
 import '../../../core/styles/app_colors.dart';
 import '../../../core/widgets/custome_image.dart';
@@ -13,79 +15,83 @@ class SearchScreen extends StatelessWidget
    var searchController = TextEditingController();
    var formKey = GlobalKey<FormState>();
   @override
-  Widget build(BuildContext context) {
-    return  BlocConsumer<DoctorCubit,DoctorStates>(
-        builder: (context, state) {
-          DoctorCubit cubit = DoctorCubit.get(context);
-          return Center(
-            child:Form(
+  Widget build(BuildContext context)
+  {
+    return BlocConsumer<DoctorCubit,DoctorStates>(
+      builder: (context,state)
+      {
+        return Padding( padding:const EdgeInsets.all(20.0),
+          child: Form(
               key: formKey,
-              child:Padding(
-                padding:const EdgeInsets.all(20.0),
-                child:  Column(
-                  children: [
-                    TextFormField(
-                      maxLines: 1,
-                      autofocus: true,
-                      cursorColor: defaultColor,
-                      controller: searchController,
-                      keyboardType: TextInputType.text,
-                      decoration:const InputDecoration(
-                        suffixIcon: Icon(
-                          Icons.search_outlined,
-                          size: 18.0,),
-                        hintText: 'Search on Patient',
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: defaultColor,
-                          ),
-                        ),
-                        hintStyle: TextStyle(
-                          fontSize: 14.0,
-                          color: Colors.grey,
+              child: Column(
+                children:
+                [
+                  TextFormField(
+                    maxLines: 1,
+                    autofocus: true,
+                    cursorColor: defaultColor,
+                    controller: searchController,
+                    keyboardType: TextInputType.text,
+                    decoration:const InputDecoration(
+                      suffixIcon: Icon(
+                        Icons.search_outlined,
+                        size: 18.0,),
+                      hintText: 'Search on Patient',
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: defaultColor,
                         ),
                       ),
-                      onFieldSubmitted: (String text)
-                      {
-                       /*  cubit.search( name: text,
-                             token: CacheHelper.getData(key: 'Token'),);*/
-                      },
-                      onChanged: (value)
-                      {
+                      hintStyle: TextStyle(
+                        fontSize: 14.0,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    onFieldSubmitted: (String text)
+                    {
+                      DoctorCubit.get(context).search( name: text,
+                  token: CacheHelper.getData(key: 'Token'),);
+                    },
+                    onChanged: (value)
+                    {
 
+                    }
+                    ,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'field mustn\'t be empty';
                       }
-                      ,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'field mustn\'t be empty';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 10.0,
-                    ),
-                  if(state is SearchLoadingState) const LinearProgressIndicator(),
-                    if (state is SearchSuccessState)
-                    SizedBox(
-                      child:Expanded(
-                        child: listOfPatient(state),
-                      ) ,
-                    ),
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  if(state is SearchLoadingState)
+                    const Center(child:CustomeProgressIndicator(),),
+                  if(state is SearchSuccessState)
+                    if(state.users.isNotEmpty)
+                        Expanded(child: listOfPatients(state)),
+                ],
+              )),);
+      },
+      listener: (context,state)
+      {
+        if(state is SearchErrorState)
+        {
+          CustomeSnackBar.showSnackBar(context, msg: state.error);
+        }
+      },
+    );
 
-                  ],
-                ),
-              ),
-            ),
-          );
-        }, listener: (context ,state){});
   }
+
 }
 
-Widget listOfPatient(SearchSuccessState state) => ListView.separated(
+Widget listOfPatients(SearchSuccessState state) => ListView.separated(
   itemBuilder: (context,index)=> patientItemBuilder(context,state,index ),
   separatorBuilder:(context,index)=> myDivider(),
-  itemCount: state.patient.length,
+  itemCount: state.users.length,
 );
 
 Widget patientItemBuilder(BuildContext context,SearchSuccessState state ,int index) => Padding(
@@ -102,8 +108,7 @@ Widget patientItemBuilder(BuildContext context,SearchSuccessState state ,int ind
           CustomeImage(
             height: 55.h,
             width: 55.w,
-            image:
-            'assets/images/undraw_Coffee_Time_e8cw.png',
+            image: 'assets/images/undraw_Coffee_Time_e8cw.png',
             borderRadius: BorderRadius.circular(50.0),
           ),
           const SizedBox(
@@ -111,7 +116,7 @@ Widget patientItemBuilder(BuildContext context,SearchSuccessState state ,int ind
           ),
           Text(
             // 'name',
-            '${state.patient[index].users[index].firstName.toString()}',// ${state.patient[index].userModel?.lastName.toString()}',
+            '${state.users[index].firstName.toString()}',// ${state.patient[index].userModel?.lastName.toString()}',
             style: const TextStyle(
               color: defaultColor,
               fontSize: 18.0,
