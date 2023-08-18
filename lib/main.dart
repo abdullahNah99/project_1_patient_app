@@ -81,43 +81,47 @@ class PatientApp extends StatelessWidget {
                 type: BottomNavigationBarType.fixed,
               ),
               textTheme: TextTheme(
-                bodySmall: TextStyle(//bodyText2
+                bodySmall: TextStyle(
+                  //bodyText2
                   color: Colors.white,
                   fontSize: 15.w,
                   fontWeight: FontWeight.w500,
                 ),
-                labelLarge: TextStyle(//caption
+                labelLarge: TextStyle(
+                  //caption
                   fontSize: 12.5.w,
                   fontWeight: FontWeight.w400,
                 ),
-                titleSmall: TextStyle(//subtitle2
+                titleSmall: TextStyle(
+                    //subtitle2
                     color: Colors.black,
                     fontSize: 12.5.w,
-                    fontWeight: FontWeight.w400
-                ),
-                labelSmall: TextStyle(//overline
+                    fontWeight: FontWeight.w400),
+                labelSmall: TextStyle(
+                    //overline
                     color: Colors.grey.shade500,
                     fontSize: 9.w,
-                    fontWeight: FontWeight.w300
-                ),
+                    fontWeight: FontWeight.w300),
               ),
             ),
 
-           home: getHome(),
-           /* home: CacheHelper.getData(key: 'Token') == null
+            //  home: getHome(),
+            home: const LoginView(),
+            /* home: CacheHelper.getData(key: 'Token') == null
                 ? const LoginView()
                 : CacheHelper.getData(key: 'Role') == 'doctor'
                     ? DoctorHomeScreen(token:  CacheHelper.getData(key: 'Token'))
                 : CacheHelper.getData(key: 'Role') == 'secretary'
-                    ? SecretariaLayout()*//*AppointmentsRequestsView(
-                        token: CacheHelper.getData(key: 'Token'))*//*
+                    ? SecretariaLayout()*/ /*AppointmentsRequestsView(
+                        token: CacheHelper.getData(key: 'Token'))*/ /*
                     : const HomePatientView(),*/
 
             darkTheme: ThemeData(
               //scaffoldBackgroundColor: Colors.grey.shade300,
               useMaterial3: true,
               appBarTheme: AppBarTheme(
-                iconTheme: IconThemeData(color: Colors.grey.shade800, size: 30.w),
+                iconTheme:
+                    IconThemeData(color: Colors.grey.shade800, size: 30.w),
                 color: defaultColor,
                 centerTitle: true,
                 actionsIconTheme: IconThemeData(
@@ -141,30 +145,28 @@ class PatientApp extends StatelessWidget {
                 type: BottomNavigationBarType.fixed,
               ),
               textTheme: TextTheme(
-                bodyText2: TextStyle(
+                bodyMedium: TextStyle(
                   color: Colors.black,
                   fontSize: 15.w,
                   fontWeight: FontWeight.w500,
                 ),
-                caption: TextStyle(
+                bodySmall: TextStyle(
                   color: Colors.white,
                   fontSize: 12.5.w,
                   fontWeight: FontWeight.w400,
                 ),
-                subtitle2: TextStyle(
+                titleSmall: TextStyle(
                     color: Colors.white,
                     fontSize: 12.5.w,
-                    fontWeight: FontWeight.w400
-                ),
-                overline: TextStyle(
+                    fontWeight: FontWeight.w400),
+                labelSmall: TextStyle(
                     color: Colors.grey.shade500,
                     fontSize: 9.w,
-                    fontWeight: FontWeight.w300
-                ),
+                    fontWeight: FontWeight.w300),
               ),
             ),
 
-           // home: getHome(),
+            // home: getHome(),
             // home: CacheHelper.getData(key: 'Token') == null
             //     ? const LoginView()
             //     : CacheHelper.getData(key: 'Role') == 'doctor'
@@ -179,7 +181,6 @@ class PatientApp extends StatelessWidget {
             //                 : const HomePatientView(),
 
             themeMode: ThemeMode.light,
-            
 
             // initialRoute: initialRoute,
             routes: AppRouter.router);
@@ -187,6 +188,7 @@ class PatientApp extends StatelessWidget {
     );
   }
 }
+
 Widget getHome() {
   if (CacheHelper.getData(key: 'Token') == null) {
     return const LoginView();
@@ -206,5 +208,3 @@ _initializeFirebase() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 }
-
-
