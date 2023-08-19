@@ -135,7 +135,11 @@ class MyAppointmentItem extends StatelessWidget {
                       ),
                       _TextItem(
                         text: '${appointmentModel.status}...',
-                        color: Colors.green,
+                        color: appointmentModel.status == 'cancelled'
+                            ? Colors.red
+                            : appointmentModel.status == 'waiting'
+                                ? Colors.orange
+                                : Colors.green,
                         width: 90.w,
                       ),
                       Visibility(

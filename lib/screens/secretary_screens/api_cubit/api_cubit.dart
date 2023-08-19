@@ -36,7 +36,9 @@ class SecretariaLyoutCubit extends Cubit<SecretariaLyoutStates> {
   static SecretariaLyoutCubit get(context) => BlocProvider.of(context);
 
   Map<String, dynamic>? perInfo;
-
+  ////////////////////
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+///////////////////
   int currentIndex = 0;
 
   List<BottomNavigationBarItem> bottomNavBarItem = [
