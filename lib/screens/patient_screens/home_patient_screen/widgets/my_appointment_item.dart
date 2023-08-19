@@ -54,6 +54,23 @@ class MyAppointmentItem extends StatelessWidget {
                   Row(
                     children: [
                       _TextItem(
+                        text: 'Date: ',
+                        color: Colors.black.withOpacity(.6),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15.w,
+                        width: 50.w,
+                      ),
+                      _TextItem(
+                        text: appointmentModel.date,
+                        width: 173.w,
+                        fontSize: 14.w,
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 12.w),
+                  Row(
+                    children: [
+                      _TextItem(
                         text: 'Time: ',
                         color: Colors.black.withOpacity(.6),
                         fontWeight: FontWeight.bold,
@@ -61,10 +78,9 @@ class MyAppointmentItem extends StatelessWidget {
                         width: 50.w,
                       ),
                       _TextItem(
-                        text:
-                            '${appointmentModel.date} - At ${appointmentModel.time}',
-                        width: 170.w,
-                        fontSize: 12.6.w,
+                        text: appointmentModel.time,
+                        width: 173.w,
+                        fontSize: 14.w,
                       ),
                     ],
                   ),

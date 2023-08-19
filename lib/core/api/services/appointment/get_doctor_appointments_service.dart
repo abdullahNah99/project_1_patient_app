@@ -6,11 +6,9 @@ import '../../../models/app_model.dart';
 import '../../http_api_services.dart';
 
 abstract class GetDoctorAppointmentsService {
-  static Future<Either<Failure, List<AppModel<int>>>>
-  getDoctorAppointments(
+  static Future<Either<Failure, List<AppModel<int>>>> getDoctorAppointments(
       {required String token, required int doctorID}) async {
     try {
-
       var data = await ApiServices.post(
           endPoint: 'indexAppointmentDoctor',
           token: token,
@@ -18,8 +16,7 @@ abstract class GetDoctorAppointmentsService {
 
       List<AppModel<int>> myAppointments = [];
 
-      for (var item in data['Appointment'])
-      {
+      for (var item in data['Appointment']) {
         myAppointments.add(AppModel<int>.fromJson(item));
       }
       return right(myAppointments);
