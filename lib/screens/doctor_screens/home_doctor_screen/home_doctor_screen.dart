@@ -6,6 +6,8 @@ import 'package:patient_app/core/widgets/custome_image.dart';
 import 'package:patient_app/screens/doctor_screens/consulting_screen/consult_doctor_cubit/cubit.dart';
 import 'package:patient_app/screens/doctor_screens/home_doctor_screen/home_doctor_cubit/home_cubit.dart';
 import 'package:patient_app/screens/doctor_screens/widget/custom_divider.dart';
+import '../../patient_screens/show_all_consultation/show_all_consultation.dart';
+import '../consulting_screen/view_consult_screen.dart';
 import '../my_account_screen/my_account_screen.dart';
 import '../widget/custom_button.dart';
 import '../widget/custom_navigate.dart';
@@ -98,7 +100,7 @@ class DoctorHomeScreen extends StatelessWidget {
                     defMaterialButton(text: 'Consulting',
                         function: ()
                         {
-                               navigateTo(context, Widget);
+                               navigateTo(context, ViewConsultScreen());
                         },
                         icon: Icons.question_answer_outlined),
                    /* defMaterialButton(text: 'My Sessions',
