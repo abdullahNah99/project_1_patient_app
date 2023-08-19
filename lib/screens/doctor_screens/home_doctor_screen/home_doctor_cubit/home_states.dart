@@ -149,13 +149,12 @@ class GetSessionSuccessState extends DoctorStates {
 
 class SearchLoadingState extends DoctorStates {}
 
-class SearchErrorState extends DoctorStates
-{
- final String error;
- SearchErrorState({required this.error});
+class SearchErrorState extends DoctorStates {
+  final String error;
+  SearchErrorState({required this.error});
 }
-class SearchSuccessState extends DoctorStates
-{
- final List<UsersModel> users;
- const SearchSuccessState({required this.users});
 
+class SearchSuccessState extends DoctorStates {
+  final List<UsersModel> users;
+  const SearchSuccessState({required this.users});
+}
