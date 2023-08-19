@@ -156,15 +156,15 @@ class PatientApp extends StatelessWidget {
             home: CacheHelper.getData(key: 'Token') == null
                 ? const LoginView()
                 : CacheHelper.getData(key: 'Role') == 'doctor'
-                    ? DoctorHomeScreen(token: CacheHelper.getData(key: 'Token'))
-                    : CacheHelper.getData(key: 'Role') == 'secretary'
-                        ? SecretariaLayout() /*AppointmentsRequestsView(
+                ? DoctorHomeScreen(token: CacheHelper.getData(key: 'Token'))
+                : CacheHelper.getData(key: 'Role') == 'secretary'
+                ? SecretariaLayout() /*AppointmentsRequestsView(
                         token: CacheHelper.getData(key: 'Token'))*/
-                        : CacheHelper.getData(key: 'Role') == 'doctor'
-                            ? DoctorHomeScreen(
-                                token: CacheHelper.getData(key: 'Token'),
-                              )
-                            : const HomePatientView(),
+                : CacheHelper.getData(key: 'Role') == 'doctor'
+                ? DoctorHomeScreen(
+              token: CacheHelper.getData(key: 'Token'),
+            )
+                : const HomePatientView(),
             // initialRoute: initialRoute,
             routes: AppRouter.router);
       },

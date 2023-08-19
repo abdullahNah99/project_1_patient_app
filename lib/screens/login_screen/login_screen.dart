@@ -15,6 +15,7 @@ import '../../core/widgets/custome_progress_indicator.dart';
 import '../../core/widgets/custome_text_field.dart';
 import '../../main.dart';
 import '../secretary_screens/appointments_requests_screen/appointments_requests_view.dart';
+import '../secretary_screens/secretary_layout/secretaria_latout.dart';
 import 'cubit/login_cubit.dart';
 import 'cubit/login_states.dart';
 
@@ -60,7 +61,7 @@ class LoginViewBody extends StatelessWidget {
           CacheHelper.saveData(key: 'Token', value: state.loginModel.token);
           CacheHelper.saveData(key: 'Role', value: state.loginModel.role);
           if (state.loginModel.role == 'secretary') {
-            return AppointmentsRequestsView(token: state.loginModel.token);
+            return SecretariaLayout();
           } if (state.loginModel.role == 'doctor') {
             return DoctorHomeScreen(token: state.loginModel.token);
           }
