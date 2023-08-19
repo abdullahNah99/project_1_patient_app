@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,13 +15,14 @@ class SecretariaLayout extends StatelessWidget {
 
   static const route = 'SecretariaLayout';
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
 
   SecretariaLayout({super.key});
 
 
   @override
   Widget build(BuildContext context) {
+    log('AppointmentsRequestsView xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
 
     return MultiBlocProvider(
       providers: [
@@ -38,8 +41,7 @@ class SecretariaLayout extends StatelessWidget {
           SecretariaLyoutCubit cubit = BlocProvider.of(context);
           HomePatientCubit homeCubit = BlocProvider.of<HomePatientCubit>(context);
           return Scaffold(
-            key: _scaffoldKey,
-            //backgroundColor: Colors.grey.shade50,
+
             drawer: Drawer(
               width: 250.w,
               child: Column(
@@ -74,7 +76,7 @@ class SecretariaLayout extends StatelessWidget {
                     icon: Icons.account_circle,
                     //iconColor: Colors.,
                     onPressed: () {
-                      _scaffoldKey.currentState!.closeDrawer();
+                      cubit.scaffoldKey.currentState!.closeDrawer();
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => SecretaryProfile(userId: cubit.getMyId()/*model.appointment[index!].patient.userId*/,)),
@@ -87,7 +89,7 @@ class SecretariaLayout extends StatelessWidget {
                     icon: Icons.logout,
                     iconColor: Colors.red,
                     onPressed: () {
-                      _scaffoldKey.currentState!.closeDrawer();
+                      //cubit.scaffoldKey.currentState!.closeDrawer();
                       homeCubit.logout(context);
                     },
                   ),

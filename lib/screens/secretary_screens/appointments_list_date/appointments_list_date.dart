@@ -104,7 +104,7 @@ class AppointmentsListDate extends StatelessWidget {
                         builder: (context) => Container(
                           width: screenSize.width,
                           height: MediaQuery.of(context).size.height * .72,
-                          child: AppointmentsRequestsView(token: CacheHelper.getData(key: 'Token'), date: '${cubit.days[cubit.indexList]} ${cubit.month[cubit.indexList]} ${cubit.dayNum[cubit.indexList]}'),
+                          child: AppointmentsRequestsView(token: CacheHelper.getData(key: 'Token'), date: cubit.dateWaitingAppointmentModel.appointment[cubit.indexList].date),
                         ),
                         fallback: (context) => const CircularProgressIndicator(),
                       ),
