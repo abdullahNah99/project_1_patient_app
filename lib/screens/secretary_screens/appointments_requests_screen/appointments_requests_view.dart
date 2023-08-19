@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:patient_app/core/widgets/custome_progress_indicator.dart';
@@ -14,6 +16,8 @@ class AppointmentsRequestsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log('AppointmentsRequestsView');
+
     return BlocProvider(
       create: (context) =>
           SecretariaLyoutCubit()..indexAppointmentByDate(date: date!),
