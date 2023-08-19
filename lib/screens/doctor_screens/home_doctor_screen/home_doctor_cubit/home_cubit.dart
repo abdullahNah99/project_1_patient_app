@@ -198,9 +198,10 @@ class DoctorCubit extends Cubit<DoctorStates> {
           (error) {
         emit(SearchErrorState(error: error.errorMessege));
       },
-          (users) {
+          (users) async{
+            await getPatients(token:CacheHelper.getData(key: 'Token'));
        emit(SearchSuccessState(users:users));
-        getPatients(token:CacheHelper.getData(key: 'Token'));
+        // getPatients(token:CacheHelper.getData(key: 'Token'));
       },
     );
   }

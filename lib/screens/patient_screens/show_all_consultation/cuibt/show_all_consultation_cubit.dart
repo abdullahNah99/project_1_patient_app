@@ -25,4 +25,25 @@ class ShowAllConsultationCubit extends Cubit<ShowAllConsultationStates> {
       },
     );
   }
+
+  Future<void> getAllDoctorConsultations({
+    required String token,
+  }) async {
+    emit(GetAllPatientConsultationsLoadingState());
+    (await GetPatientConsultationsService.getDoctorConsultations(token: token))
+        .fold(
+          (failure) {
+        emit(
+          GetAllPatientConsultationsErrorState(
+              failureMsg: failure.errorMessege),
+        );
+      },
+          (consultationModel) {
+        emit(
+          GetAllDoctorConsultationsSuccessState(
+              allConsulations: consultationModel),
+        );
+      },
+    );
+  }
 }

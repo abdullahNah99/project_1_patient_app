@@ -106,7 +106,7 @@ class PatientApp extends StatelessWidget {
             ),
 
             //  home: getHome(),
-            home: const LoginView(),
+            home:getHome(),
             /* home: CacheHelper.getData(key: 'Token') == null
                 ? const LoginView()
                 : CacheHelper.getData(key: 'Role') == 'doctor'

@@ -25,4 +25,26 @@ abstract class GetPatientConsultationsService {
       return left(ServerFailure(ex.toString()));
     }
   }
+
+
+
+  static Future<Either<Failure, List<ConsultationModelForDoctor>>>
+  getDoctorConsultations({required String token}) async {
+    try {
+      var data =
+      await ApiServices.get(endPoint: 'consultation/index', token: token);
+      List<ConsultationModelForDoctor> consultations = [];
+      for (var item in data['consultaion']) {
+        consultations.add(ConsultationModelForDoctor.fromJson(item));
+      }
+      return right(consultations);
+    } catch (ex) {
+      log('Exception: there is an error in getDoctorConsultations method');
+      log(ex.toString());
+      if (ex is DioException) {
+        return left(ServerFailure.fromDioError(ex));
+      }
+      return left(ServerFailure(ex.toString()));
+    }
+  }
 }

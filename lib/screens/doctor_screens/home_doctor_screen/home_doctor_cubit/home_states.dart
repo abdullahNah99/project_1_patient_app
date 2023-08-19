@@ -154,7 +154,10 @@ class SearchErrorState extends DoctorStates {
   SearchErrorState({required this.error});
 }
 
+
+
 class SearchSuccessState extends DoctorStates {
   final List<UsersModel> users;
+
   const SearchSuccessState({required this.users});
 }

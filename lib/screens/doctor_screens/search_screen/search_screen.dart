@@ -20,60 +20,71 @@ class SearchScreen extends StatelessWidget
     return BlocConsumer<DoctorCubit,DoctorStates>(
       builder: (context,state)
       {
-        return Padding( padding:const EdgeInsets.all(20.0),
-          child: Form(
-              key: formKey,
-              child: Column(
-                children:
-                [
-                  TextFormField(
-                    maxLines: 1,
-                    autofocus: true,
-                    cursorColor: defaultColor,
-                    controller: searchController,
-                    keyboardType: TextInputType.text,
-                    decoration:const InputDecoration(
-                      suffixIcon: Icon(
-                        Icons.search_outlined,
-                        size: 18.0,),
-                      hintText: 'Search on Patient',
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: defaultColor,
+        if(state is SearchSuccessState){
+          return Padding(
+            padding:const EdgeInsets.all(20.0),
+            child: Form(
+                key: formKey,
+                child: Column(
+                  children:
+                  [
+                    Padding(padding: REdgeInsets.only(left: 10.0, right: 10.0),child: TextFormField(
+                      maxLines: 1,
+                      autofocus: true,
+                      cursorColor: defaultColor,
+                      controller: searchController,
+                      keyboardType: TextInputType.text,
+                      decoration:const InputDecoration(
+                        suffixIcon: Icon(
+                          Icons.search_outlined,
+                          size: 18.0,),
+                        hintText: 'Search on Patient',
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: defaultColor,
+                          ),
+                        ),
+                        hintStyle: TextStyle(
+                          fontSize: 14.0,
+                          color: Colors.grey,
                         ),
                       ),
-                      hintStyle: TextStyle(
-                        fontSize: 14.0,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    onFieldSubmitted: (String text)
-                    {
-                      DoctorCubit.get(context).search( name: text,
-                  token: CacheHelper.getData(key: 'Token'),);
-                    },
-                    onChanged: (value)
-                    {
+                      onFieldSubmitted: (String text)
+                      {
+                        if(formKey.currentState!.validate())
+                        {
 
-                    }
-                    ,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'field mustn\'t be empty';
+                          DoctorCubit.get(context).search( name: text,
+                            token: CacheHelper.getData(key: 'Token'),);
+                        }
+                      },
+                      onChanged: (value)
+                      {
+
                       }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 10.0,
-                  ),
-                  if(state is SearchLoadingState)
+                      ,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'field mustn\'t be empty';
+                        }
+                        return null;
+                      },
+                    ),),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+
+
+                    /* if(state is SearchLoadingState)
                     const Center(child:CustomeProgressIndicator(),),
                   if(state is SearchSuccessState)
-                    if(state.users.isNotEmpty)
-                        Expanded(child: listOfPatients(state)),
-                ],
-              )),);
+                        Expanded(child: listOfPatients(state)),*/
+                    if(state is SearchSuccessState)
+                      Expanded(child: listOfPatients(state)),
+                  ],
+                )),);
+        }else{return CustomeProgressIndicator();}
+
       },
       listener: (context,state)
       {
@@ -98,7 +109,7 @@ Widget patientItemBuilder(BuildContext context,SearchSuccessState state ,int ind
   padding: const EdgeInsets.only(left: 5.0,right: 5.0,top: 10.0,bottom: 10.0),
   child: MaterialButton(
     onPressed: () {},
-    child: Container(
+    child: state.users.isEmpty ? const Center(child: Text('no patient'),) : Container(
       padding: const EdgeInsets.only(left: 15.0, bottom: 10.0, top: 10.0),
       decoration: BoxDecoration(
         color: Colors.grey[200],
@@ -124,6 +135,6 @@ Widget patientItemBuilder(BuildContext context,SearchSuccessState state ,int ind
           ),
         ],
       ),
-    ),
+    )
   ),
 );
