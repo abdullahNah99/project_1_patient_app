@@ -104,7 +104,7 @@ class DoctorListViewItem extends StatelessWidget {
                                   image: DecorationImage(
                                     fit: BoxFit.cover,
                                     image: NetworkImage(
-                                      '${Constants.paseUrl}upload/${cubit.indexDoctorByDepartmentModel.doctor[index].imagePath}',
+                                      '${Constants.baseURL}upload/${cubit.indexDoctorByDepartmentModel.doctor[index].imagePath}',
                                     ),
                                   )
                               ),

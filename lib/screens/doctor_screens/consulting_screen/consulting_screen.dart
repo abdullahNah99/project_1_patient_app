@@ -6,14 +6,17 @@ import 'package:patient_app/screens/doctor_screens/consulting_screen/consult_doc
 import 'package:patient_app/screens/doctor_screens/consulting_screen/consult_doctor_cubit/states.dart';
 import 'package:patient_app/screens/doctor_screens/consulting_screen/post_answer_screen.dart';
 import 'package:patient_app/screens/doctor_screens/widget/custom_divider.dart';
+import 'package:patient_app/screens/doctor_screens/widget/custom_navigate.dart';
 import '../../../core/models/index_consult_by_doctor_model.dart';
 import '../widget/custom_button.dart';
 
 class ShowConsultingScreen extends StatelessWidget {
+
   ShowConsultingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+
     return BlocConsumer<DoctorConsultCubit, DoctorConsultStates>(
 
         listener: (context, state) {},
@@ -28,26 +31,26 @@ class ShowConsultingScreen extends StatelessWidget {
             }if(state is DoctorConsultGetQuestionSuccessState)
                 {
                    return ConditionalBuilder(
-               condition: state is! DoctorConsultGetQuestionLoadingState,
-               builder: (context) => ListView.separated(
-                 itemBuilder: (context, index) => consultItemBuilder(context,index ,cubit.indexConsultByDoctorModel),
-                 separatorBuilder: (context, index) => myDivider(),
-                 itemCount: cubit.indexConsultByDoctorModel.consultaion.length,
-               ),
-               fallback: (context) => const Center(
-                 child: CircularProgressIndicator(),
-               ));
+                       condition: state is! DoctorConsultGetQuestionLoadingState,
+                       builder: (context) => ListView.separated(
+                       itemBuilder: (context, index) => consultItemBuilder(context,index ,cubit.indexConsultByDoctorModel),
+                       separatorBuilder: (context, index) => myDivider(),
+                       itemCount: cubit.indexConsultByDoctorModel.consultaion.length,
+                       ),
+                       fallback: (context) => const Center(
+                            child: CircularProgressIndicator(),
+                 ));
          }else{
            return const Center(child: CircularProgressIndicator(),);
          }
         },
-        )
-
-    ;
+        );
   }
 }
 
-Widget consultItemBuilder(BuildContext context,int index , IndexConsultByDoctorModel model ) => Padding(
+Widget consultItemBuilder(BuildContext context,int index , IndexConsultByDoctorModel model,
+    //DoctorModel doctorModel
+    ) => Padding(
       padding: const EdgeInsets.all(10.0),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
@@ -68,14 +71,18 @@ Widget consultItemBuilder(BuildContext context,int index , IndexConsultByDoctorM
                     children: [
                       const Icon(
                         Icons.question_mark_outlined,
-                        size: 16.0,
+                        size: 18.0,
                       ),
                       SizedBox(
                         width: 5.w,
                       ),
                        Text(
                         '${model.consultaion[index].question}',
-                        style: const TextStyle(fontSize: 15.0),
+                        maxLines: model.consultaion[index].question.length,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 15.0,
+                        ),
                       ),
                     ],
                   ),
@@ -99,10 +106,7 @@ Widget consultItemBuilder(BuildContext context,int index , IndexConsultByDoctorM
                       defButton(
                           width: 170.w,
                           function: () {
-                            //navigateTo(context, PostAnswerScreen());
-
-                            Navigator.push(context,MaterialPageRoute(builder: (context)=> PostAnswerScreen()));
-                           // DoctorConsultCubit.get(context).getQuestion();
+                          navigateTo(context, PostAnswerScreen(consultId:model.consultaion[index]!.id ));
                           },
                           text: 'post your answer',
                           radius: 25.0),

@@ -28,6 +28,23 @@ class GetAllPatientConsultationsSuccessState extends ShowAllConsultationStates {
   }
 }
 
+class GetAllDoctorConsultationsSuccessState extends ShowAllConsultationStates {
+  final List<ConsultationModelForDoctor> allConsulations;
+
+  GetAllDoctorConsultationsSuccessState({required this.allConsulations});
+
+  // List<ConsultationModelForDoctor> getDoctorConsulations({required int doctorID}) {
+  //   List<ConsultationModelForDoctor> list = [];
+  //   for (ConsultationModel item in allConsulations) {
+  //     if (item.doctorID == doctorID) {
+  //       list.add(item);
+  //     }
+  //   }
+  //   return list;
+  // }
+}
+
+
 class GetAllPatientConsultationsErrorState extends ShowAllConsultationStates {
   final String failureMsg;
 

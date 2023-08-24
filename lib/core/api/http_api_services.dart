@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:patient_app/core/utils/constants.dart';
 
 abstract class ApiServices {
 
   static const _baseUrl = 'http://192.168.245.136:8000/api/';
-
 
   static Future<dynamic> get({
     required String endPoint,

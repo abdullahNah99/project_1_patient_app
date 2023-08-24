@@ -83,15 +83,18 @@ class CustomDoctorItem extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text(
-                          '${doctorModel.specialty} Doctor',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 12.w,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey,
+                        SizedBox(
+                          width: 100.w,
+                          child: Text(
+                            '${doctorModel.specialty} Doctor',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 10.w,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey,
+                            ),
                           ),
                         ),
                         Text(
@@ -100,7 +103,7 @@ class CustomDoctorItem extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 10.w,
+                            fontSize: 8.w,
                             color: Colors.grey,
                           ),
                         ),

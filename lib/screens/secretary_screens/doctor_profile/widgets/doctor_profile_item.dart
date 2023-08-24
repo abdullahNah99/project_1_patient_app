@@ -215,7 +215,7 @@ class DoctorProfileItem extends StatelessWidget {
                               borderRadius: BorderRadius.circular(50.h),
                               image: DecorationImage(
                                 image: NetworkImage(
-                                  '${Constants.paseUrl}upload/${model!.doctor.imagePath}',
+                                  '${Constants.baseURL}upload/${model!.doctor.imagePath}',
                                 ),
                               )
                             ),

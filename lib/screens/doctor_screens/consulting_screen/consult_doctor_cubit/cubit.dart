@@ -1,17 +1,25 @@
 import 'dart:convert';
-
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:patient_app/core/api/services/get_doctor_info.dart';
-import 'package:patient_app/core/models/doctor_info_model.dart';
+import 'package:patient_app/core/api/services/consultation/send_answer_service.dart';
 import 'package:patient_app/screens/doctor_screens/consulting_screen/consult_doctor_cubit/states.dart';
 import '../../../../core/api/dio_helper.dart';
+import '../../../../core/api/services/consultation/get_patient_consultations_service.dart';
+import '../../../../core/api/services/get_doctor_details_service.dart';
 import '../../../../core/api/services/local/cache_helper.dart';
+import '../../../../core/functions/custome_snack_bar.dart';
+import '../../../../core/models/consultation_model.dart';
 import '../../../../core/models/index_consult_by_doctor_model.dart';
 
-class DoctorConsultCubit extends Cubit<DoctorConsultStates> {
+
+class DoctorConsultCubit extends Cubit<DoctorConsultStates>
+{
   DoctorConsultCubit() : super(DoctorConsultInitialState());
-  static DoctorConsultCubit get(context) => BlocProvider.of(context);
+  static DoctorConsultCubit get(context) =>BlocProvider.of(context);
+
+  ConsultationModel? consultationModel;
+
+
 
   Map<String, dynamic>? perInfo;
   Map<String, dynamic> decode(String token) {
@@ -42,7 +50,7 @@ class DoctorConsultCubit extends Cubit<DoctorConsultStates> {
     return int.parse(perInfo!['sub']);
   }
 
-  DoctorInfoModel? doctorInfoModel;
+  //DoctorInfoModel? doctorInfoModel;
 
 /*
   Future<void> fetchMyId() async {
@@ -65,16 +73,16 @@ class DoctorConsultCubit extends Cubit<DoctorConsultStates> {
   }
 */
 
+
   late IndexConsultByDoctorModel indexConsultByDoctorModel;
   void getQuestion() {
     emit(DoctorConsultGetQuestionLoadingState());
     DioHelper.getData(
       url: 'consultation/index',
       token: CacheHelper.getData(key: 'Token'),
-      query: {},
+      query: null,
     ).then((value) {
-      indexConsultByDoctorModel =
-          IndexConsultByDoctorModel.fromJson(value.data);
+      indexConsultByDoctorModel =IndexConsultByDoctorModel.fromJson(value.data);
       print(indexConsultByDoctorModel.message);
       print(indexConsultByDoctorModel.consultaion[0].question);
 
@@ -84,7 +92,71 @@ class DoctorConsultCubit extends Cubit<DoctorConsultStates> {
     });
   }
 
-  void postAnswer({
+
+
+  Future<void> addAnswer(
+      BuildContext context,
+      {
+        required int consultationID,
+        required String answer,
+      }) async {
+    emit(DoctorConsultPostAnswerLoadingState());
+    (await SendAnswerService.sendAnswer(
+      consultationID: consultationID ,
+      answer: answer,
+      token: CacheHelper.getData(key: 'Token'),
+    )
+    )
+        .fold(
+          (failure) {
+        //Navigator.pop(context);
+        emit(DoctorConsultPostAnswerFinishState());
+         //emit(DoctorConsultPostAnswerErrorState(error: failure.errorMessege));
+        CustomeSnackBar.showSnackBar(
+          context,
+          msg: 'Error occurred, Please Try Later',
+          color: Colors.red,
+        );
+      },
+          (consultationModel)
+           {
+               this.consultationModel =consultationModel;
+                //Navigator.pop(context);
+                  emit(DoctorConsultPostAnswerFinishState());
+
+                 CustomeSnackBar.showSnackBar(
+                  context,
+                    msg: 'Answer Send Successfully',
+                    color: Colors.green,
+                    );
+               emit(DoctorConsultPostAnswerSuccessState());
+             //Navigator.pop(context);
+      },
+    );
+
+  }
+
+
+  /*  Future<void> getConsoult(BuildContext context,{required String token}) async
+    {
+      emit(DoctorConsultGetLoadingState());
+      (await GetPatientConsultationsService.getPatientConsultations(token:  CacheHelper.getData(key: 'Token'))
+      ).fold((error)
+      {
+        emit(DoctorConsultGetErrorState(error:error.errorMessege));
+        CustomeSnackBar.showSnackBar(
+            context,
+            msg: 'Error Occurred',
+            color: Colors.red);
+      }
+      , (consultModel)
+          {
+              emit(DoctorConsultGetSuccessState(consultationModel: consultModel));
+          });
+
+    }*/
+
+ /* void postAnswer({
     required String answer,
     //required int id,
   }) async {
@@ -95,12 +167,16 @@ class DoctorConsultCubit extends Cubit<DoctorConsultStates> {
         data: {
           'answer': answer,
         }).then((value) {
-      indexConsultByDoctorModel =
-          IndexConsultByDoctorModel.fromJson(value.data);
-      print(getMyId().toString());
+      indexConsultByDoctorModel = IndexConsultByDoctorModel.fromJson(value.data);
+      //print(getMyId().toString());
       emit(DoctorConsultPostAnswerSuccessState());
     }).catchError((error) {
       emit(DoctorConsultPostAnswerErrorState(error: error.toString()));
     });
+
   }
+
+
+*/
+
 }
