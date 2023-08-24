@@ -12,3 +12,4 @@ const color1 = Color(0xFFffffff);
 const color2 = Color(0xFFd9d9d9);
 const color3 = Color(0xFF68dbc2);
 const color4 = Color.fromARGB(255, 42, 28, 168);
+//#7B7098

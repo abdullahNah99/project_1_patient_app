@@ -9,7 +9,6 @@ import 'package:patient_app/screens/doctor_screens/home_doctor_screen/home_docto
 import 'package:patient_app/screens/login_screen/login_screen.dart';
 import 'package:patient_app/screens/patient_screens/doctor_details_screen/doctor_details_screen.dart';
 import 'package:patient_app/screens/patient_screens/home_patient_screen/home_patient_screen.dart';
-
 import 'core/api/dio_helper.dart';
 import 'core/api/services/local/bloc_ob_server.dart';
 import 'screens/secretary_screens/secretary_layout/secretaria_latout.dart';
