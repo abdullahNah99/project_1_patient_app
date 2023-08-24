@@ -13,6 +13,8 @@ class EditTextField extends StatelessWidget {
   final bool? obscureText;
   final Function? onPressed;
   final Function? onTap;
+  final bool? enabled;
+  final double? suffixSize;
 
   const EditTextField({
     super.key,
@@ -26,6 +28,8 @@ class EditTextField extends StatelessWidget {
     this.obscureText,
     this.onPressed,
     this.onTap,
+    this.enabled,
+    this.suffixSize,
   });
 
   @override
@@ -36,6 +40,7 @@ class EditTextField extends StatelessWidget {
         end: 20.0,
       ),
       child: TextFormField(
+        enabled: enabled,
         textAlign: TextAlign.start,
         keyboardType: keyboardType,
         decoration: InputDecoration(
@@ -64,14 +69,13 @@ class EditTextField extends StatelessWidget {
             fontSize: 20,
           ),
           contentPadding: const EdgeInsetsDirectional.only(
-            start: 0.0,
             bottom: 10.0
           ),
           floatingLabelStyle: TextStyle(
             color: Colors.grey[400],
           ),
-          suffixIcon: suffixIcon != null ? IconButton(onPressed: (){ onPressed!();}, icon: Icon(suffixIcon, color: defaultColor,)) : null,
-        ),
+          suffixIcon: suffixIcon != null ? IconButton(onPressed: (){ onPressed!();}, icon: Icon(suffixIcon, size: suffixSize ?? 25,
+            color: defaultColor,)) : null,),
         obscureText: obscureText!,
         //initialValue: initialValue,
         style: const TextStyle(

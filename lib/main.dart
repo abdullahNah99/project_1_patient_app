@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient_app/core/api/services/local/cache_helper.dart';
@@ -57,6 +58,10 @@ class PatientApp extends StatelessWidget {
             theme: ThemeData(
               useMaterial3: true,
               appBarTheme: AppBarTheme(
+                systemOverlayStyle: const SystemUiOverlayStyle(
+                  statusBarColor: defaultColor,
+                  statusBarIconBrightness: Brightness.light
+                ),
                 iconTheme: IconThemeData(color: Colors.white, size: 30.w),
                 color: defaultColor,
                 centerTitle: true,
@@ -180,7 +185,6 @@ class PatientApp extends StatelessWidget {
             //                 : const HomePatientView(),
 
             themeMode: ThemeMode.light,
-
             // initialRoute: initialRoute,
             routes: AppRouter.router);
       },

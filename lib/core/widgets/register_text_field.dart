@@ -15,6 +15,8 @@ class RegisterTextField extends StatelessWidget {
   final bool? obscureText;
   final Function? onPressed;
   final Function? onTap;
+  final bool? enabled;
+  final double? suffixSize;
 
   const RegisterTextField({
     super.key,
@@ -28,6 +30,8 @@ class RegisterTextField extends StatelessWidget {
     this.obscureText,
     this.onPressed,
     this.onTap,
+    this.enabled,
+    this.suffixSize,
   });
 
   @override
@@ -41,6 +45,7 @@ class RegisterTextField extends StatelessWidget {
         Expanded(
           child: EditTextField(
             //lableText: lableText,
+            enabled: enabled,
             hintText: hintText,
             controller: controller,
             keyboardType: keyboardType,
@@ -53,6 +58,7 @@ class RegisterTextField extends StatelessWidget {
             onTap: (){
               onTap!();
             },
+            suffixSize: suffixSize,
           ),
         ),
       ],

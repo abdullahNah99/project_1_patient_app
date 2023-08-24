@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patient_app/core/styles/app_colors.dart';
+import 'package:patient_app/core/utils/app_assets.dart';
 import 'package:patient_app/screens/secretary_screens/api_cubit/api_states.dart';
 import '../../../../core/models/secretaria/secretaria_secretaria/view_secretary_model.dart';
 import '../../../../core/widgets/custome_arrow_back_button.dart';
@@ -36,12 +37,18 @@ class SecretaryProfileItem extends StatelessWidget {
           body: Stack(
             children: [
               Container(
+                height: 215 .h,
                 alignment: AlignmentDirectional.topCenter,
-                color: defaultColor,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage(AppAssets.secCo),
+                  )
+                ),
               ),
               Positioned(
                 right: screenSize.width * .85,
-                top: 22.h,
+                top: 32.h,
                 child: const CustomArrowBackIconButton(),
               ),
               Align(
@@ -92,7 +99,7 @@ class SecretaryProfileItem extends StatelessWidget {
                         DefaultTextInfo(
                           caption: 'Department name',
                           text: model!.department.name,
-                          icon: Icons.business_sharp,
+                          icon: Icons.account_tree_rounded,
                         ),
                       ],
                     ),
@@ -111,6 +118,7 @@ class SecretaryProfileItem extends StatelessWidget {
                           margin: EdgeInsets.only(top: screenSize.height * .16),
                           height: 100.h,
                           width: 95.h,
+                          image: AppAssets.sec,
                         ),
                         const Expanded(child: SizedBox()),
                       ],

@@ -73,10 +73,13 @@ class PatientsListViewItem extends StatelessWidget {
                           child: Column(
                             children: [
                               CustomeImage(
-                                image: AppAssets.defaultImagePurple ,
-                                width: 145.w,
-                                //height: 150.h,
-                                borderRadius: BorderRadius.circular(15),
+                                image: model.patient[index].gender == 'Male' ? AppAssets.paMa
+                                    : model.patient[index].gender == 'male' ? AppAssets.paMa
+                                    : model.patient[index].gender == 'Female' ? AppAssets.paFe
+                                    : model.patient[index].gender == 'female' ? AppAssets.paFe : profImage!,
+                                width: 190.w,
+                                height: 160.h,
+                                borderRadius: BorderRadius.circular(15.r),
                               ),
                               SizedBox(
                                 height: 6.h,
@@ -123,11 +126,11 @@ class PatientsListViewItem extends StatelessWidget {
                   ),
                 ),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 5.w,
-                  mainAxisSpacing: 5.h,
-                  childAspectRatio: 3/2,
-                  mainAxisExtent: 260.h
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 5.w,
+                    mainAxisSpacing: 5.h,
+                    childAspectRatio: 3/2,
+                    mainAxisExtent: 230.h
                 ),
                 itemCount: model.patient.length,
               )

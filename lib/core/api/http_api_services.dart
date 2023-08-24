@@ -5,8 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:patient_app/core/utils/constants.dart';
 
 abstract class ApiServices {
-  // static const _baseUrl = 'http://192.168.1.10:8000/api/';
-  static const _baseUrl = '${Constants.baseURL}api/';
+
+  static const _baseUrl = 'http://192.168.245.136:8000/api/';
 
   static Future<dynamic> get({
     required String endPoint,

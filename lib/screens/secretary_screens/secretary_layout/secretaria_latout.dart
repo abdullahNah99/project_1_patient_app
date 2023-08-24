@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../core/utils/app_assets.dart';
 import '../../../core/widgets/custome_image.dart';
 import '../../patient_screens/home_patient_screen/cubits/home_cubit/home_patient_cuibt.dart';
 import '../../patient_screens/home_patient_screen/widgets/custom_drawer_button.dart';
@@ -63,6 +64,7 @@ class SecretariaLayout extends StatelessWidget {
                             width: 80.w,
                             borderRadius: BorderRadius.circular(50.r),
                             iconSize: 60.sp,
+                            image: AppAssets.sec,
                           ),
                         ),
                         SizedBox(
@@ -76,7 +78,7 @@ class SecretariaLayout extends StatelessWidget {
                     icon: Icons.account_circle,
                     //iconColor: Colors.,
                     onPressed: () {
-                      cubit.scaffoldKey.currentState!.closeDrawer();
+                      cubit.scaffoldKey.currentState?.closeDrawer();
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => SecretaryProfile(userId: cubit.getMyId()/*model.appointment[index!].patient.userId*/,)),
