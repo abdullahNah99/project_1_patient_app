@@ -30,6 +30,10 @@ class ViewPatientWithHisSessions extends StatelessWidget
               bottom: Radius.circular(20.r),
             ),
           ),
+          title: Text(
+            'Patient Details',
+            style: TextStyle(fontSize: 20.w),
+          ),
         ),
         body: ViewPatientWithHisSessionsBody(index),
       ),);

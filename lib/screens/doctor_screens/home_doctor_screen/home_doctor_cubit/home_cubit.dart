@@ -183,10 +183,6 @@ class DoctorCubit extends Cubit<DoctorStates> {
     });
   }
 
-  
-  
-  
-  
   Future<void> search({required String name,required String token}) async
   {
     emit(SearchLoadingState());

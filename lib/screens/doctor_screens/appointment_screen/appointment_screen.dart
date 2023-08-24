@@ -17,7 +17,8 @@ class ShowAppointmentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<DoctorCubit, DoctorStates>(builder: (context, state) {
+    return BlocConsumer<DoctorCubit, DoctorStates>(
+        builder: (context, state) {
       if (state is DoctorViewAppointmentSuccessState) {
         if (state.appointments.isEmpty) {
           return Center(
