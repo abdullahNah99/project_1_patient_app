@@ -7,6 +7,7 @@ import 'package:patient_app/core/widgets/custome_button.dart';
 import 'package:patient_app/screens/secretary_screens/api_cubit/api_states.dart';
 import '../../../../core/functions/custome_snack_bar.dart';
 import '../../../../core/models/secretaria/secretaria_patient/view_patient_model.dart';
+import '../../../../core/utils/app_assets.dart';
 import '../../../../core/widgets/custome_arrow_back_button.dart';
 import '../../../../core/widgets/custome_image.dart';
 import '../../../../core/widgets/register_text_field.dart';
@@ -48,6 +49,15 @@ class PatientProfileItem extends StatelessWidget {
           );
           //Navigator.pop(context);
         }
+        /*if(state is SecretariaProfSuccssesState)
+        {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+            builder: (context1) => AddAppointment(departmentId: SecretariaLyoutCubit.get(context).viewSecretaryModel.department.id, patientId: model!.patient.id,)),
+          );
+
+        }*/
       },
       builder: (context, state) {
         return Scaffold(
@@ -55,12 +65,18 @@ class PatientProfileItem extends StatelessWidget {
           body: Stack(
             children: [
               Container(
+                height: 215 .h,
                 alignment: AlignmentDirectional.topCenter,
-                color: defaultColor,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage(AppAssets.paCo),
+                  ),
+                ),
               ),
               Positioned(
                 right: screenSize.width * .85,
-                top: 22.h,
+                top: 32.h,
                 child: const CustomArrowBackIconButton(),
               ),
               Align(
@@ -138,6 +154,10 @@ class PatientProfileItem extends StatelessWidget {
                           margin: EdgeInsets.only(top: screenSize.height * .16),
                           height: 100.h,
                           width: 95.h,
+                          image: model!.patient.gender == 'Male' ? AppAssets.paMa
+                              : model!.patient.gender == 'male' ? AppAssets.paMa
+                              : model!.patient.gender == 'Female' ? AppAssets.paFe
+                              : model!.patient.gender == 'female' ? AppAssets.paFe : AppAssets.paFe,
                         ),
                         const Expanded(child: SizedBox()),
                       ],
@@ -156,65 +176,307 @@ class PatientProfileItem extends StatelessWidget {
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.015,
                     ),
-                    CustomeButton(
-                        borderRadius: BorderRadiusDirectional.all(Radius.circular(10.r)),
-                        width: 250.w,
-                        text: 'charge Wallet',
-                        onPressed: (){
-                          scaffoldKey.currentState!.showBottomSheet(
-                            elevation: 00.0,
-                                (context) => Container(
-                              height: 175.h,
-                              width: screenSize.width,
-                              color: Colors.grey.shade100,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height * 0.020,
-                                  ),
-                                  Form(
-                                    key: formKey,
-                                    child: Padding(
-                                      padding:  EdgeInsetsDirectional.only(
-                                        start: 10.w,
-                                        end: 0.w,
-                                      ),
-                                      child: RegisterTextField(
-                                        hintText: 'Amount ...',
-                                        icon: Icons.monetization_on,
-                                        controller: amount,
-                                        keyboardType: TextInputType.number,
-                                      ),
+                    GestureDetector(
+                      onTap: (){
+                        scaffoldKey.currentState!.showBottomSheet(
+                          elevation: 00.0,
+                              (context) => Container(
+                            height: 175.h,
+                            width: screenSize.width,
+                            color: Colors.grey.shade100,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  height: MediaQuery.of(context).size.height * 0.020,
+                                ),
+                                Form(
+                                  key: formKey,
+                                  child: Padding(
+                                    padding:  EdgeInsetsDirectional.only(
+                                      start: 10.w,
+                                      end: 0.w,
+                                    ),
+                                    child: RegisterTextField(
+                                      hintText: 'Amount ...',
+                                      icon: Icons.monetization_on,
+                                      controller: amount,
+                                      keyboardType: TextInputType.number,
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height * 0.05,
+                                ),
+                                SizedBox(
+                                  height: MediaQuery.of(context).size.height * 0.05,
+                                ),
+                                CustomeButton(
+                                  text: 'Charge',
+                                  width: 250.w,
+                                  borderRadius: BorderRadiusDirectional.all(Radius.circular(10.r)),
+                                  onPressed: (){
+                                    if(formKey.currentState!.validate()){
+                                      SecretariaLyoutCubit.get(context).chargeWallet(value: double.parse(amount.text), id: model!.patient.id);
+                                      SecretariaLyoutCubit.get(context).changeBottomSheet(isShow: true);
+                                    }
+                                  },
+                                ),
+                                SizedBox(
+                                  height: MediaQuery.of(context).size.height * 0.033,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ).closed.then((value) => {
+                          SecretariaLyoutCubit.get(context).changeBottomSheet(isShow: false),
+                        }
+                        );
+                      },
+                      child: Container(
+                        width: 130.w,
+                        height: 46.h,
+                        decoration: BoxDecoration(
+                          color: defaultColor/*Colors.purple.withOpacity(0.02)*/,
+                          borderRadius: BorderRadiusDirectional.all(Radius.circular(10.r)),
+                          border: Border.all(width: 1,color: Colors.grey.shade200),
+                        ),
+                        child: Align(
+                          alignment: AlignmentDirectional.center,
+                          child: Text(
+                            'Charge Wallet',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15.w,
+                            ),
+                          ),
+                        ),
+                        /*Column(
+                              children: [
+                                Text(
+                                  'Delete Account',
+                                  style: TextStyle(
+                                    color: Colors.grey.shade500,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 12.w,
                                   ),
-                                  CustomeButton(
-                                    text: 'Charge',
-                                    width: 250.w,
-                                    borderRadius: BorderRadiusDirectional.all(Radius.circular(10.r)),
-                                    onPressed: (){
-                                      if(formKey.currentState!.validate()){
-                                        SecretariaLyoutCubit.get(context).chargeWallet(value: double.parse(amount.text), id: model!.patient.id);
-                                        SecretariaLyoutCubit.get(context).changeBottomSheet(isShow: true);
-                                      }
-                                    },
-                                  ),
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height * 0.033,
-                                  ),
-                                ],
+                                ),
+                                Icon(
+                                  Icons.account_balance_wallet_outlined,
+                                  color: Colors.grey,
+                                  size: 30,
+                                ),
+                              ],
+                            ),*/
+                      ),
+                    ),
+                    /*Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: (){
+                            scaffoldKey.currentState!.showBottomSheet(
+                              elevation: 00.0,
+                                  (context) => Container(
+                                height: 175.h,
+                                width: screenSize.width,
+                                color: Colors.grey.shade100,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      height: MediaQuery.of(context).size.height * 0.020,
+                                    ),
+                                    Form(
+                                      key: formKey,
+                                      child: Padding(
+                                        padding:  EdgeInsetsDirectional.only(
+                                          start: 10.w,
+                                          end: 0.w,
+                                        ),
+                                        child: RegisterTextField(
+                                          hintText: 'Amount ...',
+                                          icon: Icons.monetization_on,
+                                          controller: amount,
+                                          keyboardType: TextInputType.number,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: MediaQuery.of(context).size.height * 0.05,
+                                    ),
+                                    CustomeButton(
+                                      text: 'Charge',
+                                      width: 250.w,
+                                      borderRadius: BorderRadiusDirectional.all(Radius.circular(10.r)),
+                                      onPressed: (){
+                                        if(formKey.currentState!.validate()){
+                                          SecretariaLyoutCubit.get(context).chargeWallet(value: double.parse(amount.text), id: model!.patient.id);
+                                          SecretariaLyoutCubit.get(context).changeBottomSheet(isShow: true);
+                                        }
+                                      },
+                                    ),
+                                    SizedBox(
+                                      height: MediaQuery.of(context).size.height * 0.033,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ).closed.then((value) => {
+                              SecretariaLyoutCubit.get(context).changeBottomSheet(isShow: false),
+                            }
+                            );
+                          },
+                          child: Container(
+                            width: 130.w,
+                            height: 46.h,
+                            decoration: BoxDecoration(
+                              color: defaultColor*//*Colors.purple.withOpacity(0.02)*//*,
+                              borderRadius: BorderRadiusDirectional.all(Radius.circular(10.r)),
+                              border: Border.all(width: 1,color: Colors.grey.shade200),
+                            ),
+                            child: Align(
+                              alignment: AlignmentDirectional.center,
+                              child: Text(
+                                'Charge Wallet',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15.w,
+                                ),
                               ),
                             ),
-                          ).closed.then((value) => {
-                            SecretariaLyoutCubit.get(context).changeBottomSheet(isShow: false),
-                          }
-                          );
-                        }
-                    ),
+                            *//*Column(
+                              children: [
+                                Text(
+                                  'Delete Account',
+                                  style: TextStyle(
+                                    color: Colors.grey.shade500,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 12.w,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.account_balance_wallet_outlined,
+                                  color: Colors.grey,
+                                  size: 30,
+                                ),
+                              ],
+                            ),*//*
+                          ),
+                        ),
+                        *//*CustomeButton(
+                            borderRadius: BorderRadiusDirectional.all(Radius.circular(10.r)),
+                            width: 250.w,
+                            text: 'charge Wallet',
+                            onPressed: (){
+                              scaffoldKey.currentState!.showBottomSheet(
+                                elevation: 00.0,
+                                    (context) => Container(
+                                  height: 175.h,
+                                  width: screenSize.width,
+                                  color: Colors.grey.shade100,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        height: MediaQuery.of(context).size.height * 0.020,
+                                      ),
+                                      Form(
+                                        key: formKey,
+                                        child: Padding(
+                                          padding:  EdgeInsetsDirectional.only(
+                                            start: 10.w,
+                                            end: 0.w,
+                                          ),
+                                          child: RegisterTextField(
+                                            hintText: 'Amount ...',
+                                            icon: Icons.monetization_on,
+                                            controller: amount,
+                                            keyboardType: TextInputType.number,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: MediaQuery.of(context).size.height * 0.05,
+                                      ),
+                                      CustomeButton(
+                                        text: 'Charge',
+                                        width: 250.w,
+                                        borderRadius: BorderRadiusDirectional.all(Radius.circular(10.r)),
+                                        onPressed: (){
+                                          if(formKey.currentState!.validate()){
+                                            SecretariaLyoutCubit.get(context).chargeWallet(value: double.parse(amount.text), id: model!.patient.id);
+                                            SecretariaLyoutCubit.get(context).changeBottomSheet(isShow: true);
+                                          }
+                                        },
+                                      ),
+                                      SizedBox(
+                                        height: MediaQuery.of(context).size.height * 0.033,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ).closed.then((value) => {
+                                SecretariaLyoutCubit.get(context).changeBottomSheet(isShow: false),
+                              }
+                              );
+                            }
+                        ),*//*
+                        Padding(
+                          padding: EdgeInsetsDirectional.only(
+                              start: 10.w,
+                              end: 10.w,
+                          ),
+                          child: SizedBox(
+                            width: 1.w,
+                            height: 50.h,
+                            child: Container(
+                              color: Colors.grey.shade400,
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: (){
+                            *//*cubit.deleteSecretaria(
+                              user_id: model!.patient.userId,
+                            );
+                            Navigator.pop(context);*//*
+                            *//*Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context1) => AddAppointment()),
+                            );*//*
+                            SecretariaLyoutCubit.get(context).viewSecretary(user_id: SecretariaLyoutCubit.get(context).getMyId());
+                          },
+                          child: Container(
+                            width: 160.w,
+                            height: 46.h,
+                            decoration: BoxDecoration(
+                              color: Colors.purple.withOpacity(0.02),
+                              borderRadius: BorderRadiusDirectional.all(Radius.circular(10.r)),
+                              border: Border.all(width: 1,color: Colors.grey.shade200),
+                            ),
+                            child: Column(
+                              children: [
+                                Text(
+                                  'Delete Account',
+                                  style: TextStyle(
+                                    color: Colors.grey.shade500,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 12.w,
+                                  ),
+                                ),
+                                const Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                  size: 30,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),*/
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.033,
                     ),

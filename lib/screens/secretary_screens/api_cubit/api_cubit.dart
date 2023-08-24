@@ -132,6 +132,13 @@ class SecretariaLyoutCubit extends Cubit<SecretariaLyoutStates> {
     emit(ShowAppointmentState());
   }
 
+  void selectDate()
+  {
+    isSelected = ! isSelected;
+    colorItem[indexList] =! colorItem[indexList];
+    emit(selectDateState());
+  }
+
   bool showWaitingDays = false;
   bool isSelecte = false;
   bool showApproveDays = false;

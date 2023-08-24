@@ -95,13 +95,14 @@ class DoctorListViewItem extends StatelessWidget {
                         child: Column(
                           children: [
                             Container(
-                              height: MediaQuery.of(context).size.height * .25,
-                              width: 145.w,
+                              height: 160.h,
+                              width: 190.w,
                               //margin: EdgeInsets.only(top: screenSize.height * .16),
                               decoration: BoxDecoration(
                                   color: Colors.grey.shade200,
-                                  borderRadius: BorderRadius.circular(10.h),
+                                  borderRadius: BorderRadius.circular(15.h),
                                   image: DecorationImage(
+                                    fit: BoxFit.cover,
                                     image: NetworkImage(
                                       '${Constants.paseUrl}upload/${cubit.indexDoctorByDepartmentModel.doctor[index].imagePath}',
                                     ),
@@ -163,7 +164,7 @@ class DoctorListViewItem extends StatelessWidget {
                   crossAxisSpacing: 5.w,
                   mainAxisSpacing: 5.h,
                   childAspectRatio: 3/2,
-                  mainAxisExtent: 260.h
+                  mainAxisExtent: 230.h
               ),
               itemCount: cubit.indexDoctorByDepartmentModel.doctor.length,
             );
