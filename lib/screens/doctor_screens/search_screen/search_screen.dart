@@ -51,12 +51,14 @@ class SearchScreen extends StatelessWidget
                       ),
                       onFieldSubmitted: (String text)
                       {
-                        if(formKey.currentState!.validate())
+                        /*if(formKey.currentState!.validate())
                         {
 
                           DoctorCubit.get(context).search( name: text,
                             token: CacheHelper.getData(key: 'Token'),);
-                        }
+                        }*/
+                        DoctorCubit.get(context).search( name: text,
+                          token: CacheHelper.getData(key: 'Token'),);
                       },
                       onChanged: (value)
                       {
@@ -83,7 +85,67 @@ class SearchScreen extends StatelessWidget
                       Expanded(child: listOfPatients(state)),
                   ],
                 )),);
-        }else{return CustomeProgressIndicator();}
+        }else
+        {
+          return  Padding(
+            padding:const EdgeInsets.all(20.0),
+            child: Form(
+                key: formKey,
+                child: Column(
+                  children:
+                  [
+                    Padding(padding: REdgeInsets.only(left: 10.0, right: 10.0),child: TextFormField(
+                      maxLines: 1,
+                      autofocus: true,
+                      cursorColor: defaultColor,
+                      controller: searchController,
+                      keyboardType: TextInputType.text,
+                      decoration:const InputDecoration(
+                        suffixIcon: Icon(
+                          Icons.search_outlined,
+                          size: 18.0,),
+                        hintText: 'Search on Patient',
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: defaultColor,
+                          ),
+                        ),
+                        hintStyle: TextStyle(
+                          fontSize: 14.0,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      onFieldSubmitted: (String text)
+                      {
+                        /*if(formKey.currentState!.validate())
+                        {
+
+                          DoctorCubit.get(context).search( name: text,
+                            token: CacheHelper.getData(key: 'Token'),);
+                        }*/
+                        DoctorCubit.get(context).search( name: text,
+                          token: CacheHelper.getData(key: 'Token'),);
+                      },
+                      onChanged: (value)
+                      {
+
+                      }
+                      ,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'field mustn\'t be empty';
+                        }
+                        return null;
+                      },
+                    ),),
+
+                    /* if(state is SearchLoadingState)
+                    const Center(child:CustomeProgressIndicator(),),
+                  if(state is SearchSuccessState)
+                        Expanded(child: listOfPatients(state)),*/
+                  ],
+                )),);
+          /*CustomeProgressIndicator();*/}
 
       },
       listener: (context,state)

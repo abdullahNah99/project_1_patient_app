@@ -66,7 +66,7 @@ class SessionCubit extends Cubit<SessionStates> {
   }
 
   Future<dynamic> postWithImage({
-    required String endPoint,
+    //required String endPoint,
     required Map<String, String> body,
     //required int appointmentId,
     @required String? imagePath,
@@ -74,7 +74,7 @@ class SessionCubit extends Cubit<SessionStates> {
   }) async {
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('${Constants.baseURL}$endPoint'),
+      Uri.parse('${Constants.baseURL}api/session/store'),
     );
     request.fields.addAll(body);
     if (imagePath != null) {

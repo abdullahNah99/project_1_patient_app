@@ -322,19 +322,17 @@ class AddSessionScreen extends StatelessWidget {
                                       if (formKey.currentState!.validate()) {
                                         cubit.postWithImage(
                                             body: {
-                                              'appointment_id':
-                                                  '$appointmentId',
-                                              'medicine':
-                                                  medicineController.text,
+                                              'appointment_id': '$appointmentId',
+                                              'medicine': medicineController.text,
                                               'report': reportController.text,
                                             },
                                             imagePath: '$image',
-                                            endPoint: 'session/store',
+                                            //endPoint: 'session/store',
                                             token: CacheHelper.getData(
                                                 key: 'Token'));
 
                                         // navigateAndReplacement(context,ShowAppointmentScreen());
-                                        Navigator.pop(context);
+                                       Navigator.pop(context);
                                       }
                                     },
                                     text: 'add',
