@@ -180,7 +180,6 @@ class PatientApp extends StatelessWidget {
             //                 : const HomePatientView(),
 
             themeMode: ThemeMode.light,
-
             // initialRoute: initialRoute,
             routes: AppRouter.router);
       },

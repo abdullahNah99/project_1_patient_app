@@ -10,6 +10,8 @@ class ChangeBottomSheetState extends SecretariaLyoutStates{}
 
 class ShowAppointmentState extends SecretariaLyoutStates{}
 
+class selectDateState extends SecretariaLyoutStates{}
+
 class ShowWaitingDayState extends SecretariaLyoutStates{}
 
 class ShowApproveDayState extends SecretariaLyoutStates{}
